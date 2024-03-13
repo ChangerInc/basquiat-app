@@ -23,6 +23,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -32,26 +33,30 @@ import com.changer.basquiat.ui.home.HomeScreen
 @Preview
 @Composable
 fun LoginScreenPreview() {
-    LoginScreen(navigateToHistorico = {}, navigateToCadastro = {})
+    LoginScreen(
+        navigateToHistorico = {},
+        navigateToCadastro = {},
+        navigateToHome = {}
+    )
 }
 
 @Composable
 fun LoginScreen(
     navigateToHistorico: () -> Unit,
     navigateToCadastro: () -> Unit,
+    navigateToHome: () -> Unit
 ) {
     val email = remember { mutableStateOf("") }
     val senha = remember { mutableStateOf("") }
     val isEsqueciSenhaVisible = remember { mutableStateOf(false) }
-    val navController = rememberNavController()
 
     Scaffold(
         topBar = {
-            TopAppBarLayout(titulo = "Login", navigateToPage = { navController.navigate("home") })
+            TopAppBarLayout(titulo = "Login", navigateToPage = { navigateToHome() })
         }
     ) { padding ->
-        Column {
             Box(
+                contentAlignment = Alignment.Center,
                 modifier = Modifier
                     .fillMaxSize()
                     .background(Color.White)
@@ -101,7 +106,6 @@ fun LoginScreen(
                     }
                 }
             }
-        }
     }
 }
 

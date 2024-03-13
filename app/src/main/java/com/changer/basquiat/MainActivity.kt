@@ -39,12 +39,25 @@ fun MainScreen() {
     val navController = rememberNavController()
 
     NavHost(navController, startDestination = "home") {
-        composable("home") { HomeScreen(navigateToLogin = { navController.navigate("login") }, navigateToCadastro = { navController.navigate("cadastro") }) }
-        composable("login") { LoginScreen(navigateToHistorico = { navController.navigate("historico") }, navigateToCadastro = { navController.navigate("cadastro") }) }
-        composable("cadastro") { CadastroScreen(navigateToLogin = { navController.navigate("login") }) }
+        composable("home") {
+            HomeScreen(
+                navigateToLogin = { navController.navigate("login") },
+                navigateToCadastro = { navController.navigate("cadastro") }) }
+
+        composable("login") {
+            LoginScreen(
+                navigateToHistorico = { navController.navigate("historico") },
+                navigateToCadastro = { navController.navigate("cadastro") },
+                navigateToHome = { navController.navigate("home") }) }
+
+        composable("cadastro") {
+            CadastroScreen(
+                navigateToLogin = { navController.navigate("login") }) }
+
         composable("historico") { HistoricoScreen() }
 
         composable("circulos") { CirculoScreen() }
+
         composable("conversao") { ConversaoScreen() }
     }
 

@@ -12,7 +12,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import com.changer.basquiat.ui.theme.BasquiatTheme
@@ -29,6 +28,7 @@ fun TopAppBarPreview() {
 @Composable
 fun TopAppBarLayout(titulo:String, navigateToPage: () -> Unit) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
+
         CenterAlignedTopAppBar(
             colors = TopAppBarDefaults.topAppBarColors(
                 containerColor = MaterialTheme.colorScheme.primaryContainer,
@@ -42,7 +42,7 @@ fun TopAppBarLayout(titulo:String, navigateToPage: () -> Unit) {
                 )
                 },
             navigationIcon = {
-                IconButton(onClick = { navigateToPage() } ) {
+                IconButton(onClick = navigateToPage) {
                     Icon(
                         imageVector = Icons.Filled.ArrowBack,
                         contentDescription = "Localized description"
