@@ -10,10 +10,10 @@ import com.changer.basquiat.ui.home.HomeScreen
 import com.changer.basquiat.ui.login.LoginScreen
 
 @Composable
-fun MyAppNavHost(
+fun BasquiatNavHost(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
-    startDestination: String = "profile"
+    startDestination: String
 ) {
     NavHost(
         modifier = modifier,
@@ -30,7 +30,6 @@ fun MyAppNavHost(
         composable("login") {
             LoginScreen(
                 navigateToHistorico = { navController.navigate("historico") },
-                navigateToCadastro = { navController.navigate("cadastro") },
                 navigateToHome = { navController.navigate("home") }
             ) }
     }
