@@ -60,10 +60,11 @@ fun HomeScreen(
                     .align(Alignment.CenterHorizontally)
             )
             Text(
-                text = stringResource(id = R.string.titulo_tela_inicial_nao_logado),
+                text = stringResource(id = R.string.titulo_tela_inicial_nao_logado)
+                        + " clique!",
                 fontSize = 22.sp,
                 fontWeight = FontWeight.Bold,
-                style = MaterialTheme.typography.bodyLarge,
+                style = MaterialTheme.typography.titleMedium,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
                     .padding(48.dp, 64.dp)

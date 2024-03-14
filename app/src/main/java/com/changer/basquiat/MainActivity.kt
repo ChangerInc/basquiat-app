@@ -6,16 +6,9 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
-import com.changer.basquiat.ui.home.HomeScreen
-import com.changer.basquiat.ui.login.LoginScreen
-import com.changer.basquiat.ui.login.TopAppBarLoginCadastro
 import com.changer.basquiat.ui.navigate.BasquiatNavHost
 import com.changer.basquiat.ui.theme.BasquiatTheme
 

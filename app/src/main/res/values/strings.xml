@@ -1,9 +1,9 @@
 <resources>
     <string name="app_name">basquiat</string>
     <string name="title_activity_main">MainActivity</string>
-    <string name="titulo_tela_inicial_nao_logado">Transforme seus arquivos com a facilidade de um click</string>
+    <string name="titulo_tela_inicial_nao_logado">Transforme seus arquivos \ncom a facilidade de um </string>
     <string name="termos_uso_tela_inicial_nao_logado">Criando uma conta, você concorda com nossos Termos de uso e Políticas de privacidade.</string>
-    <string name="titulo_tela_login">Bem vindo(a) de volta! Faça login para continuar</string>
+    <string name="titulo_tela_login">Bem vindo(a) de volta! \nFaça login para continuar</string>
     <string name="titulo_tela_cadastro">Seja bem vindo(a)! Crie sua conta para ter acesso ás conversões!</string>
     <string name="titulo_tela_conversao">Transforme seus arquivos com a facilidade de um click</string>
     <string name="como_usar_tela_conversao">Como usar o conversor?</string>
