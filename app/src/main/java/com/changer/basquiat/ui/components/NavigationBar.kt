@@ -1,9 +1,6 @@
 package com.changer.basquiat.ui.components
 
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Home
-import androidx.compose.material.icons.outlined.List
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
