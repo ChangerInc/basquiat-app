@@ -30,10 +30,16 @@ import com.changer.basquiat.ui.theme.Azul
 import com.changer.basquiat.ui.theme.Branco
 import com.changer.basquiat.ui.theme.Preto
 
+@Preview
+@Composable
+fun HomeScreenPreview() {
+    HomeScreen(navigateToLogin = {}, navigateToRegister = {})
+}
+
 @Composable
 fun HomeScreen(
     navigateToLogin: () -> Unit,
-    navigateToCadastro: () -> Unit,
+    navigateToRegister: () -> Unit,
 ) {
     Box(
         modifier = Modifier
@@ -72,7 +78,7 @@ fun HomeScreen(
             )
             Button(
                 shape = RoundedCornerShape(6.dp),
-                onClick = navigateToCadastro,
+                onClick = navigateToRegister,
                 colors = ButtonDefaults.outlinedButtonColors(
                     containerColor = Azul,
                     contentColor = Branco
@@ -118,10 +124,4 @@ fun HomeScreen(
             )
         }
     }
-}
-
-@Preview
-@Composable
-fun HomeScreenPreview() {
-    HomeScreen(navigateToLogin = {}, navigateToCadastro = {})
 }

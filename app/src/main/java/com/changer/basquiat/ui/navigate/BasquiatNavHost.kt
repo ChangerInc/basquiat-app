@@ -8,6 +8,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.changer.basquiat.ui.home.HomeScreen
 import com.changer.basquiat.ui.login.LoginScreen
+import com.changer.basquiat.ui.register.RegisterScreen
 
 @Composable
 fun BasquiatNavHost(
@@ -22,7 +23,7 @@ fun BasquiatNavHost(
     ) {
         composable("home") {
             HomeScreen(
-                navigateToCadastro = { navController.navigate("cadastro") },
+                navigateToRegister = { navController.navigate("register") },
                 navigateToLogin = { navController.navigate("login") },
                 /*...*/
             )
@@ -30,6 +31,11 @@ fun BasquiatNavHost(
         composable("login") {
             LoginScreen(
                 navigateToHistorico = { navController.navigate("historico") },
+                navigateToHome = { navController.navigate("home") }
+            ) }
+        composable("register") {
+            RegisterScreen(
+                navigateToLogin = { navController.navigate("login") },
                 navigateToHome = { navController.navigate("home") }
             ) }
     }
