@@ -88,7 +88,7 @@ fun HomeScreen(
                     .align(Alignment.CenterHorizontally)
             ) {
                 Text(
-                    text = "Sign Up",
+                    text = "Cadastro",
                     fontSize = 22.sp
                 )
             }
