@@ -74,7 +74,17 @@ fun LoginScreen(
                         style = MaterialTheme.typography.titleMedium,
                         textAlign = TextAlign.Left
                     )
+
                     Spacer(modifier = modifier.height(53.dp))
+
+                    Row {
+                        Text(
+                            text = "E-mail ou senha incorretos, tente novamente",
+                            color = Color.Red
+                        )
+                    }
+
+                    Spacer(modifier = modifier.height(10.dp))
 
                     InputEmail()
 
