@@ -1,4 +1,4 @@
-package com.changer.basquiat.ui.register
+package com.changer.basquiat.ui.register.presentation
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -29,7 +29,7 @@ import com.changer.basquiat.ui.components.InputName
 import com.changer.basquiat.ui.components.InputPassword
 import com.changer.basquiat.ui.components.InputPhoneNumber
 import com.changer.basquiat.ui.components.TopAppBarLoginCadastro
-import com.changer.basquiat.ui.home.RegisterButton
+import com.changer.basquiat.ui.home.presentation.RegisterButton
 import com.changer.basquiat.ui.theme.Azul
 import com.changer.basquiat.ui.theme.BasquiatTheme
 

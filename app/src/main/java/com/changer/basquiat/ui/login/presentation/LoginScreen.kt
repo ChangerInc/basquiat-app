@@ -1,4 +1,4 @@
-package com.changer.basquiat.ui.login
+package com.changer.basquiat.ui.login.presentation
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -14,8 +14,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -48,6 +50,10 @@ fun LoginScreen(
     navigateToHome: () -> Unit
 ) {
     val isEsqueciSenhaVisible = remember { mutableStateOf(false) }
+
+    var email by remember {
+        mutableStateOf("")
+    }
 
     Scaffold(
         topBar = {
@@ -86,7 +92,9 @@ fun LoginScreen(
 
                     Spacer(modifier = modifier.height(10.dp))
 
-                    InputEmail()
+                    InputEmail({ email }) { newEmail ->
+                        email = newEmail
+                    }
 
                     Spacer(modifier = modifier.height(44.dp))
 

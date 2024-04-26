@@ -1,4 +1,4 @@
-package com.changer.basquiat.ui.login
+package com.changer.basquiat.ui.login.presentation
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.size

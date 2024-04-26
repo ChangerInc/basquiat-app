@@ -9,7 +9,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.changer.basquiat.ui.navigate.BasquiatNavHost
+import com.changer.basquiat.ui.navigate.presentation.BasquiatNavHost
 import com.changer.basquiat.ui.theme.BasquiatTheme
 
 class MainActivity : ComponentActivity() {

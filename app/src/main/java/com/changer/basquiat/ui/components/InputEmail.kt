@@ -11,8 +11,10 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -30,16 +32,24 @@ import com.changer.basquiat.ui.theme.Preto
 @Preview(showBackground = true)
 @Composable
 fun InputEmailPreview() {
+    var email by remember {
+        mutableStateOf("")
+    }
     BasquiatTheme {
-        InputEmail()
+        InputEmail({
+            email
+        }) {
+            email = it
+        }
     }
 }
 
 @Composable
 fun InputEmail(
-    modifier: Modifier = Modifier
+    email: () -> String,
+    modifier: Modifier = Modifier,
+    setEmail: (String) -> Unit,
 ) {
-    var email by rememberSaveable { mutableStateOf("") }
 
     OutlinedTextField(
         shape = OutlinedTextFieldDefaults.shape,
@@ -52,8 +62,10 @@ fun InputEmail(
             unfocusedIndicatorColor = CinzaClaro,
             unfocusedContainerColor = Branco,
         ),
-        value = email,
-        onValueChange = {email = it},
+        value = email(),
+        onValueChange = {
+            setEmail(it)
+        },
         label = {
             Text(
                 text = "Email",
@@ -74,7 +86,8 @@ fun InputEmail(
                 content = {
                     Icon(
                         imageVector = Icons.Outlined.Email,
-                        contentDescription = "Icone de e-mail")
+                        contentDescription = "Icone de e-mail"
+                    )
                 }
             )
         },

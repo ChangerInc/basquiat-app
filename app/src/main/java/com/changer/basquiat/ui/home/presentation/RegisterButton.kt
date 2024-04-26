@@ -1,4 +1,4 @@
-package com.changer.basquiat.ui.home
+package com.changer.basquiat.ui.home.presentation
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.size
