@@ -36,16 +36,24 @@ import com.changer.basquiat.ui.theme.Preto
 @Preview(showBackground = true)
 @Composable
 fun InputPasswordPreview() {
+    var senha by remember {
+        mutableStateOf("")
+    }
     BasquiatTheme {
-        InputPassword()
+        InputPassword({
+            senha
+        }) {
+            senha = it
+        }
     }
 }
 
 @Composable
 fun InputPassword(
-    modifier: Modifier = Modifier
+    senha: () -> String,
+    modifier: Modifier = Modifier,
+    setSenha: (String) -> Unit,
 ) {
-    var senha by rememberSaveable { mutableStateOf("") }
     var senhaVisivel: Boolean by remember { mutableStateOf(false) }
     val icon:ImageVector =
         if (senhaVisivel) {
@@ -68,8 +76,10 @@ fun InputPassword(
             unfocusedIndicatorColor = CinzaClaro,
             unfocusedContainerColor = Branco,
         ),
-        value = senha,
-        onValueChange = {senha = it},
+        value = senha(),
+        onValueChange = {
+            setSenha(it)
+        },
         label = {
             Text(
                 text = "Senha",

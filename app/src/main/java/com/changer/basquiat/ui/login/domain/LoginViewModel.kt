@@ -1,12 +1,13 @@
-package com.changer.basquiat.mvvm
+package com.changer.basquiat.ui.login.domain
 
-import android.net.http.HttpException
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.changer.basquiat.mvvm.state.LoginScreenState
-import com.changer.basquiat.config.IUsuarioRepository
+import com.changer.basquiat.ui.login.domain.LoginScreenState
+import com.changer.basquiat.common.domain.domain.IUsuarioRepository
+import com.changer.basquiat.ui.login.data.UsuarioToken
 import kotlinx.coroutines.launch
+import retrofit2.HttpException
 
 class LoginViewModel (
     private val repository: IUsuarioRepository
@@ -23,7 +24,7 @@ class LoginViewModel (
 
                 if (response.isSuccessful) {
                     state.value = LoginScreenState.Success(
-                        data = response.body() ?:
+                        data = response.body()
                     )
                 } else {
                     throw Exception("Erro desconhecido")
@@ -31,8 +32,11 @@ class LoginViewModel (
             }
         } catch (e: HttpException) {
             val message = when (e.code()) {
-                400 -> ""
+                404 -> "Email de usuário não encontrado"
+                else -> "Erro desconhecido"
             }
+
+            state.value = LoginScreenState.Error(message)
         }
     }
 }

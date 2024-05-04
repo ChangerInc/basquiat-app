@@ -55,6 +55,10 @@ fun LoginScreen(
         mutableStateOf("")
     }
 
+    var senha by remember {
+        mutableStateOf("")
+    }
+
     Scaffold(
         topBar = {
             TopAppBarLoginCadastro(
@@ -98,7 +102,9 @@ fun LoginScreen(
 
                     Spacer(modifier = modifier.height(44.dp))
 
-                    InputPassword()
+                    InputPassword({ senha }) { newSenha ->
+                        senha = newSenha
+                    }
 
                     Column(
                         modifier = modifier

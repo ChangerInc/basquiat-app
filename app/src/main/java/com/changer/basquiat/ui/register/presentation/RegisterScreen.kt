@@ -14,8 +14,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -50,7 +52,14 @@ fun RegisterScreen(
     navigateToLogin: () -> Unit,
     navigateToHome: () -> Unit
 ) {
-    val isEsqueciSenhaVisible = remember { mutableStateOf(false) }
+    var email by remember {
+        mutableStateOf("")
+    }
+
+    var senha by remember {
+        mutableStateOf("")
+    }
+
 
     Scaffold(
         topBar = {
@@ -87,11 +96,15 @@ fun RegisterScreen(
 
                 Spacer(modifier = modifier.height(11.dp))
 
-                InputEmail()
+                InputEmail({ email }) { newEmail ->
+                    email = newEmail
+                }
 
                 Spacer(modifier = modifier.height(11.dp))
 
-                InputPassword()
+                InputPassword({ senha }) { newSenha ->
+                    senha = newSenha
+                }
 
                 Column(
                     modifier = modifier

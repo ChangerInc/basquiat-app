@@ -1,12 +1,12 @@
-package com.changer.basquiat.mvvm.state
+package com.changer.basquiat.ui.login.domain
 
-import com.changer.basquiat.mvvm.model.Usuario
+import com.changer.basquiat.ui.login.data.UsuarioToken
 
 sealed interface LoginScreenState {
     data object Loading: LoginScreenState
 
     data class Success(
-        val data: Usuario
+        val data: UsuarioToken
     ): LoginScreenState
 
     data class Error(

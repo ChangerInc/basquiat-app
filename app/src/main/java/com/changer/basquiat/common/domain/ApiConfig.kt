@@ -1,4 +1,4 @@
-package com.changer.basquiat.config
+package com.changer.basquiat.common.domain
 
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
