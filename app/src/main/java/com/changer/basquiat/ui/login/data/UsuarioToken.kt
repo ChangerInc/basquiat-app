@@ -1,11 +1,12 @@
 package com.changer.basquiat.ui.login.data
 
+import java.lang.reflect.Constructor
 import java.util.UUID
 
 data class UsuarioToken(
-    private val id: UUID,
-    private val nome: String,
-    private val email: String,
-    private val fotoPerfil: String,
-    private val token: String,
+    private var id: UUID,
+    private var nome: String,
+    private var email: String,
+    private var fotoPerfil: String,
+    private var token: String,
 )

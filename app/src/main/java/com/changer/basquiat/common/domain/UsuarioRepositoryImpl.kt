@@ -1,15 +1,22 @@
 package com.changer.basquiat.common.domain
 
-import com.changer.basquiat.common.domain.domain.IUsuarioRepository
+import com.changer.basquiat.common.data.UsuarioService
+import com.changer.basquiat.ui.register.data.Usuario
 import com.changer.basquiat.ui.login.data.UsuarioToken
 import retrofit2.Response
 
-class UsuarioRepositoryImpl: IUsuarioRepository {
+interface UsuarioRepositoryImpl: IUsuarioRepository {
     override suspend fun getUser(): Response<UsuarioToken> {
-        TODO("Not yet implemented")
+        val api = ApiConfig
+            .getIntance()
+            .create(UsuarioService::class.java)
+        return api.login()
     }
 
-    override suspend fun registerUser(user: UsuarioToken): Response<Int> {
-        TODO("Not yet implemented")
+    override suspend fun registerUser(user: Usuario): Response<Usuario> {
+        val api = ApiConfig
+            .getIntance()
+            .create(UsuarioService::class.java)
+        return api.cadstro()
     }
 }

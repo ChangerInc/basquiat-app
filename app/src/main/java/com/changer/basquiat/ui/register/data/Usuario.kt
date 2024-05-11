@@ -1,4 +1,4 @@
-package com.changer.basquiat.ui.home.data
+package com.changer.basquiat.ui.register.data
 
 import java.util.UUID
 

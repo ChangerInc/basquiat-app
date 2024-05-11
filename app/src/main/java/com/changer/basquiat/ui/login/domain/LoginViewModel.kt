@@ -3,8 +3,8 @@ package com.changer.basquiat.ui.login.domain
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.changer.basquiat.ui.login.domain.LoginScreenState
-import com.changer.basquiat.common.domain.domain.IUsuarioRepository
+import com.changer.basquiat.common.domain.IUsuarioRepository
+import com.changer.basquiat.ui.login.data.UserForm
 import com.changer.basquiat.ui.login.data.UsuarioToken
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
@@ -15,11 +15,10 @@ class LoginViewModel (
     var state = MutableLiveData<LoginScreenState>(LoginScreenState.Loading)
         private set
 
-    fun getUser(login: Map<String, String>) {
-        login.size
+    fun getUser(login: UserForm) {
         try {
             viewModelScope.launch {
-                val response = repository.getUser()
+                val response = repository.getUser(login)
                 state.value = LoginScreenState.Loading
 
                 if (response.isSuccessful) {
@@ -32,7 +31,8 @@ class LoginViewModel (
             }
         } catch (e: HttpException) {
             val message = when (e.code()) {
-                404 -> "Email de usuário não encontrado"
+                400 -> "Informações faltando"
+                404 -> "Email ou senha incorretos"
                 else -> "Erro desconhecido"
             }
 

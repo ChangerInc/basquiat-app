@@ -15,6 +15,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -29,6 +30,7 @@ import com.changer.basquiat.R
 import com.changer.basquiat.ui.components.InputEmail
 import com.changer.basquiat.ui.components.InputPassword
 import com.changer.basquiat.ui.components.TopAppBarLoginCadastro
+import com.changer.basquiat.ui.login.domain.LoginViewModel
 import com.changer.basquiat.ui.theme.BasquiatTheme
 import com.changer.basquiat.ui.theme.Preto
 
@@ -36,9 +38,12 @@ import com.changer.basquiat.ui.theme.Preto
 @Composable
 fun LoginScreenPreview() {
     BasquiatTheme {
+        val vm by inject<LoginViewModel>()
+        vm.getUser()
         LoginScreen(
             navigateToHistorico = {},
-            navigateToHome = {}
+            navigateToHome = {},
+            vm
         )
     }
 }
@@ -47,9 +52,11 @@ fun LoginScreenPreview() {
 fun LoginScreen(
     modifier: Modifier = Modifier,
     navigateToHistorico: () -> Unit,
-    navigateToHome: () -> Unit
+    navigateToHome: () -> Unit,
+    vm: LoginViewModel
 ) {
     val isEsqueciSenhaVisible = remember { mutableStateOf(false) }
+    val state by vm.state.observeAsState()
 
     var email by remember {
         mutableStateOf("")
