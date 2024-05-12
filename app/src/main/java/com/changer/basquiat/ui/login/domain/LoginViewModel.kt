@@ -22,16 +22,18 @@ class LoginViewModel (
                 state.value = LoginScreenState.Loading
 
                 if (response.isSuccessful) {
-                    state.value = LoginScreenState.Success(
-                        data = response.body()
-                    )
+                    state.value = response.body()?.let {
+                        LoginScreenState.Success(
+                            data = it
+                        )
+                    }
                 } else {
                     throw Exception("Erro desconhecido")
                 }
             }
         } catch (e: HttpException) {
             val message = when (e.code()) {
-                400 -> "Informações faltando"
+                400 -> "Campos em branco"
                 404 -> "Email ou senha incorretos"
                 else -> "Erro desconhecido"
             }

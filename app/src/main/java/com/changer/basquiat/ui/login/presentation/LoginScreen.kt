@@ -26,37 +26,42 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.ReportFragment
 import com.changer.basquiat.R
+import com.changer.basquiat.common.appModule
 import com.changer.basquiat.ui.components.InputEmail
 import com.changer.basquiat.ui.components.InputPassword
 import com.changer.basquiat.ui.components.TopAppBarLoginCadastro
+import com.changer.basquiat.ui.login.data.UserForm
+import com.changer.basquiat.ui.login.domain.LoginScreenState
 import com.changer.basquiat.ui.login.domain.LoginViewModel
 import com.changer.basquiat.ui.theme.BasquiatTheme
 import com.changer.basquiat.ui.theme.Preto
+import org.koin.android.ext.koin.androidContext
+import org.koin.core.context.startKoin
+import org.koin.java.KoinJavaComponent
+import org.koin.java.KoinJavaComponent.inject
 
 @Preview
 @Composable
 fun LoginScreenPreview() {
     BasquiatTheme {
-        val vm by inject<LoginViewModel>()
-        vm.getUser()
         LoginScreen(
             navigateToHistorico = {},
-            navigateToHome = {},
-            vm
+            navigateToHome = {}
         )
     }
 }
-
 @Composable
 fun LoginScreen(
     modifier: Modifier = Modifier,
     navigateToHistorico: () -> Unit,
     navigateToHome: () -> Unit,
-    vm: LoginViewModel
+//    vm: LoginViewModel
 ) {
     val isEsqueciSenhaVisible = remember { mutableStateOf(false) }
-    val state by vm.state.observeAsState()
+
+//    val state by vm.state.observeAsState()
 
     var email by remember {
         mutableStateOf("")
@@ -74,64 +79,67 @@ fun LoginScreen(
             )
         }
     ) { padding ->
-            Box(
-                contentAlignment = Alignment.Center,
+        Box(
+            contentAlignment = Alignment.Center,
+            modifier = modifier
+                .fillMaxSize()
+                .background(Color.White)
+                .padding(padding)
+        ) {
+            Column(
                 modifier = modifier
-                    .fillMaxSize()
-                    .background(Color.White)
-                    .padding(padding)
+                    .align(Alignment.Center)
+                    .padding(26.dp)
             ) {
+                Text(
+                    text = stringResource(id = R.string.titulo_tela_login),
+                    style = MaterialTheme.typography.titleMedium,
+                    textAlign = TextAlign.Left
+                )
+
+                Spacer(modifier = modifier.height(53.dp))
+
+                Row {
+                    Text(
+                        text = "E-mail ou senha incorretos, tente novamente",
+                        color = Color.Red
+                    )
+                }
+
+                Spacer(modifier = modifier.height(10.dp))
+
+                InputEmail({ email }) { newEmail ->
+                    email = newEmail
+                }
+
+                Spacer(modifier = modifier.height(44.dp))
+
+                InputPassword({ senha }) { newSenha ->
+                    senha = newSenha
+                }
+
                 Column(
                     modifier = modifier
-                        .align(Alignment.Center)
-                        .padding(26.dp)
+                        .fillMaxWidth()
+                        .padding(top = 5.dp)
                 ) {
                     Text(
-                        text = stringResource(id = R.string.titulo_tela_login),
-                        style = MaterialTheme.typography.titleMedium,
-                        textAlign = TextAlign.Left
-                    )
-
-                    Spacer(modifier = modifier.height(53.dp))
-
-                    Row {
-                        Text(
-                            text = "E-mail ou senha incorretos, tente novamente",
-                            color = Color.Red
-                        )
-                    }
-
-                    Spacer(modifier = modifier.height(10.dp))
-
-                    InputEmail({ email }) { newEmail ->
-                        email = newEmail
-                    }
-
-                    Spacer(modifier = modifier.height(44.dp))
-
-                    InputPassword({ senha }) { newSenha ->
-                        senha = newSenha
-                    }
-
-                    Column(
+                        color = Preto,
+                        text = "Esqueci minha senha!",
+                        textAlign = TextAlign.Start,
                         modifier = modifier
-                            .fillMaxWidth()
-                            .padding(top = 5.dp)
+                            .clickable { isEsqueciSenhaVisible.value = true }
+                    )
+                    Row(
+                        modifier = modifier
+                            .align(Alignment.End)
                     ) {
-                        Text(
-                            color = Preto,
-                            text = "Esqueci minha senha!",
-                            textAlign = TextAlign.Start,
-                            modifier = modifier
-                                .clickable { isEsqueciSenhaVisible.value = true }
+                        EntryButton(
+                          onClick = { navigateToHistorico() }
+//                            onClick = { vm.getUser(login = UserForm(email, senha)) }
                         )
-                        Row(
-                            modifier = modifier
-                                .align(Alignment.End)
-                        ) {
-                            EntryButton(onClick = { navigateToHistorico() })
-                        }
                     }
+                }
 
                     if (isEsqueciSenhaVisible.value) {
                         EsqueciSenhaDialog(
@@ -140,10 +148,10 @@ fun LoginScreen(
                     }
                 }
             }
+        }
     }
-}
 
-@Composable
-fun EsqueciSenhaDialog(onClose: () -> Unit) {
+    @Composable
+    fun EsqueciSenhaDialog(onClose: () -> Unit) {
 
-}
+    }

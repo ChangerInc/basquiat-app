@@ -56,8 +56,10 @@ dependencies {
     implementation("com.squareup.retrofit2:retrofit:2.11.0")
     implementation("com.squareup.retrofit2:converter-gson:2.11.0")
     implementation("io.coil-kt:coil-compose:2.6.0")
-    implementation ("com.google.code.gson:gson:2.8.8")
     implementation("io.insert-koin:koin-android:3.5.0")
+
+    implementation("io.insert-koin:koin-android:3.5.0")
+    implementation ("com.google.code.gson:gson:2.8.8")
 
 
     implementation(libs.androidx.core.ktx)
