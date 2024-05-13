@@ -26,29 +26,24 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.ReportFragment
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.changer.basquiat.R
-import com.changer.basquiat.common.appModule
 import com.changer.basquiat.ui.components.InputEmail
 import com.changer.basquiat.ui.components.InputPassword
 import com.changer.basquiat.ui.components.TopAppBarLoginCadastro
+import com.changer.basquiat.ui.echo.presentation.EchoViewModel
 import com.changer.basquiat.ui.login.data.UserForm
-import com.changer.basquiat.ui.login.domain.LoginScreenState
+import com.changer.basquiat.ui.login.data.UsuarioToken
 import com.changer.basquiat.ui.login.domain.LoginViewModel
 import com.changer.basquiat.ui.theme.BasquiatTheme
 import com.changer.basquiat.ui.theme.Preto
-import org.koin.android.ext.koin.androidContext
-import org.koin.core.context.startKoin
-import org.koin.java.KoinJavaComponent
-import org.koin.java.KoinJavaComponent.inject
-
 @Preview
 @Composable
 fun LoginScreenPreview() {
     BasquiatTheme {
         LoginScreen(
             navigateToHistorico = {},
-            navigateToHome = {}
+            navigateToHome = {},
         )
     }
 }
@@ -57,11 +52,11 @@ fun LoginScreen(
     modifier: Modifier = Modifier,
     navigateToHistorico: () -> Unit,
     navigateToHome: () -> Unit,
-//    vm: LoginViewModel
+    vm: LoginViewModel = viewModel()
 ) {
     val isEsqueciSenhaVisible = remember { mutableStateOf(false) }
 
-//    val state by vm.state.observeAsState()
+    val state by vm.apiResponse.observeAsState()
 
     var email by remember {
         mutableStateOf("")
@@ -97,16 +92,18 @@ fun LoginScreen(
                     textAlign = TextAlign.Left
                 )
 
-                Spacer(modifier = modifier.height(53.dp))
+                /*Spacer(modifier = modifier.height(53.dp))
 
-                Row {
-                    Text(
-                        text = "E-mail ou senha incorretos, tente novamente",
-                        color = Color.Red
-                    )
+                if (erro) {
+                    Row {
+                        Text(
+                            text = "E-mail ou senha incorretos, tente novamente",
+                            color = Color.Red
+                        )
+                    }
                 }
 
-                Spacer(modifier = modifier.height(10.dp))
+                Spacer(modifier = modifier.height(10.dp))*/
 
                 InputEmail({ email }) { newEmail ->
                     email = newEmail
@@ -135,9 +132,13 @@ fun LoginScreen(
                             .align(Alignment.End)
                     ) {
                         EntryButton(
-                          onClick = { navigateToHistorico() }
-//                            onClick = { vm.getUser(login = UserForm(email, senha)) }
+//                          onClick = { navigateToHistorico() }
+                            onClick = { vm.testLogin(UserForm(email, senha)) }
                         )
+
+                        state?.let { user ->
+                            Text(text = user.toString())
+                        }
                     }
                 }
 

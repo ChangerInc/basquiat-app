@@ -6,6 +6,7 @@ import com.changer.basquiat.ui.login.domain.LoginViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
+/*
 val appModule = module {
     single<UsuarioService> {
         ApiConfig
@@ -16,4 +17,4 @@ val appModule = module {
     viewModel {
         LoginViewModel(get())
     }
-}
+}*/
