@@ -1,5 +1,6 @@
 package com.changer.basquiat
 
+import EchoScreen
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -22,7 +23,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    MainScreen()
+                    EchoScreen()
                 }
             }
         }
@@ -38,6 +39,7 @@ fun MainScreen() {
 @Composable
 fun MainScreenPreview() {
     BasquiatTheme {
-        MainScreen()
+//        MainScreen()
+        EchoScreen()
     }
 }
