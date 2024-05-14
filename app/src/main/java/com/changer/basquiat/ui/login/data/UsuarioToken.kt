@@ -9,4 +9,8 @@ data class UsuarioToken(
     private var email: String,
     private var fotoPerfil: String,
     private var token: String,
-)
+) {
+    fun getNome(): String {
+        return this.nome
+    }
+}

@@ -94,13 +94,11 @@ fun LoginScreen(
 
                 /*Spacer(modifier = modifier.height(53.dp))
 
-                if (erro) {
-                    Row {
-                        Text(
-                            text = "E-mail ou senha incorretos, tente novamente",
-                            color = Color.Red
-                        )
-                    }
+                Row {
+                    Text(
+                        text = "E-mail ou senha incorretos, tente novamente",
+                        color = Color.Red
+                    )
                 }
 
                 Spacer(modifier = modifier.height(10.dp))*/
@@ -132,13 +130,14 @@ fun LoginScreen(
                             .align(Alignment.End)
                     ) {
                         EntryButton(
-//                          onClick = { navigateToHistorico() }
-                            onClick = { vm.testLogin(UserForm(email, senha)) }
+                            onClick = {
+                                try {
+                                    vm.testLogin(UserForm(email, senha))
+                                } finally {
+                                    state?.getNome()?.let { navigateToHistorico() }
+                                }
+                            }
                         )
-
-                        state?.let { user ->
-                            Text(text = user.toString())
-                        }
                     }
                 }
 
