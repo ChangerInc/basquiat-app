@@ -8,10 +8,10 @@ import retrofit2.http.Body
 import retrofit2.http.POST
 
 interface UsuarioService {
-    @POST("/usuario/login")
-    suspend fun login(@Body login: UserForm): Response<UsuarioToken>
+    @POST("usuario/login")
+    suspend fun login(@Body login: UserForm): Response<UsuarioToken?>
 
-    @POST("/usuario/")
+    @POST("usuario/")
     suspend fun cadstro(@Body form: Usuario): Response<Usuario>
 
     /*@PUT("/usuario/{uuid}")

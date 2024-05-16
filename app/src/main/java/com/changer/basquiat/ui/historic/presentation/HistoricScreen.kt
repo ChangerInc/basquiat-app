@@ -62,15 +62,6 @@ fun HistoricScreen(/*nome: String*/) {
 
                 Spacer(modifier = Modifier.height(53.dp))
 
-                Row {
-                    Text(
-                        text = "E-mail ou senha incorretos, tente novamente",
-                        color = Color.Red
-                    )
-                }
-
-                Spacer(modifier = Modifier.height(10.dp))
-
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()

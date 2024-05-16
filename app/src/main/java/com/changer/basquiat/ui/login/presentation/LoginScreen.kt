@@ -31,22 +31,12 @@ import com.changer.basquiat.R
 import com.changer.basquiat.ui.components.InputEmail
 import com.changer.basquiat.ui.components.InputPassword
 import com.changer.basquiat.ui.components.TopAppBarLoginCadastro
-import com.changer.basquiat.ui.echo.presentation.EchoViewModel
 import com.changer.basquiat.ui.login.data.UserForm
-import com.changer.basquiat.ui.login.data.UsuarioToken
 import com.changer.basquiat.ui.login.domain.LoginViewModel
 import com.changer.basquiat.ui.theme.BasquiatTheme
 import com.changer.basquiat.ui.theme.Preto
-@Preview
-@Composable
-fun LoginScreenPreview() {
-    BasquiatTheme {
-        LoginScreen(
-            navigateToHistorico = {},
-            navigateToHome = {},
-        )
-    }
-}
+
+
 @Composable
 fun LoginScreen(
     modifier: Modifier = Modifier,
@@ -56,7 +46,11 @@ fun LoginScreen(
 ) {
     val isEsqueciSenhaVisible = remember { mutableStateOf(false) }
 
-    val state by vm.apiResponse.observeAsState()
+    val response by vm.apiResponse.observeAsState()
+
+    var errorMessage by remember {
+        mutableStateOf("")
+    }
 
     var email by remember {
         mutableStateOf("")
@@ -92,22 +86,22 @@ fun LoginScreen(
                     textAlign = TextAlign.Left
                 )
 
-                /*Spacer(modifier = modifier.height(53.dp))
+                Spacer(modifier = modifier.height(44.dp))
 
                 Row {
                     Text(
-                        text = "E-mail ou senha incorretos, tente novamente",
+                        text = errorMessage,
                         color = Color.Red
                     )
                 }
 
-                Spacer(modifier = modifier.height(10.dp))*/
+                Spacer(modifier = modifier.height(10.dp))
 
                 InputEmail({ email }) { newEmail ->
                     email = newEmail
                 }
 
-                Spacer(modifier = modifier.height(44.dp))
+                Spacer(modifier = modifier.height(32.dp))
 
                 InputPassword({ senha }) { newSenha ->
                     senha = newSenha
@@ -131,27 +125,47 @@ fun LoginScreen(
                     ) {
                         EntryButton(
                             onClick = {
+                                errorMessage = "Deu erro irmão :("
                                 try {
-                                    vm.testLogin(UserForm(email, senha))
+                                    vm.getUser(form = UserForm(email, senha))
                                 } finally {
-                                    state?.getNome()?.let { navigateToHistorico() }
+                                    println(response.toString())
+                                    println(response?.body()?.getNome())
                                 }
                             }
                         )
                     }
+
+                    Text(
+                        text = "Seja bem vindo(a), " + response?.body()?.getNome()
+                                + "\nemail: " + response?.body()?.getEmail()
+                                + "\nUUID: " + response?.body()?.getId()
+                    )
                 }
 
-                    if (isEsqueciSenhaVisible.value) {
-                        EsqueciSenhaDialog(
-                            onClose = { isEsqueciSenhaVisible.value = false }
-                        )
-                    }
+                if (isEsqueciSenhaVisible.value) {
+                    EsqueciSenhaDialog(
+                        onClose = { isEsqueciSenhaVisible.value = false }
+                    )
                 }
             }
         }
     }
+}
 
-    @Composable
-    fun EsqueciSenhaDialog(onClose: () -> Unit) {
+@Composable
+fun EsqueciSenhaDialog(onClose: () -> Unit) {
 
+}
+
+
+@Preview
+@Composable
+fun LoginScreenPreview() {
+    BasquiatTheme {
+        LoginScreen(
+            navigateToHistorico = {},
+            navigateToHome = {},
+        )
     }
+}

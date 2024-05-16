@@ -13,7 +13,7 @@ class UsuarioRepositoryImp : IUsuarioRepository {
             .create(UsuarioService::class.java)
     }
 
-    override suspend fun getUser(login: UserForm): Response<UsuarioToken> {
+    override suspend fun getUser(login: UserForm): Response<UsuarioToken?> {
         return api.login(login)
     }
 

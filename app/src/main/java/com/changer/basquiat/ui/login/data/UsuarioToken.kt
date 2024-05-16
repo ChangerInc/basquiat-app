@@ -4,7 +4,7 @@ import java.lang.reflect.Constructor
 import java.util.UUID
 
 data class UsuarioToken(
-    private var id: UUID,
+    private var userId: UUID,
     private var nome: String,
     private var email: String,
     private var fotoPerfil: String,
@@ -13,4 +13,14 @@ data class UsuarioToken(
     fun getNome(): String {
         return this.nome
     }
+
+    fun getEmail(): String {
+        return this.email
+    }
+
+    fun getId(): UUID {
+        return this.userId
+    }
+
+
 }

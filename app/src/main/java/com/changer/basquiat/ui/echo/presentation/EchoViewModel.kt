@@ -12,7 +12,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class EchoViewModel : ViewModel() {
     private val retrofit = Retrofit.Builder()
-        .baseUrl("http://26.50.154.154:8080/")
+        .baseUrl("http://10.18.36.135:8080/")
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 
