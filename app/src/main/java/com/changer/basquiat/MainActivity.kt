@@ -48,7 +48,7 @@ fun MainScreen() {
 @Composable
 fun MainScreenPreview() {
     BasquiatTheme {
-//        MainScreen()
-        EchoScreen()
+      MainScreen()
+
     }
 }
