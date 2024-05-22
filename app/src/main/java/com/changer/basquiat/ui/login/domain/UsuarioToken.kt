@@ -1,4 +1,4 @@
-package com.changer.basquiat.ui.login.data
+package com.changer.basquiat.ui.login.domain
 
 import java.lang.reflect.Constructor
 import java.util.UUID

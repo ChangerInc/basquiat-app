@@ -30,9 +30,10 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.changer.basquiat.R
 import com.changer.basquiat.ui.components.InputEmail
 import com.changer.basquiat.ui.components.InputPassword
+import com.changer.basquiat.ui.components.Loading
 import com.changer.basquiat.ui.components.TopAppBarLoginCadastro
 import com.changer.basquiat.ui.login.data.UserForm
-import com.changer.basquiat.ui.login.domain.LoginViewModel
+import com.changer.basquiat.ui.login.domain.LoginScreenState
 import com.changer.basquiat.ui.theme.BasquiatTheme
 import com.changer.basquiat.ui.theme.Preto
 
@@ -46,7 +47,6 @@ fun LoginScreen(
 ) {
     val isEsqueciSenhaVisible = remember { mutableStateOf(false) }
 
-    val response by vm.apiResponse.observeAsState()
 
     var errorMessage by remember {
         mutableStateOf("")
@@ -58,6 +58,22 @@ fun LoginScreen(
 
     var senha by remember {
         mutableStateOf("")
+    }
+
+    val state by vm.state.observeAsState()
+
+    when (state) {
+        is LoginScreenState.Loading -> {
+            Loading("Entrando...")
+        }
+
+        is LoginScreenState.Success -> {
+            navigateToHistorico()
+        }
+
+        is LoginScreenState.Error, null -> {
+            errorMessage = (state as LoginScreenState.Error).message
+        }
     }
 
     Scaffold(
@@ -125,22 +141,20 @@ fun LoginScreen(
                     ) {
                         EntryButton(
                             onClick = {
-                                errorMessage = "Deu erro irmão :("
                                 try {
                                     vm.getUser(form = UserForm(email, senha))
                                 } finally {
-                                    println(response.toString())
-                                    println(response?.body()?.getNome())
+                                    println(state.toString())
                                 }
                             }
                         )
                     }
 
-                    Text(
-                        text = "Seja bem vindo(a), " + response?.body()?.getNome()
-                                + "\nemail: " + response?.body()?.getEmail()
-                                + "\nUUID: " + response?.body()?.getId()
-                    )
+                    /*Text(
+                        text = "Seja bem vindo(a), " + state?.body()?.getNome()
+                                + "\nemail: " + state?.body()?.getEmail()
+                                + "\nUUID: " + state?.body()?.getId()
+                    )*/
                 }
 
                 if (isEsqueciSenhaVisible.value) {
@@ -151,10 +165,16 @@ fun LoginScreen(
             }
         }
     }
+
 }
 
 @Composable
 fun EsqueciSenhaDialog(onClose: () -> Unit) {
+
+}
+
+@Composable
+fun ScreenState(vm: LoginViewModel, form: UserForm) {
 
 }
 

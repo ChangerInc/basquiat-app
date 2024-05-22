@@ -2,7 +2,7 @@ package com.changer.basquiat.common.domain
 
 import com.changer.basquiat.common.data.UsuarioService
 import com.changer.basquiat.ui.login.data.UserForm
-import com.changer.basquiat.ui.login.data.UsuarioToken
+import com.changer.basquiat.ui.login.domain.UsuarioToken
 import com.changer.basquiat.ui.register.data.Usuario
 import retrofit2.Response
 
