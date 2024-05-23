@@ -26,7 +26,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.changer.basquiat.R
 import com.changer.basquiat.ui.components.InputEmail
 import com.changer.basquiat.ui.components.InputPassword
@@ -43,7 +42,7 @@ fun LoginScreen(
     modifier: Modifier = Modifier,
     navigateToHistorico: () -> Unit,
     navigateToHome: () -> Unit,
-    vm: LoginViewModel = viewModel()
+    vm: LoginViewModel?
 ) {
     val isEsqueciSenhaVisible = remember { mutableStateOf(false) }
 
@@ -60,7 +59,7 @@ fun LoginScreen(
         mutableStateOf("")
     }
 
-    val state by vm.state.observeAsState()
+    val state by vm!!.state.observeAsState()
 
     when (state) {
         is LoginScreenState.Loading -> {
@@ -142,7 +141,7 @@ fun LoginScreen(
                         EntryButton(
                             onClick = {
                                 try {
-                                    vm.getUser(form = UserForm(email, senha))
+                                    vm?.getUser(form = UserForm(email, senha))
                                 } finally {
                                     println(state.toString())
                                 }
@@ -178,7 +177,6 @@ fun ScreenState(vm: LoginViewModel, form: UserForm) {
 
 }
 
-
 @Preview
 @Composable
 fun LoginScreenPreview() {
@@ -186,6 +184,7 @@ fun LoginScreenPreview() {
         LoginScreen(
             navigateToHistorico = {},
             navigateToHome = {},
+            vm = null
         )
     }
 }
