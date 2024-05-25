@@ -11,6 +11,7 @@ val PurpleGrey40 = Color(0xFF625b71)
 val Pink40 = Color(0xFF7D5260)
 
 val Azul = Color(91, 152, 186)
+val AzulClaro = Azul.copy(alpha = 0.5f)
 val Preto = Color(19, 19, 19)
 val Cinza = Color(115, 115, 115)
 val CinzaClaro = Color(158, 158, 158)

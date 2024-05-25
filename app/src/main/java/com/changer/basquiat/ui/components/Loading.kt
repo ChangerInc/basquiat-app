@@ -18,6 +18,7 @@ import com.changer.basquiat.ui.theme.BasquiatTheme
 
 @Composable
 fun Loading(
+    loadingMessage: String,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -32,7 +33,7 @@ fun Loading(
         )
         Spacer(modifier = Modifier.height(20.dp))
         Text(
-            text = "Carregando suas músicas",
+            text = loadingMessage,
         )
     }
 }
@@ -41,6 +42,6 @@ fun Loading(
 @Composable
 fun LoadingPreview() {
     BasquiatTheme {
-        Loading(Modifier)
+            Loading("Carregando suas músicas", Modifier)
     }
 }

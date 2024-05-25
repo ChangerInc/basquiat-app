@@ -9,14 +9,17 @@ import androidx.navigation.compose.rememberNavController
 import com.changer.basquiat.ui.historic.presentation.HistoricScreen
 import com.changer.basquiat.ui.home.presentation.HomeScreen
 import com.changer.basquiat.ui.login.presentation.LoginScreen
+import com.changer.basquiat.ui.login.presentation.LoginViewModel
 import com.changer.basquiat.ui.register.presentation.RegisterScreen
 
 @Composable
 fun BasquiatNavHost(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
-    startDestination: String
+    startDestination: String,
+    vm: LoginViewModel
 ) {
+
     NavHost(
         modifier = modifier,
         navController = navController,
@@ -33,7 +36,8 @@ fun BasquiatNavHost(
         composable("login") {
             LoginScreen(
                 navigateToHistorico = { navController.navigate("historico") },
-                navigateToHome = { navController.navigate("home") }
+                navigateToHome = { navController.navigate("home") },
+                vm = vm
             )
         }
 

@@ -54,13 +54,20 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
     implementation("androidx.compose.runtime:runtime-livedata:1.6.5")
     implementation("com.squareup.retrofit2:retrofit:2.11.0")
-    implementation("com.squareup.retrofit2:converter-gson:2.11.0")
     implementation("io.coil-kt:coil-compose:2.6.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.11.0")
+    implementation ("com.google.code.gson:gson:2.8.8")
     implementation("io.insert-koin:koin-android:3.5.0")
 
     implementation("io.insert-koin:koin-android:3.5.0")
     implementation ("com.google.code.gson:gson:2.8.8")
 
+    implementation ("androidx.datastore:datastore-preferences:1.0.0")
+
+    implementation ("androidx.compose.material3:material3:1.2.1")
+    implementation ("androidx.compose.material3:material3-window-size-class:1.2.1")
+    implementation ("androidx.compose.material3:material3-adaptive-navigation-suite:1.3.0-beta01")
+    implementation ("androidx.compose.material:material-icons-extended")
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -71,6 +78,8 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.androidx.navigation.compose)
+    implementation(libs.protolite.well.known.types)
+    implementation(libs.androidx.material3.android)
 //    implementation(libs.androidx.room.ktx)
 //    implementation(libs.androidx.documentfile)
     testImplementation(libs.junit)

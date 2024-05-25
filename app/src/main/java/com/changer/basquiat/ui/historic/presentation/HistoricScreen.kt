@@ -1,7 +1,6 @@
 package com.changer.basquiat.ui.historic.presentation
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -22,14 +21,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.changer.basquiat.R
-import com.changer.basquiat.ui.components.InputEmail
-import com.changer.basquiat.ui.components.InputPassword
 import com.changer.basquiat.ui.components.TopBarLogin
-import com.changer.basquiat.ui.login.data.UserForm
-import com.changer.basquiat.ui.login.data.UsuarioToken
 import com.changer.basquiat.ui.login.presentation.EntryButton
-import com.changer.basquiat.ui.login.presentation.EsqueciSenhaDialog
-import com.changer.basquiat.ui.theme.Preto
 
 @Preview
 @Composable
