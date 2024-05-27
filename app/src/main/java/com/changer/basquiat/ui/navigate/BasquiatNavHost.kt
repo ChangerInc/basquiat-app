@@ -6,6 +6,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.changer.basquiat.common.data.UserPreferences
+import com.changer.basquiat.ui.historic.data.HistoricoViewModel
 import com.changer.basquiat.ui.historic.presentation.HistoricScreen
 import com.changer.basquiat.ui.home.presentation.HomeScreen
 import com.changer.basquiat.ui.login.presentation.LoginScreen
@@ -17,7 +19,9 @@ fun BasquiatNavHost(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
     startDestination: String,
-    vm: LoginViewModel
+    user: UserPreferences,
+    vmLogin: LoginViewModel,
+    vmHistoric: HistoricoViewModel,
 ) {
 
     NavHost(
@@ -37,7 +41,7 @@ fun BasquiatNavHost(
             LoginScreen(
                 navigateToHistorico = { navController.navigate("historico") },
                 navigateToHome = { navController.navigate("home") },
-                vm = vm
+                vm = vmLogin
             )
         }
 
@@ -49,7 +53,13 @@ fun BasquiatNavHost(
         }
 
         composable("historico") {
-            HistoricScreen()
+            HistoricScreen(
+                navigationToHistoric = { navController.navigate("historico") },
+                navigationToConversion = { navController.navigate("conversion") },
+                navigationToCircles = { navController.navigate("circles") },
+                vm = vmHistoric,
+                user
+            )
         }
     }
 }

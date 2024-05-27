@@ -4,31 +4,30 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.changer.basquiat.ui.historic.data.HistoricItem
+import com.changer.basquiat.common.data.Arquivo
 
 @Preview(showBackground = true)
 @Composable
 fun HistoricPreview() {
     Historic(items = List(50) {
-        HistoricItem(
-            criacao = java.util.Date(),
+        Arquivo(
+            idArquivo = java.util.UUID.randomUUID(),
+            nome = "Nome do arquivo",
+            criacao = "2021-10-10",
+            tamanho = java.math.BigDecimal(100),
             extensao = "pdf",
-            idArquivo = "id$it",
-            nome = "Arquivo $it",
-            tamanho = it.toLong(),
-            urlArquivo = "url$it"
+            urlArquivo = "https://www.google.com"
         )
     })
 }
 
 @Composable
 fun Historic(
-    items: List<HistoricItem>
+    items: List<Arquivo>?
 ) {
     LazyColumn(
         modifier = Modifier
@@ -36,15 +35,17 @@ fun Historic(
         contentPadding = PaddingValues(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        this.items(items) { item ->
-            FileItem(
-                criacao = item.criacao,
-                extensao = item.extensao,
-                idArquivo = item.idArquivo,
-                nome = item.nome,
-                tamanho = item.tamanho,
-                urlArquivo = item.urlArquivo
-            )
+        items?.forEach { arquivo ->
+            item {
+                FileItem(
+                    criacao = arquivo.criacao,
+                    extensao = arquivo.extensao,
+                    idArquivo = arquivo.idArquivo.toString(),
+                    nome = arquivo.nome,
+                    tamanho = arquivo.tamanho,
+                    urlArquivo = arquivo.urlArquivo
+                )
+            }
         }
     }
 }

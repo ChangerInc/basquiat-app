@@ -11,6 +11,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.changer.basquiat.common.appModule
+import com.changer.basquiat.common.data.UserPreferences
+import com.changer.basquiat.ui.historic.data.HistoricoViewModel
 import com.changer.basquiat.ui.login.presentation.LoginViewModel
 import com.changer.basquiat.ui.navigate.BasquiatNavHost
 import com.changer.basquiat.ui.theme.BasquiatTheme
@@ -31,8 +33,10 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    val vm by inject<LoginViewModel>()
-                    MainScreen(vm)
+                    val user by inject<UserPreferences>()
+                    val vmLogin by inject<LoginViewModel>()
+                    val vmHistoric by inject<HistoricoViewModel>()
+                    MainScreen(user, vmLogin, vmHistoric)
                 }
             }
         }
@@ -40,8 +44,8 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun MainScreen(vm: LoginViewModel) {
-    BasquiatNavHost(startDestination = "home", vm = vm)
+fun MainScreen(user: UserPreferences, vmLogin: LoginViewModel, vmHistoric: HistoricoViewModel) {
+    BasquiatNavHost(startDestination = "home", user = user, vmLogin = vmLogin, vmHistoric = vmHistoric)
 }
 
 

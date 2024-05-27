@@ -148,12 +148,6 @@ fun LoginScreen(
                             }
                         )
                     }
-
-                    /*Text(
-                        text = "Seja bem vindo(a), " + state?.body()?.getNome()
-                                + "\nemail: " + state?.body()?.getEmail()
-                                + "\nUUID: " + state?.body()?.getId()
-                    )*/
                 }
 
                 if (isEsqueciSenhaVisible.value) {
@@ -169,11 +163,6 @@ fun LoginScreen(
 
 @Composable
 fun EsqueciSenhaDialog(onClose: () -> Unit) {
-
-}
-
-@Composable
-fun ScreenState(vm: LoginViewModel, form: UserForm) {
 
 }
 

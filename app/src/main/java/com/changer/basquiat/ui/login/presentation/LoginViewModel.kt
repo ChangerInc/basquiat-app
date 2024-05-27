@@ -10,38 +10,39 @@ import com.changer.basquiat.ui.login.domain.LoginScreenState
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 
-class LoginViewModel (
+class LoginViewModel(
     private val repository: IUsuarioRepository,
     private val userPreferences: UserPreferences
-): ViewModel() {
+) : ViewModel() {
     var state = MutableLiveData<LoginScreenState>(LoginScreenState.Loading)
         private set
 
     fun getUser(form: UserForm) {
-        try {
-            viewModelScope.launch {
+        viewModelScope.launch {
+            state.value = LoginScreenState.Loading
+            try {
                 val response = repository.getUser(form)
-                state.value = LoginScreenState.Loading
 
                 if (response.isSuccessful) {
                     response.body()?.let {
                         userPreferences.saveAuthToken(it)
                         state.value = LoginScreenState.Success(data = it)
-                    } ?: LoginScreenState.Error("Erro desconhecido")
-                } else {
-                    state.value = LoginScreenState.Error("Erro desconhecido")
+                    }
                 }
-            }
-        } catch (e: HttpException) {
-            val message = when (e.code()) {
-                400 -> "Campos em branco"
-                404 -> "Email ou senha incorretos"
-                else -> "Erro desconhecido"
-            }
+            } catch (e: HttpException) {
+                val message = when (e.code()) {
+                    400 -> "Email ou senha incorretos"
+                    401 -> "Não autorizado"
+                    404 -> "Email ou senha incorretos"
+                    405 -> "Método http não permitido"
+                    500 -> "Erro interno do servidor"
+                    else -> "Erro desconhecido"
+                }
 
-            state.value = LoginScreenState.Error(message)
-        } catch (e: Exception) {
-            state.value = LoginScreenState.Error("Erro desconhecido")
+                    state.value = LoginScreenState.Error(message)
+            } catch (e: Exception) {
+                    state.value = LoginScreenState.Error(e.message.toString())
+            }
         }
     }
 }

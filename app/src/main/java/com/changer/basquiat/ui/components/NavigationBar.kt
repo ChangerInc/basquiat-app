@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
@@ -23,7 +24,8 @@ fun NavigationBarPreview() {
         NavigateBar(
             navigateToHistorico = {},
             navigateToConversao = {},
-            navigateToCirculos = {}
+            navigateToCirculos = {},
+            selectedScreen = 1
         )
     }
 }
@@ -33,23 +35,24 @@ fun NavigateBar(
     modifier: Modifier = Modifier,
     navigateToHistorico: () -> Unit,
     navigateToConversao: () -> Unit,
-    navigateToCirculos: () -> Unit
+    navigateToCirculos: () -> Unit,
+    selectedScreen: Int
 ) {
-    val selectedItem by remember { mutableIntStateOf(0) }
+    var selectedItem by remember { mutableIntStateOf(selectedScreen) }
     val items = listOf(
         ItemsNavigationBar(
             "Conversor",
-            navigateToConversao,
+            { navigateToConversao(); selectedItem = 0 },
             ImageVector.vectorResource(id = R.drawable.outline_change_circle_24)
         ),
         ItemsNavigationBar(
             "Histórico",
-            navigateToHistorico,
+            { navigateToHistorico(); selectedItem = 1 },
             ImageVector.vectorResource(id = R.drawable.outline_table_rows_24)
         ),
         ItemsNavigationBar(
             "Círculos",
-            navigateToCirculos,
+            { navigateToCirculos(); selectedItem = 2 },
             ImageVector.vectorResource(id = R.drawable.outline_groups_24)
         )
     )
