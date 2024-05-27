@@ -11,9 +11,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.changer.basquiat.common.appModule
-import com.changer.basquiat.ui.login.presentation.LoginViewModel
-import com.changer.basquiat.ui.navigate.BasquiatNavHost
-import com.changer.basquiat.ui.theme.BasquiatTheme
+import com.changer.basquiat.presentation.ui.navigate.BasquiatNavHost
+import com.changer.basquiat.presentation.ui.theme.BasquiatTheme
+import com.changer.basquiat.presentation.viewmodel.LoginViewModel
 import org.koin.android.ext.android.inject
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin

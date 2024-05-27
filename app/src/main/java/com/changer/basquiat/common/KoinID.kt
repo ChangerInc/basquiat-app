@@ -1,9 +1,9 @@
 package com.changer.basquiat.common
 
-import com.changer.basquiat.common.data.UserPreferences
-import com.changer.basquiat.common.domain.IUsuarioRepository
-import com.changer.basquiat.common.domain.UsuarioRepositoryImp
-import com.changer.basquiat.ui.login.presentation.LoginViewModel
+import com.changer.basquiat.common.data.preferences.UserPreferences
+import com.changer.basquiat.domain.repository.IUsuarioRepository
+import com.changer.basquiat.common.data.repository.UsuarioRepositoryImp
+import com.changer.basquiat.presentation.viewmodel.LoginViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
