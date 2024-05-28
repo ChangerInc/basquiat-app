@@ -27,15 +27,15 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.changer.basquiat.R
+import com.changer.basquiat.domain.model.UserForm
 import com.changer.basquiat.presentation.viewmodel.LoginViewModel
-import com.changer.basquiat.ui.components.InputEmail
-import com.changer.basquiat.ui.components.InputPassword
-import com.changer.basquiat.ui.components.Loading
-import com.changer.basquiat.ui.components.TopAppBarLoginCadastro
-import com.changer.basquiat.ui.login.data.UserForm
-import com.changer.basquiat.ui.login.domain.LoginScreenState
-import com.changer.basquiat.ui.theme.BasquiatTheme
-import com.changer.basquiat.ui.theme.Preto
+import com.changer.basquiat.presentation.ui.components.InputEmail
+import com.changer.basquiat.presentation.ui.components.InputPassword
+import com.changer.basquiat.presentation.ui.components.Loading
+import com.changer.basquiat.presentation.ui.components.TopAppBarLoginCadastro
+import com.changer.basquiat.presentation.ui.login.LoginScreenState
+import com.changer.basquiat.presentation.ui.theme.BasquiatTheme
+import com.changer.basquiat.presentation.ui.theme.Preto
 
 
 @Composable

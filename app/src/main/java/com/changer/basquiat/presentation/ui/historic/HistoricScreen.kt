@@ -21,8 +21,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.changer.basquiat.R
-import com.changer.basquiat.ui.components.TopBarLogin
-import com.changer.basquiat.ui.login.presentation.EntryButton
+import com.changer.basquiat.presentation.ui.components.TopBarLogin
+import com.changer.basquiat.presentation.ui.login.EntryButton
 
 @Preview
 @Composable

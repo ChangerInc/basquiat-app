@@ -11,9 +11,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.changer.basquiat.ui.theme.Azul
-import com.changer.basquiat.ui.theme.BasquiatTheme
-import com.changer.basquiat.ui.theme.Branco
+import com.changer.basquiat.presentation.ui.theme.Azul
+import com.changer.basquiat.presentation.ui.theme.BasquiatTheme
+import com.changer.basquiat.presentation.ui.theme.Branco
 
 @Preview(showBackground = true)
 @Composable

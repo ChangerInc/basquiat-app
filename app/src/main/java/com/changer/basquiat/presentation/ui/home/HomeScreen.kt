@@ -26,9 +26,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.changer.basquiat.R
 import com.changer.basquiat.R.drawable
-import com.changer.basquiat.ui.theme.Azul
-import com.changer.basquiat.ui.theme.Branco
-import com.changer.basquiat.ui.theme.Preto
+import com.changer.basquiat.presentation.ui.theme.Azul
+import com.changer.basquiat.presentation.ui.theme.Branco
+import com.changer.basquiat.presentation.ui.theme.Preto
 
 @Preview
 @Composable
