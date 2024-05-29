@@ -59,6 +59,7 @@ dependencies {
     implementation ("com.google.code.gson:gson:2.8.8")
     implementation("io.insert-koin:koin-android:3.5.0")
 
+    implementation ("androidx.documentfile:documentfile:1.0.1")
     implementation("io.insert-koin:koin-android:3.5.0")
     implementation ("com.google.code.gson:gson:2.8.8")
 
@@ -80,8 +81,6 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.protolite.well.known.types)
     implementation(libs.androidx.material3.android)
-//    implementation(libs.androidx.room.ktx)
-//    implementation(libs.androidx.documentfile)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

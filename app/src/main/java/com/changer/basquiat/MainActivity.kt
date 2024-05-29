@@ -1,6 +1,5 @@
 package com.changer.basquiat
 
-import EchoScreen
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -9,11 +8,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import com.changer.basquiat.common.appModule
-import com.changer.basquiat.presentation.ui.navigate.BasquiatNavHost
+import com.changer.basquiat.common.data.preferences.UserPreferences
 import com.changer.basquiat.presentation.ui.theme.BasquiatTheme
+import com.changer.basquiat.presentation.viewmodel.HistoricoViewModel
 import com.changer.basquiat.presentation.viewmodel.LoginViewModel
+import com.changer.basquiat.ui.navigate.BasquiatNavHost
 import org.koin.android.ext.android.inject
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
@@ -31,8 +31,10 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    val vm by inject<LoginViewModel>()
-                    MainScreen(vm)
+                    val user by inject<UserPreferences>()
+                    val vmLogin by inject<LoginViewModel>()
+                    val vmHistoric by inject<HistoricoViewModel>()
+                    MainScreen(user, vmLogin, vmHistoric)
                 }
             }
         }
@@ -40,8 +42,13 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun MainScreen(vm: LoginViewModel) {
-    BasquiatNavHost(startDestination = "home", vm = vm)
+fun MainScreen(user: UserPreferences, vmLogin: LoginViewModel, vmHistoric: HistoricoViewModel) {
+    BasquiatNavHost(
+        startDestination = "home",
+        user = user,
+        vmLogin = vmLogin,
+        vmHistoric = vmHistoric
+    )
 }
 
 

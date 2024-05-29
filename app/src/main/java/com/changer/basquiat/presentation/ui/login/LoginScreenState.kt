@@ -3,6 +3,7 @@ package com.changer.basquiat.presentation.ui.login
 import com.changer.basquiat.domain.model.UsuarioToken
 
 sealed interface LoginScreenState {
+    data object Normalize: LoginScreenState
     data object Loading: LoginScreenState
 
     data class Success(
