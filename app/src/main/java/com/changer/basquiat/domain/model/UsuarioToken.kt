@@ -1,6 +1,5 @@
 package com.changer.basquiat.domain.model
 
-import java.lang.reflect.Constructor
 import java.util.UUID
 
 data class UsuarioToken(

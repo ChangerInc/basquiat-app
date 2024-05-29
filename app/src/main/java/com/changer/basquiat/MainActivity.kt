@@ -13,7 +13,7 @@ import com.changer.basquiat.common.data.preferences.UserPreferences
 import com.changer.basquiat.presentation.ui.theme.BasquiatTheme
 import com.changer.basquiat.presentation.viewmodel.HistoricoViewModel
 import com.changer.basquiat.presentation.viewmodel.LoginViewModel
-import com.changer.basquiat.ui.navigate.BasquiatNavHost
+import com.changer.basquiat.presentation.ui.navigate.BasquiatNavHost
 import org.koin.android.ext.android.inject
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
@@ -57,6 +57,6 @@ fun MainScreen(user: UserPreferences, vmLogin: LoginViewModel, vmHistoric: Histo
 //fun MainScreenPreview() {
 //    BasquiatTheme {
 //        MainScreen(vm)
-////        EchoScreen()
+////        com.changer.basquiat.presentation.ui.echo.EchoScreen()
 //    }
 //}

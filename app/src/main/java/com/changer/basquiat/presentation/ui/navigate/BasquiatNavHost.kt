@@ -1,4 +1,4 @@
-package com.changer.basquiat.ui.navigate
+package com.changer.basquiat.presentation.ui.navigate
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier

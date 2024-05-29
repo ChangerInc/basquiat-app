@@ -2,6 +2,7 @@ package com.changer.basquiat.common.domain
 
 import com.changer.basquiat.common.data.remote.ApiConfig
 import com.changer.basquiat.common.data.remote.ArquivoService
+import com.changer.basquiat.common.data.repository.IArquivoRepository
 import com.changer.basquiat.domain.model.Arquivo
 import okhttp3.MultipartBody
 import okhttp3.ResponseBody
@@ -9,7 +10,7 @@ import retrofit2.Response
 import java.util.UUID
 
 class ArquivoRepositoryImp : IArquivoRepository {
-    val api by lazy {
+    private val api by lazy {
         ApiConfig
             .getIntance()
             .create(ArquivoService::class.java)

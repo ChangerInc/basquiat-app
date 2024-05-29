@@ -140,7 +140,7 @@ fun LoginScreen(
         is LoginScreenState.Error, null -> {
             val errorMessage = (state as LoginScreenState.Error).message
             ErrorView(message = errorMessage) {
-                vm.TryAgain()
+                vm.tryAgain()
             }
         }
 

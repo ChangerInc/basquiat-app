@@ -1,7 +1,6 @@
 package com.changer.basquiat.domain.model
 
 import java.math.BigDecimal
-import java.time.LocalDateTime
 import java.util.UUID
 
 data class Arquivo (

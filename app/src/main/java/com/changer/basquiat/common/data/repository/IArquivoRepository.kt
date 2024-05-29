@@ -1,4 +1,4 @@
-package com.changer.basquiat.common.domain
+package com.changer.basquiat.common.data.repository
 
 import com.changer.basquiat.domain.model.Arquivo
 import okhttp3.MultipartBody

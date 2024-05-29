@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.changer.basquiat.common.data.preferences.UserPreferences
 import com.changer.basquiat.domain.model.UserForm
-import com.changer.basquiat.domain.repository.IUsuarioRepository
+import com.changer.basquiat.common.data.repository.IUsuarioRepository
 import com.changer.basquiat.presentation.ui.login.LoginScreenState
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -47,8 +47,9 @@ class LoginViewModel(
             }
         }
     }
-    fun TryAgain() {
+    fun tryAgain() {
         state.value = LoginScreenState.Normalize
     }
+
 }
 

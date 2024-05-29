@@ -1,4 +1,4 @@
-package com.changer.basquiat.domain.repository
+package com.changer.basquiat.common.data.repository
 
 import com.changer.basquiat.domain.model.UserForm
 import com.changer.basquiat.domain.model.Usuario

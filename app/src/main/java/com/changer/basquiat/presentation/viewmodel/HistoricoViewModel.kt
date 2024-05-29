@@ -4,7 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.changer.basquiat.common.data.preferences.UserPreferences
-import com.changer.basquiat.common.domain.IArquivoRepository
+import com.changer.basquiat.common.data.repository.IArquivoRepository
 import com.changer.basquiat.domain.model.Arquivo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

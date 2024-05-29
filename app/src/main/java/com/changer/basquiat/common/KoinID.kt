@@ -1,10 +1,10 @@
 package com.changer.basquiat.common
 
 import com.changer.basquiat.common.data.preferences.UserPreferences
-import com.changer.basquiat.common.data.repository.UsuarioRepositoryImp
+import com.changer.basquiat.common.domain.UsuarioRepositoryImp
 import com.changer.basquiat.common.domain.ArquivoRepositoryImp
-import com.changer.basquiat.common.domain.IArquivoRepository
-import com.changer.basquiat.domain.repository.IUsuarioRepository
+import com.changer.basquiat.common.data.repository.IArquivoRepository
+import com.changer.basquiat.common.data.repository.IUsuarioRepository
 import com.changer.basquiat.presentation.viewmodel.HistoricoViewModel
 import com.changer.basquiat.presentation.viewmodel.LoginViewModel
 
