@@ -14,6 +14,7 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -31,16 +32,23 @@ import com.changer.basquiat.presentation.ui.theme.Preto
 @Preview(showBackground = true)
 @Composable
 fun InputNamePreview() {
+    var name by remember {
+        mutableStateOf("")
+    }
+
     BasquiatTheme {
-        InputName()
+        InputName({ name }) {
+            name = it
+        }
     }
 }
 
 @Composable
 fun InputName(
-    modifier: Modifier = Modifier
+    name: () -> String,
+    modifier: Modifier = Modifier,
+    setName: (String) -> Unit
 ) {
-    var name by rememberSaveable { mutableStateOf("") }
 
     OutlinedTextField(
         shape = OutlinedTextFieldDefaults.shape,
@@ -53,10 +61,10 @@ fun InputName(
             unfocusedIndicatorColor = CinzaClaro,
             unfocusedContainerColor = Branco,
         ),
-        value = name,
+        value = name(),
         onValueChange = {
             if (it.length < 21) {
-                name = it
+                setName(it)
             }
         },
         label = {

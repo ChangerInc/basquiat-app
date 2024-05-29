@@ -20,6 +20,6 @@ class UsuarioRepositoryImp : IUsuarioRepository {
     }
 
     override suspend fun registerUser(user: Usuario): Response<Usuario> {
-        return api.cadstro(user)
+        return api.register(user)
     }
 }

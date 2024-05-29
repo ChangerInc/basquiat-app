@@ -12,7 +12,7 @@ interface UsuarioService {
     suspend fun login(@Body login: UserForm): Response<UsuarioToken?>
 
     @POST("usuario/")
-    suspend fun cadstro(@Body form: Usuario): Response<Usuario>
+    suspend fun register(@Body form: Usuario): Response<Usuario>
 
     /*@PUT("/usuario/{uuid}")
     suspend fun mudarSenha(@Path("uuid") uuid: UUID): Response<Usuario>*/

@@ -52,14 +52,21 @@ fun RegisterScreen(
     navigateToLogin: () -> Unit,
     navigateToHome: () -> Unit
 ) {
+    var name by remember {
+        mutableStateOf("")
+    }
+
     var email by remember {
         mutableStateOf("")
     }
 
-    var senha by remember {
+    var password by remember {
         mutableStateOf("")
     }
 
+    var passwordConfirm by remember {
+        mutableStateOf("")
+    }
 
     Scaffold(
         topBar = {
@@ -88,7 +95,9 @@ fun RegisterScreen(
                 )
                 Spacer(modifier = modifier.height(53.dp))
 
-                InputName()
+                InputName({ name }) { newName ->
+                    name = newName
+                }
 
                 Spacer(modifier = modifier.height(11.dp))
 
@@ -102,8 +111,8 @@ fun RegisterScreen(
 
                 Spacer(modifier = modifier.height(11.dp))
 
-                InputPassword({ senha }) { newSenha ->
-                    senha = newSenha
+                InputPassword({ password }) { newSenha ->
+                    password = newSenha
                 }
 
                 Column(
