@@ -17,7 +17,7 @@ fun HistoricPreview() {
         Arquivo(
             idArquivo = java.util.UUID.randomUUID(),
             nome = "Nome do arquivo",
-            criacao = "2021-10-10",
+            criacao = "2021-10-10T00:00:00.000000",
             tamanho = java.math.BigDecimal(100),
             extensao = "pdf",
             urlArquivo = "https://www.google.com"
