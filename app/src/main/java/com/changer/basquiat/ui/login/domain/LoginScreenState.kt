@@ -1,6 +1,7 @@
 package com.changer.basquiat.ui.login.domain
 
 sealed interface LoginScreenState {
+    data object Normalize: LoginScreenState
     data object Loading: LoginScreenState
 
     data class Success(

@@ -26,7 +26,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.changer.basquiat.R
+import com.changer.basquiat.ui.components.ErrorView
 import com.changer.basquiat.ui.components.InputEmail
 import com.changer.basquiat.ui.components.InputPassword
 import com.changer.basquiat.ui.components.Loading
@@ -42,14 +44,9 @@ fun LoginScreen(
     modifier: Modifier = Modifier,
     navigateToHistorico: () -> Unit,
     navigateToHome: () -> Unit,
-    vm: LoginViewModel?
+    vm: LoginViewModel
 ) {
     val isEsqueciSenhaVisible = remember { mutableStateOf(false) }
-
-
-    var errorMessage by remember {
-        mutableStateOf("")
-    }
 
     var email by remember {
         mutableStateOf("")
@@ -59,106 +56,97 @@ fun LoginScreen(
         mutableStateOf("")
     }
 
-    val state by vm!!.state.observeAsState()
+    val state by vm.state.observeAsState()
 
     when (state) {
+        is LoginScreenState.Normalize -> {
+            Scaffold(
+                topBar = {
+                    TopAppBarLoginCadastro(
+                        titulo = "Login",
+                        navigateToPage = { navigateToHome() }
+                    )
+                }
+            ) { padding ->
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = modifier
+                        .fillMaxSize()
+                        .background(Color.White)
+                        .padding(padding)
+                ) {
+                    Column(
+                        modifier = modifier
+                            .align(Alignment.Center)
+                            .padding(26.dp)
+                    ) {
+                        Text(
+                            text = stringResource(id = R.string.titulo_tela_login),
+                            style = MaterialTheme.typography.titleMedium,
+                            textAlign = TextAlign.Left
+                        )
+
+                        Spacer(modifier = modifier.height(10.dp))
+
+                        InputEmail({ email }) { newEmail ->
+                            email = newEmail
+                        }
+
+                        Spacer(modifier = modifier.height(32.dp))
+
+                        InputPassword({ senha }) { newSenha ->
+                            senha = newSenha
+                        }
+
+                        Column(
+                            modifier = modifier
+                                .fillMaxWidth()
+                                .padding(top = 5.dp)
+                        ) {
+                            Text(
+                                color = Preto,
+                                text = "Esqueci minha senha!",
+                                textAlign = TextAlign.Start,
+                                modifier = modifier
+                                    .clickable { isEsqueciSenhaVisible.value = true }
+                            )
+                            Row(
+                                modifier = modifier
+                                    .align(Alignment.End)
+                            ) {
+                                EntryButton(
+                                    onClick = {
+                                        vm.getUser(form = UserForm(email, senha))
+                                    }
+                                )
+                            }
+                        }
+
+                        if (isEsqueciSenhaVisible.value) {
+                            EsqueciSenhaDialog(
+                                onClose = { isEsqueciSenhaVisible.value = false }
+                            )
+                        }
+                    }
+                }
+            }
+        }
+
         is LoginScreenState.Loading -> {
             Loading("Entrando...")
+        }
+
+        is LoginScreenState.Error, null -> {
+            val errorMessage = (state as LoginScreenState.Error).message
+            ErrorView(message = errorMessage) {
+                vm.TryAgain()
+            }
         }
 
         is LoginScreenState.Success -> {
             navigateToHistorico()
         }
-
-        is LoginScreenState.Error, null -> {
-            errorMessage = (state as LoginScreenState.Error).message
-        }
     }
-
-    Scaffold(
-        topBar = {
-            TopAppBarLoginCadastro(
-                titulo = "Login",
-                navigateToPage = { navigateToHome() }
-            )
-        }
-    ) { padding ->
-        Box(
-            contentAlignment = Alignment.Center,
-            modifier = modifier
-                .fillMaxSize()
-                .background(Color.White)
-                .padding(padding)
-        ) {
-            Column(
-                modifier = modifier
-                    .align(Alignment.Center)
-                    .padding(26.dp)
-            ) {
-                Text(
-                    text = stringResource(id = R.string.titulo_tela_login),
-                    style = MaterialTheme.typography.titleMedium,
-                    textAlign = TextAlign.Left
-                )
-
-                Spacer(modifier = modifier.height(44.dp))
-
-                Row {
-                    Text(
-                        text = errorMessage,
-                        color = Color.Red
-                    )
-                }
-
-                Spacer(modifier = modifier.height(10.dp))
-
-                InputEmail({ email }) { newEmail ->
-                    email = newEmail
-                }
-
-                Spacer(modifier = modifier.height(32.dp))
-
-                InputPassword({ senha }) { newSenha ->
-                    senha = newSenha
-                }
-
-                Column(
-                    modifier = modifier
-                        .fillMaxWidth()
-                        .padding(top = 5.dp)
-                ) {
-                    Text(
-                        color = Preto,
-                        text = "Esqueci minha senha!",
-                        textAlign = TextAlign.Start,
-                        modifier = modifier
-                            .clickable { isEsqueciSenhaVisible.value = true }
-                    )
-                    Row(
-                        modifier = modifier
-                            .align(Alignment.End)
-                    ) {
-                        EntryButton(
-                            onClick = {
-                                try {
-                                    vm?.getUser(form = UserForm(email, senha))
-                                } finally {
-                                    println(state.toString())
-                                }
-                            }
-                        )
-                    }
-                }
-
-                if (isEsqueciSenhaVisible.value) {
-                    EsqueciSenhaDialog(
-                        onClose = { isEsqueciSenhaVisible.value = false }
-                    )
-                }
-            }
-        }
-    }
-
 }
 
 @Composable
@@ -166,14 +154,15 @@ fun EsqueciSenhaDialog(onClose: () -> Unit) {
 
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 fun LoginScreenPreview() {
     BasquiatTheme {
+        val vm = viewModel<LoginViewModel>()
         LoginScreen(
             navigateToHistorico = {},
             navigateToHome = {},
-            vm = null
+            vm = vm
         )
     }
 }
