@@ -35,6 +35,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.changer.basquiat.R
 import com.changer.basquiat.common.data.UserPreferences
 import com.changer.basquiat.ui.components.NavigateBar
@@ -52,7 +53,7 @@ fun HistoricScreenPreview() {
         navigationToHistoric = {},
         navigationToConversion = {},
         navigationToCircles = {},
-        vm = null,
+        vm = viewModel(),
         userPreferences = null
     )
 }
@@ -63,10 +64,10 @@ fun HistoricScreen(
     navigationToHistoric: () -> Unit,
     navigationToConversion: () -> Unit,
     navigationToCircles: () -> Unit,
-    vm: HistoricoViewModel?,
+    vm: HistoricoViewModel,
     userPreferences: UserPreferences?
 ) {
-    val arquivos by vm?.arquivos!!.observeAsState(emptyList())
+    val arquivos by vm.arquivos.observeAsState(emptyList())
     val user by userPreferences!!.authToken.collectAsState(initial = null)
     val context = LocalContext.current
     val fileChooserLauncher =
@@ -82,13 +83,13 @@ fun HistoricScreen(
                 inputStream?.let { stream ->
                     val requestFile = stream.readBytes().toRequestBody()
                     val body = MultipartBody.Part.createFormData("file", fileName, requestFile)
-                    vm?.uploadArquivo(user?.getId(), body)
+                    vm.uploadArquivo(user?.getId(), body)
                 }
             }
         }
 
     LaunchedEffect(key1 = Unit) {
-        vm?.getArquivos(user?.getId())
+        vm.getArquivos(user?.getId())
     }
 
     Scaffold(

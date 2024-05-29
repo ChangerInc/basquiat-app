@@ -4,16 +4,18 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.changer.basquiat.common.data.Arquivo
 
 @Preview(showBackground = true)
 @Composable
 fun HistoricPreview() {
-    Historic(items = List(50) {
+    Historic(items = List(0) {
         Arquivo(
             idArquivo = java.util.UUID.randomUUID(),
             nome = "Nome do arquivo",
@@ -35,15 +37,26 @@ fun Historic(
         contentPadding = PaddingValues(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        items?.forEach { arquivo ->
+        if (items!!.isNotEmpty()) {
+            items.forEach { arquivo ->
+                item {
+                    FileItem(
+                        criacao = arquivo.criacao,
+                        extensao = arquivo.extensao,
+                        idArquivo = arquivo.idArquivo.toString(),
+                        nome = arquivo.nome,
+                        tamanho = arquivo.tamanho,
+                        urlArquivo = arquivo.urlArquivo
+                    )
+                }
+            }
+        } else {
             item {
-                FileItem(
-                    criacao = arquivo.criacao,
-                    extensao = arquivo.extensao,
-                    idArquivo = arquivo.idArquivo.toString(),
-                    nome = arquivo.nome,
-                    tamanho = arquivo.tamanho,
-                    urlArquivo = arquivo.urlArquivo
+                Text(
+                    text = "Nenhum arquivo no histórico",
+                    modifier = Modifier.fillMaxSize(),
+                    textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+                    fontSize = 20.sp
                 )
             }
         }
