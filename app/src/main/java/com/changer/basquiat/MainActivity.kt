@@ -9,11 +9,10 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.changer.basquiat.common.appModule
-import com.changer.basquiat.common.data.preferences.UserPreferences
+import com.changer.basquiat.presentation.ui.navigate.BasquiatNavHost
 import com.changer.basquiat.presentation.ui.theme.BasquiatTheme
 import com.changer.basquiat.presentation.viewmodel.HistoricoViewModel
 import com.changer.basquiat.presentation.viewmodel.LoginViewModel
-import com.changer.basquiat.presentation.ui.navigate.BasquiatNavHost
 import org.koin.android.ext.android.inject
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
@@ -31,10 +30,9 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    val user by inject<UserPreferences>()
                     val vmLogin by inject<LoginViewModel>()
                     val vmHistoric by inject<HistoricoViewModel>()
-                    MainScreen(user, vmLogin, vmHistoric)
+                    MainScreen(vmLogin, vmHistoric)
                 }
             }
         }
@@ -42,10 +40,9 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun MainScreen(user: UserPreferences, vmLogin: LoginViewModel, vmHistoric: HistoricoViewModel) {
+fun MainScreen(vmLogin: LoginViewModel, vmHistoric: HistoricoViewModel) {
     BasquiatNavHost(
         startDestination = "home",
-        user = user,
         vmLogin = vmLogin,
         vmHistoric = vmHistoric
     )

@@ -1,5 +1,6 @@
 package com.changer.basquiat.presentation.ui.historic
 
+import android.content.Context
 import android.net.Uri
 import android.provider.OpenableColumns
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -37,14 +38,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.changer.basquiat.R
-import com.changer.basquiat.common.data.preferences.UserPreferences
 import com.changer.basquiat.presentation.ui.components.NavigateBar
 import com.changer.basquiat.presentation.ui.components.TopBarLogin
+import com.changer.basquiat.presentation.ui.components.UploadButton
 import com.changer.basquiat.presentation.ui.theme.Azul
 import com.changer.basquiat.presentation.ui.theme.Branco
 import com.changer.basquiat.presentation.viewmodel.HistoricoViewModel
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.toRequestBody
+import java.util.UUID
 
 @Preview(showBackground = true)
 @Composable
@@ -53,8 +55,7 @@ fun HistoricScreenPreview() {
         navigationToHistoric = {},
         navigationToConversion = {},
         navigationToCircles = {},
-        vm = viewModel(),
-        userPreferences = null
+        vm = viewModel()
     )
 }
 
@@ -64,32 +65,40 @@ fun HistoricScreen(
     navigationToHistoric: () -> Unit,
     navigationToConversion: () -> Unit,
     navigationToCircles: () -> Unit,
-    vm: HistoricoViewModel,
-    userPreferences: UserPreferences?
+    vm: HistoricoViewModel
 ) {
     val arquivos by vm.arquivos.observeAsState(emptyList())
-    val user by userPreferences!!.authToken.collectAsState(initial = null)
+    val user by vm.authToken.collectAsState(initial = null)
     val context = LocalContext.current
-    val fileChooserLauncher =
-        rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()) { uri: Uri? ->
-            uri?.let {
-                val fileName =
-                    context.contentResolver.query(it, null, null, null, null)?.use { cursor ->
-                        val nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
-                        cursor.moveToFirst()
-                        cursor.getString(nameIndex)
-                    }
-                val inputStream = context.contentResolver.openInputStream(it)
-                inputStream?.let { stream ->
-                    val requestFile = stream.readBytes().toRequestBody()
-                    val body = MultipartBody.Part.createFormData("file", fileName, requestFile)
-                    vm.uploadArquivo(user?.getId(), body)
-                }
-            }
-        }
+
+//    val fileChooserLauncher =
+//        rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()) { uri: Uri? ->
+//            uri?.let {
+//                val fileName =
+//                    context.contentResolver.query(it, null, null, null, null)?.use { cursor ->
+//                        val nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+//                        cursor.moveToFirst()
+//                        cursor.getString(nameIndex)
+//                    }
+//                val inputStream = context.contentResolver.openInputStream(it)
+//                inputStream?.let { stream ->
+//                    val requestFile = stream.readBytes().toRequestBody()
+//                    val body = MultipartBody.Part.createFormData("file", fileName, requestFile)
+//                    vm.uploadArquivo(body)
+//                }
+//            }
+//        }
+
+    fun uploadFile(file: MultipartBody.Part) {
+        vm.uploadArquivo(file)
+    }
+
+    fun downloadFile(id: UUID, fileName: String) {
+        vm.downloadArquivo(context, id, fileName)
+    }
 
     LaunchedEffect(key1 = Unit) {
-        vm.getArquivos(user?.getId())
+        vm.getArquivos()
     }
 
     Scaffold(
@@ -104,19 +113,13 @@ fun HistoricScreen(
                 },
                 state = rememberTooltipState()
             ) {
-                FloatingActionButton(
-                    modifier = Modifier.size(65.dp),
-                    containerColor = Azul,
-                    onClick = { fileChooserLauncher.launch("application/*") }) {
-                    Icon(
-                        Icons.Filled.UploadFile,
-                        "Upload File",
-                        modifier = Modifier.size(40.dp),
-                        tint = Branco
-                    )
+                UploadButton(context = context) {
+                    vm.uploadArquivo(it)
                 }
             }
-        }, floatingActionButtonPosition = FabPosition.End, bottomBar = {
+        },
+        floatingActionButtonPosition = FabPosition.End,
+        bottomBar = {
             NavigateBar(
                 navigateToHistorico = { navigationToHistoric() },
                 navigateToConversao = { navigationToConversion() },
@@ -138,7 +141,18 @@ fun HistoricScreen(
                 style = MaterialTheme.typography.titleMedium,
                 textAlign = TextAlign.Center
             )
-            Historic(items = arquivos)
+            Historic(
+                items = arquivos,
+                downloadFile = ::downloadFile
+            )
         }
     }
+}
+
+@Composable
+fun LaunchFileChooser(
+    context: Context,
+    upload: (MultipartBody.Part) -> Unit,
+) {
+
 }

@@ -21,5 +21,9 @@ data class UsuarioToken(
         return this.userId
     }
 
+    fun getFotoPerfil(): String {
+        return this.fotoPerfil
+    }
+
 
 }

@@ -26,12 +26,14 @@ fun HistoricPreview() {
             extensao = "pdf",
             urlArquivo = "https://www.google.com"
         )
-    })
+    },
+        downloadFile = { _, _ -> })
 }
 
 @Composable
 fun Historic(
-    items: List<Arquivo>?
+    items: List<Arquivo>?,
+    downloadFile: (UUID, String) -> Unit
 ) {
     LazyColumn(
         modifier = Modifier
@@ -48,7 +50,8 @@ fun Historic(
                         idArquivo = arquivo.idArquivo.toString(),
                         nome = arquivo.nome,
                         tamanho = arquivo.tamanho,
-                        urlArquivo = arquivo.urlArquivo
+                        urlArquivo = arquivo.urlArquivo,
+                        downloadFile = { downloadFile(arquivo.idArquivo, arquivo.nome) }
                     )
                 }
             }

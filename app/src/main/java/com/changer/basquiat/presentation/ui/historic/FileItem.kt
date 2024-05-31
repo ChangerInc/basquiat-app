@@ -44,7 +44,8 @@ fun PreviewFileItem() {
         idArquivo = "1",
         nome = "Nome do arquivo grande para testar o overflow de texto em uma linha",
         tamanho = BigDecimal(100),
-        urlArquivo = "https://www.google.com"
+        urlArquivo = "https://www.google.com",
+        downloadFile = {}
     )
 }
 
@@ -55,7 +56,8 @@ fun FileItem(
     idArquivo: String,
     nome: String,
     tamanho: BigDecimal,
-    urlArquivo: String
+    urlArquivo: String,
+    downloadFile: () -> Unit
 ) {
     val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSS", Locale.getDefault())
     val outputFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
@@ -126,17 +128,17 @@ fun FileItem(
                 Arrangement.Center
             ) {
                 Row {
-                    IconButton(onClick = { /*TODO: Handle click*/ }) {
+                    IconButton(onClick = { downloadFile() }) {
                         Icon(
                             Icons.Filled.Download,
-                            contentDescription = null,
+                            contentDescription = "Download File",
                             tint = Preto
                         )
                     }
                     IconButton(onClick = { /*TODO: Handle click*/ }) {
                         Icon(
                             Icons.Filled.Delete,
-                            contentDescription = null,
+                            contentDescription = "Delete File",
                             tint = Preto
                         )
                     }

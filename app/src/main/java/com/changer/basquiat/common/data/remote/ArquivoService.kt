@@ -21,4 +21,10 @@ interface ArquivoService {
         @Path("idUsuario") idUsuario: UUID?,
         @Part file: MultipartBody.Part
     ): Response<ResponseBody>
+
+    @GET("/arquivo/{idUsuario}/{idArquivo}")
+    suspend fun downloadArquivo(
+        @Path("idUsuario") idUsuario: UUID?,
+        @Path("idArquivo") idArquivo: UUID?
+    ): Response<ResponseBody>
 }

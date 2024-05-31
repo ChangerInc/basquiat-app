@@ -16,7 +16,9 @@ class ArquivoRepositoryImp : IArquivoRepository {
             .create(ArquivoService::class.java)
     }
 
-    override suspend fun getArquivos(id: UUID?): Response<List<Arquivo>> {
+    override suspend fun getArquivos(
+        id: UUID?
+    ): Response<List<Arquivo>> {
         return api.getAllById(id)
     }
 
@@ -25,5 +27,12 @@ class ArquivoRepositoryImp : IArquivoRepository {
         file: MultipartBody.Part
     ): Response<ResponseBody> {
         return api.uploadArquivo(idUsuario, file)
+    }
+
+    override suspend fun downloadArquivo(
+        idUsuario: UUID?,
+        idArquivo: UUID?
+    ): Response<ResponseBody> {
+        return api.downloadArquivo(idUsuario, idArquivo)
     }
 }
