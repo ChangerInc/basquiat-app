@@ -7,6 +7,7 @@ import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
@@ -32,14 +33,16 @@ import com.changer.basquiat.presentation.ui.theme.Preto
 @Preview(showBackground = true)
 @Composable
 fun InputNamePreview() {
-    var name by remember {
+    val name by remember {
         mutableStateOf("")
     }
 
     BasquiatTheme {
-        InputName({ name }) {
-            name = it
-        }
+        InputName(
+            name = { name },
+            setName = {  },
+            inputColor = { Azul }
+        )
     }
 }
 
@@ -47,18 +50,18 @@ fun InputNamePreview() {
 fun InputName(
     name: () -> String,
     modifier: Modifier = Modifier,
-    setName: (String) -> Unit
+    setName: (String) -> Unit,
+    inputColor: () -> Color
 ) {
-
     OutlinedTextField(
         shape = OutlinedTextFieldDefaults.shape,
         colors = TextFieldDefaults.colors(
             cursorColor = Azul,
             focusedLeadingIconColor = Azul,
-            focusedIndicatorColor = Azul,
+            focusedIndicatorColor = inputColor(),
             focusedContainerColor = Branco,
             unfocusedLeadingIconColor = CinzaClaro,
-            unfocusedIndicatorColor = CinzaClaro,
+            unfocusedIndicatorColor = inputColor(),
             unfocusedContainerColor = Branco,
         ),
         value = name(),

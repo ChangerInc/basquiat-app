@@ -36,15 +36,15 @@ import com.changer.basquiat.presentation.ui.theme.Preto
 @Preview(showBackground = true)
 @Composable
 fun InputPasswordPreview() {
-    var senha by remember {
+    val senha by remember {
         mutableStateOf("")
     }
     BasquiatTheme {
-        InputPassword({
-            senha
-        }) {
-            senha = it
-        }
+        InputPassword(
+            senha = { senha },
+            setSenha = { },
+            inputColor = { Azul }
+        )
     }
 }
 
@@ -53,13 +53,14 @@ fun InputPassword(
     senha: () -> String,
     modifier: Modifier = Modifier,
     setSenha: (String) -> Unit,
+    inputColor: () -> Color
 ) {
     var senhaVisivel: Boolean by remember { mutableStateOf(false) }
-    val icon:ImageVector =
+
+    val icon: ImageVector =
         if (senhaVisivel) {
             ImageVector.vectorResource(id = R.drawable.outline_visibility_off_24)
-        }
-        else {
+        } else {
             ImageVector.vectorResource(id = R.drawable.outline_visibility_24)
         }
 
@@ -69,11 +70,11 @@ fun InputPassword(
             cursorColor = Azul,
             focusedLeadingIconColor = Azul,
             focusedTrailingIconColor = Azul,
-            focusedIndicatorColor = Azul,
+            focusedIndicatorColor = inputColor(),
             focusedContainerColor = Branco,
             unfocusedLeadingIconColor = CinzaClaro,
             unfocusedTrailingIconColor = CinzaClaro,
-            unfocusedIndicatorColor = CinzaClaro,
+            unfocusedIndicatorColor = inputColor(),
             unfocusedContainerColor = Branco,
         ),
         value = senha(),
@@ -100,19 +101,21 @@ fun InputPassword(
                 content = {
                     Icon(
                         imageVector = ImageVector.vectorResource(id = R.drawable.outline_password_24),
-                        contentDescription = "Icone da senha")
+                        contentDescription = "Icone da senha"
+                    )
                 }
             )
         },
         trailingIcon = {
-                       IconButton(
-                           onClick = { senhaVisivel = !senhaVisivel },
-                           content = {
-                               Icon(
-                                   imageVector = icon,
-                                   contentDescription = "Icone de visibilidade da senha")
-                           }
-                       )
+            IconButton(
+                onClick = { senhaVisivel = !senhaVisivel },
+                content = {
+                    Icon(
+                        imageVector = icon,
+                        contentDescription = "Icone de visibilidade da senha"
+                    )
+                }
+            )
         },
         visualTransformation = if (senhaVisivel) VisualTransformation.None else PasswordVisualTransformation(),
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),

@@ -14,6 +14,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -33,7 +34,6 @@ import com.changer.basquiat.presentation.ui.components.InputEmail
 import com.changer.basquiat.presentation.ui.components.InputPassword
 import com.changer.basquiat.presentation.ui.components.Loading
 import com.changer.basquiat.presentation.ui.components.TopAppBarLoginCadastro
-import com.changer.basquiat.presentation.ui.login.LoginScreenState
 import com.changer.basquiat.presentation.ui.theme.BasquiatTheme
 import com.changer.basquiat.presentation.ui.theme.Preto
 
@@ -47,18 +47,24 @@ fun LoginScreen(
 ) {
     val isEsqueciSenhaVisible = remember { mutableStateOf(false) }
 
-
     var errorMessage by remember {
         mutableStateOf("")
     }
-
+   /*
     var email by remember {
         mutableStateOf("")
     }
 
     var senha by remember {
         mutableStateOf("")
-    }
+    }*/
+
+    val email by vm!!.email.collectAsState()
+    val senha by vm!!.password.collectAsState()
+
+    val emailColor by vm!!.emailColor.collectAsState()
+    val senhaColor by vm!!.passwordColor.collectAsState()
+
 
     val state by vm!!.state.observeAsState()
 
@@ -113,15 +119,19 @@ fun LoginScreen(
 
                 Spacer(modifier = modifier.height(10.dp))
 
-                InputEmail({ email }) { newEmail ->
-                    email = newEmail
-                }
+                InputEmail(
+                    email = { email },
+                    setEmail = { vm!!.validateEmail(it) },
+                    inputColor = { emailColor }
+                )
 
                 Spacer(modifier = modifier.height(32.dp))
 
-                InputPassword({ senha }) { newSenha ->
-                    senha = newSenha
-                }
+                InputPassword(
+                    senha = { senha },
+                    setSenha = { vm!!.validatePassword(it) },
+                    inputColor = { senhaColor }
+                )
 
                 Column(
                     modifier = modifier

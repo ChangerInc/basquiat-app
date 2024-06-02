@@ -2,8 +2,7 @@ package com.changer.basquiat.presentation.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Email
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
@@ -11,72 +10,86 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
+import com.changer.basquiat.R
 import com.changer.basquiat.presentation.ui.theme.Azul
 import com.changer.basquiat.presentation.ui.theme.BasquiatTheme
 import com.changer.basquiat.presentation.ui.theme.Branco
 import com.changer.basquiat.presentation.ui.theme.CinzaClaro
 import com.changer.basquiat.presentation.ui.theme.Preto
 
-@Preview(showBackground = true)
 @Composable
-fun InputEmailPreview() {
-    val email by remember {
+@Preview(showBackground = true)
+fun InputConfirmPasswordPreview() {
+    val senha by remember {
         mutableStateOf("")
     }
     BasquiatTheme {
-        InputEmail(
-            email = { email },
-            setEmail = { },
+        InputConfirmPassword(
+            senha = { senha },
+            setSenha = { },
             inputColor = { Azul }
         )
     }
 }
 
 @Composable
-fun InputEmail(
-    email: () -> String,
+fun InputConfirmPassword(
+    senha: () -> String,
     modifier: Modifier = Modifier,
-    setEmail: (String) -> Unit,
+    setSenha: (String) -> Unit,
     inputColor: () -> Color
 ) {
+    var senhaVisivel: Boolean by remember { mutableStateOf(false) }
+
+    val icon: ImageVector =
+        if (senhaVisivel) {
+            ImageVector.vectorResource(id = R.drawable.outline_visibility_off_24)
+        } else {
+            ImageVector.vectorResource(id = R.drawable.outline_visibility_24)
+        }
 
     OutlinedTextField(
         shape = OutlinedTextFieldDefaults.shape,
         colors = TextFieldDefaults.colors(
             cursorColor = Azul,
             focusedLeadingIconColor = Azul,
+            focusedTrailingIconColor = Azul,
             focusedIndicatorColor = inputColor(),
             focusedContainerColor = Branco,
             unfocusedLeadingIconColor = CinzaClaro,
+            unfocusedTrailingIconColor = CinzaClaro,
             unfocusedIndicatorColor = inputColor(),
             unfocusedContainerColor = Branco,
         ),
-        value = email(),
+        value = senha(),
         onValueChange = {
-            setEmail(it)
+            setSenha(it)
         },
         label = {
             Text(
-                text = "Email",
+                text = "Confirmação de senha",
                 fontSize = 18.sp,
                 color = CinzaClaro
             )
         },
         placeholder = {
             Text(
-                text = "email@exemplo.com",
+                text = "******",
                 fontSize = 18.sp,
                 color = CinzaClaro
             )
@@ -86,12 +99,25 @@ fun InputEmail(
                 onClick = {},
                 content = {
                     Icon(
-                        imageVector = Icons.Outlined.Email,
-                        contentDescription = "Icone de e-mail"
+                        imageVector = ImageVector.vectorResource(id = R.drawable.outline_password_24),
+                        contentDescription = "Icone da senha"
                     )
                 }
             )
         },
+        trailingIcon = {
+            IconButton(
+                onClick = { senhaVisivel = !senhaVisivel },
+                content = {
+                    Icon(
+                        imageVector = icon,
+                        contentDescription = "Icone de visibilidade da senha"
+                    )
+                }
+            )
+        },
+        visualTransformation = if (senhaVisivel) VisualTransformation.None else PasswordVisualTransformation(),
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
         textStyle = TextStyle(color = Preto, fontWeight = FontWeight.Bold),
         singleLine = true,
         modifier = modifier
