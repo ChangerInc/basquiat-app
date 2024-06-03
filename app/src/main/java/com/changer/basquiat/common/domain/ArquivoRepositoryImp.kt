@@ -35,4 +35,11 @@ class ArquivoRepositoryImp : IArquivoRepository {
     ): Response<ResponseBody> {
         return api.downloadArquivo(idUsuario, idArquivo)
     }
+
+    override suspend fun deleteArquivo(
+        idUsuario: UUID?,
+        idArquivo: UUID?
+    ): Response<ResponseBody> {
+        return api.deleteArquivo(idUsuario, idArquivo)
+    }
 }

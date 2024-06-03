@@ -1,5 +1,6 @@
 package com.changer.basquiat.presentation.ui.login
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -10,10 +11,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -37,7 +41,6 @@ import com.changer.basquiat.presentation.ui.components.TopAppBarLoginCadastro
 import com.changer.basquiat.presentation.ui.theme.BasquiatTheme
 import com.changer.basquiat.presentation.ui.theme.Preto
 import com.changer.basquiat.presentation.viewmodel.LoginViewModel
-
 
 
 @Composable
@@ -75,6 +78,7 @@ fun LoginScreen(
                         .fillMaxSize()
                         .background(Color.White)
                         .padding(padding)
+                        .verticalScroll(rememberScrollState())
                 ) {
                     Column(
                         modifier = modifier
@@ -145,7 +149,10 @@ fun LoginScreen(
         }
 
         is LoginScreenState.Success -> {
-            navigateToHistorico()
+            val redirect = true
+            AnimatedVisibility(visible = redirect) {
+                navigateToHistorico()
+            }
         }
     }
 }

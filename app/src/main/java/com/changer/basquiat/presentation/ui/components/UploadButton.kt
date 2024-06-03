@@ -1,7 +1,6 @@
 package com.changer.basquiat.presentation.ui.components
 
 import android.content.Context
-import android.net.Uri
 import android.provider.OpenableColumns
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
