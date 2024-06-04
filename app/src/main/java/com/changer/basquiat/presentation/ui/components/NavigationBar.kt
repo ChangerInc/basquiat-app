@@ -1,6 +1,10 @@
 package com.changer.basquiat.presentation.ui.components
 
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ChangeCircle
+import androidx.compose.material.icons.filled.Groups
+import androidx.compose.material.icons.filled.TableRows
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -39,23 +43,25 @@ fun NavigateBar(
     selectedScreen: Int
 ) {
     var selectedItem by remember { mutableIntStateOf(selectedScreen) }
-    val items = listOf(
-        ItemsNavigationBar(
-            "Conversor",
-            { navigateToConversao(); selectedItem = 0 },
-            ImageVector.vectorResource(id = R.drawable.outline_change_circle_24)
-        ),
-        ItemsNavigationBar(
-            "Histórico",
-            { navigateToHistorico(); selectedItem = 1 },
-            ImageVector.vectorResource(id = R.drawable.outline_table_rows_24)
-        ),
-        ItemsNavigationBar(
-            "Círculos",
-            { navigateToCirculos(); selectedItem = 2 },
-            ImageVector.vectorResource(id = R.drawable.outline_groups_24)
+    val items = remember {
+        listOf(
+            ItemsNavigationBar(
+                "Conversor",
+                { navigateToConversao(); selectedItem = 0 },
+                Icons.Filled.ChangeCircle
+            ),
+            ItemsNavigationBar(
+                "Histórico",
+                { navigateToHistorico(); selectedItem = 1 },
+                Icons.Filled.TableRows
+            ),
+            ItemsNavigationBar(
+                "Círculos",
+                { navigateToCirculos(); selectedItem = 2 },
+                Icons.Filled.Groups
+            )
         )
-    )
+    }
 
     NavigationBar {
         items.forEachIndexed { index, item ->

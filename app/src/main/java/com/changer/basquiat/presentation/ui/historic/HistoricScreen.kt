@@ -1,24 +1,19 @@
 package com.changer.basquiat.presentation.ui.historic
 
-import android.net.Uri
-import android.provider.OpenableColumns
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.UploadFile
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FabPosition
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.PlainTooltip
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TooltipBox
 import androidx.compose.material3.TooltipDefaults
@@ -28,6 +23,10 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -37,14 +36,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.changer.basquiat.R
-import com.changer.basquiat.common.data.preferences.UserPreferences
+import com.changer.basquiat.presentation.ui.components.ErrorView
+import com.changer.basquiat.presentation.ui.components.LinearProgress
 import com.changer.basquiat.presentation.ui.components.NavigateBar
 import com.changer.basquiat.presentation.ui.components.TopBarLogin
-import com.changer.basquiat.presentation.ui.theme.Azul
-import com.changer.basquiat.presentation.ui.theme.Branco
+import com.changer.basquiat.presentation.ui.components.UploadButton
 import com.changer.basquiat.presentation.viewmodel.HistoricoViewModel
-import okhttp3.MultipartBody
-import okhttp3.RequestBody.Companion.toRequestBody
+import kotlinx.coroutines.launch
 
 @Preview(showBackground = true)
 @Composable
@@ -53,8 +51,7 @@ fun HistoricScreenPreview() {
         navigationToHistoric = {},
         navigationToConversion = {},
         navigationToCircles = {},
-        vm = viewModel(),
-        userPreferences = null
+        vm = viewModel()
     )
 }
 
@@ -64,66 +61,80 @@ fun HistoricScreen(
     navigationToHistoric: () -> Unit,
     navigationToConversion: () -> Unit,
     navigationToCircles: () -> Unit,
-    vm: HistoricoViewModel,
-    userPreferences: UserPreferences?
+    vm: HistoricoViewModel
 ) {
     val arquivos by vm.arquivos.observeAsState(emptyList())
-    val user by userPreferences!!.authToken.collectAsState(initial = null)
+    val user by vm.authToken.collectAsState(initial = null)
     val context = LocalContext.current
-    val fileChooserLauncher =
-        rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()) { uri: Uri? ->
-            uri?.let {
-                val fileName =
-                    context.contentResolver.query(it, null, null, null, null)?.use { cursor ->
-                        val nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
-                        cursor.moveToFirst()
-                        cursor.getString(nameIndex)
-                    }
-                val inputStream = context.contentResolver.openInputStream(it)
-                inputStream?.let { stream ->
-                    val requestFile = stream.readBytes().toRequestBody()
-                    val body = MultipartBody.Part.createFormData("file", fileName, requestFile)
-                    vm.uploadArquivo(user?.getId(), body)
+    val state by vm.state.observeAsState()
+    val scope = rememberCoroutineScope()
+    val snackbarHostState = remember { SnackbarHostState() }
+    var loading by remember { mutableStateOf(false) }
+    var snackbarMessage by remember { mutableStateOf("") }
+
+    LaunchedEffect(null) {
+        vm.getArquivos()
+    }
+
+    when (state) {
+        is HistoricScreenState.Loading -> {
+            val loadingState = (state as HistoricScreenState.Loading).loading
+            loading = loadingState
+        }
+
+        is HistoricScreenState.Success -> {
+            snackbarMessage = (state as HistoricScreenState.Success).message
+            LaunchedEffect(HistoricScreenState.Success::class) {
+                scope.launch {
+                    snackbarHostState.showSnackbar(
+                        snackbarMessage,
+                        withDismissAction = true,
+                        duration = SnackbarDuration.Short
+                    )
                 }
             }
         }
 
-    LaunchedEffect(key1 = Unit) {
-        vm.getArquivos(user?.getId())
+        is HistoricScreenState.Error -> {
+            val errorMessage = (state as HistoricScreenState.Error).message
+            ErrorView(message = errorMessage) {
+                vm.tryAgain()
+            }
+        }
     }
 
     Scaffold(
-        topBar = { TopBarLogin(titulo = "Historico") },
+        topBar = { TopBarLogin(titulo = "Histórico") },
         floatingActionButton = {
             TooltipBox(
                 positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
                 tooltip = {
                     PlainTooltip {
-                        Text("Add to favorites")
+                        Text("Adicionar arquivo")
                     }
                 },
                 state = rememberTooltipState()
             ) {
-                FloatingActionButton(
-                    modifier = Modifier.size(65.dp),
-                    containerColor = Azul,
-                    onClick = { fileChooserLauncher.launch("application/*") }) {
-                    Icon(
-                        Icons.Filled.UploadFile,
-                        "Upload File",
-                        modifier = Modifier.size(40.dp),
-                        tint = Branco
-                    )
+                UploadButton(
+                    context = context
+                ) { file ->
+                    vm.uploadArquivo(file)
                 }
             }
-        }, floatingActionButtonPosition = FabPosition.End, bottomBar = {
+        },
+        floatingActionButtonPosition = FabPosition.End,
+        bottomBar = {
             NavigateBar(
                 navigateToHistorico = { navigationToHistoric() },
                 navigateToConversao = { navigationToConversion() },
                 navigateToCirculos = { navigationToCircles() },
                 selectedScreen = 1
             )
-        }) { padding ->
+        },
+        snackbarHost = {
+            SnackbarHost(hostState = snackbarHostState)
+        }
+    ) { padding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -138,7 +149,21 @@ fun HistoricScreen(
                 style = MaterialTheme.typography.titleMedium,
                 textAlign = TextAlign.Center
             )
-            Historic(items = arquivos)
+
+            AnimatedVisibility(visible = loading) {
+                LinearProgress()
+            }
+            Historic(
+                items = arquivos,
+                downloadFile = { idArquivo, fileName ->
+                    vm.downloadArquivo(
+                        context,
+                        idArquivo,
+                        fileName
+                    )
+                },
+                deleteFile = { idArquivo -> vm.deleteArquivo(idArquivo) }
+            )
         }
     }
 }
