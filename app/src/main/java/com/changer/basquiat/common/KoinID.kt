@@ -5,8 +5,6 @@ import com.changer.basquiat.common.domain.UsuarioRepositoryImp
 import com.changer.basquiat.common.domain.ArquivoRepositoryImp
 import com.changer.basquiat.common.data.repository.IArquivoRepository
 import com.changer.basquiat.common.data.repository.IUsuarioRepository
-import com.changer.basquiat.common.data.repository.UsuarioRepositoryImp
-import com.changer.basquiat.domain.repository.IUsuarioRepository
 import com.changer.basquiat.presentation.viewmodel.HistoricoViewModel
 import com.changer.basquiat.presentation.viewmodel.LoginViewModel
 import com.changer.basquiat.presentation.viewmodel.RegisterViewModel
