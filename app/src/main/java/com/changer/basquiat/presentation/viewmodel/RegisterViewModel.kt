@@ -4,10 +4,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
+import com.changer.basquiat.common.data.repository.IUsuarioRepository
 import com.changer.basquiat.domain.model.RegisterForm
-import com.changer.basquiat.domain.repository.IUsuarioRepository
-import com.changer.basquiat.presentation.ui.login.LoginScreenState
 import com.changer.basquiat.presentation.ui.register.RegisterScreenState
 import com.changer.basquiat.presentation.ui.theme.Azul
 import kotlinx.coroutines.delay
