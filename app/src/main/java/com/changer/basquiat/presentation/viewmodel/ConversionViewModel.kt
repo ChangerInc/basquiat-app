@@ -19,6 +19,8 @@ class ConversionViewModel(
     userPreferences: UserPreferences,
     private val aboutFile: AboutFile
 ) : ViewModel() {
+    var showDialog: MutableLiveData<Boolean> = MutableLiveData(false)
+        private set
     private val _authToken: Flow<UsuarioToken?> = userPreferences.authToken
     var state = MutableLiveData<ConversionScreenState>(ConversionScreenState.Loading(true))
         private set
@@ -33,6 +35,7 @@ class ConversionViewModel(
                     state.value = ConversionScreenState.Success("Arquivo enviado com sucesso")
                     delay(200)
                     state.value = ConversionScreenState.Loading(false)
+                    showDialog.value = true
                 } else {
                     Log.e("Erro", "Erro ao enviar arquivo")
                 }

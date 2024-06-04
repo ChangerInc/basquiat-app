@@ -28,14 +28,15 @@ fun HowToUse() {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .height(150.dp),
+            .height(160.dp),
         verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
             text = stringResource(R.string.como_usar_tela_conversao),
             fontSize = 24.sp,
-            color = Preto
+            color = Branco,
+            fontWeight = FontWeight.Bold
         )
         Topic(stringResource(R.string.como_usar_passo_um_tela_conversao), 1)
         Topic(stringResource(R.string.como_usar_passo_dois_tela_conversao), 2)
@@ -70,7 +71,8 @@ fun Topic(
             modifier = Modifier
                 .fillMaxWidth(),
             text = text,
-            color = Preto,
+            fontWeight = FontWeight.Bold,
+            color = Branco,
             maxLines = 2
         )
     }

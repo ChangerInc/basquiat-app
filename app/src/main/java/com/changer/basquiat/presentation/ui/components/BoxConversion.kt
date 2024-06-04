@@ -22,9 +22,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -34,7 +32,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.documentfile.provider.DocumentFile
 //import androidx.documentfile.provider.DocumentFile
 import com.changer.basquiat.presentation.ui.theme.Azul
 import com.changer.basquiat.presentation.ui.theme.BasquiatTheme
@@ -46,20 +43,24 @@ import okhttp3.RequestBody.Companion.toRequestBody
 @Composable
 fun BoxConversionPreview() {
     BasquiatTheme {
-        BoxConversion(onFileSelected = { _ -> })
+        BoxConversion(
+            onFileSelected = {},
+            options = {}
+        )
     }
 }
 
 @Composable
 fun BoxConversion(
     onFileSelected: (file: MultipartBody.Part) -> Unit,
+    options: (List<String>) -> Unit
 ) {
     val fileName = remember { mutableStateOf("Selecionar arquivo") }
     val context = LocalContext.current
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
     ) { uri ->
-        handleFileSelection(uri, context, onFileSelected, fileName)
+        handleFileSelection(uri, context, onFileSelected, options, fileName)
     }
 
     UploadConversionButton(fileName.value) { launcher.launch("*/*") }
@@ -104,6 +105,7 @@ fun handleFileSelection(
     uri: Uri?,
     context: Context,
     onFileSelected: (file: MultipartBody.Part) -> Unit,
+    options: (List<String>) -> Unit,
     fileName: MutableState<String>
 ) {
     if (uri != null) {
@@ -115,6 +117,7 @@ fun handleFileSelection(
                     cursor.getString(nameIndex)
                 }
             fileName.value = name ?: "Selecionar arquivo"
+            options(getOptionsForFileExtension(name ?: ""))
             val inputStream = context.contentResolver.openInputStream(it)
             inputStream?.let { stream ->
                 val requestFile = stream.readBytes().toRequestBody()
@@ -122,9 +125,47 @@ fun handleFileSelection(
                     MultipartBody.Part.createFormData("file", name, requestFile)
                 onFileSelected(body)
             }
-
         }
     } else {
         Toast.makeText(context, "Nenhum arquivo selecionado", Toast.LENGTH_SHORT).show()
+    }
+}
+
+fun getOptionsForFileExtension(fileName: String): List<String> {
+    val extension = fileName.substringAfterLast(".").lowercase()
+    return when (extension) {
+        "txt" -> listOf("PDF", "DOC", "XLSX", "CSV")
+        "pdf" -> listOf("TXT", "DOCX")
+        "docx" -> listOf("TXT", "PDF")
+        "xlsx" -> listOf("TXT", "PDF", "DOCX", "CSV")
+        "csv" -> listOf("PDF", "XLSX")
+        "jpg", "jpeg" -> listOf(
+            "PNG",
+            "GIF",
+            "SVG",
+            "PSD",
+            "WEBP",
+            "RAW",
+            "TIFF",
+            "BMP",
+            "JPEG",
+            "PDF"
+        )
+
+        "png" -> listOf("JPG", "GIF", "SVG", "PSD", "WEBP", "TIFF", "BMP")
+        "gif", "svg", "psd", "webp", "raw", "tiff", "bmp" -> listOf(
+            "JPG",
+            "PNG",
+            "GIF",
+            "SVG",
+            "PSD",
+            "WEBP",
+            "RAW",
+            "TIFF",
+            "BMP",
+            "PDF"
+        )
+
+        else -> emptyList()
     }
 }
