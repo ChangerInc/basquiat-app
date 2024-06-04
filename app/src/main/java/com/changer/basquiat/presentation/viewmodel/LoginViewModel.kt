@@ -5,8 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.changer.basquiat.common.data.preferences.UserPreferences
+import com.changer.basquiat.common.data.repository.IUsuarioRepository
 import com.changer.basquiat.domain.model.UserForm
-import com.changer.basquiat.domain.repository.IUsuarioRepository
 import com.changer.basquiat.presentation.ui.login.LoginScreenState
 import com.changer.basquiat.presentation.ui.theme.Azul
 import kotlinx.coroutines.delay
