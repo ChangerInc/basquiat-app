@@ -10,15 +10,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.changer.basquiat.common.appModule
 import com.changer.basquiat.common.data.preferences.UserPreferences
+import com.changer.basquiat.presentation.ui.navigate.BasquiatNavHost
 import com.changer.basquiat.presentation.ui.theme.BasquiatTheme
+import com.changer.basquiat.presentation.viewmodel.ConversionViewModel
 import com.changer.basquiat.presentation.viewmodel.HistoricoViewModel
 import com.changer.basquiat.presentation.viewmodel.LoginViewModel
-import com.changer.basquiat.presentation.ui.navigate.BasquiatNavHost
 import com.changer.basquiat.presentation.viewmodel.RegisterViewModel
 import org.koin.android.ext.android.inject
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
-
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,10 +37,12 @@ class MainActivity : ComponentActivity() {
                     val vmRegister by inject<RegisterViewModel>()
                     val vmLogin by inject<LoginViewModel>()
                     val vmHistoric by inject<HistoricoViewModel>()
+                    val vmConversion by inject<ConversionViewModel>()
                     MainScreen(
                         vmLogin = vmLogin,
                         vmRegister = vmRegister,
                         vmHistoric = vmHistoric,
+                        vmConversion = vmConversion,
                         user = user
                     )
                 }
@@ -49,18 +51,20 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-
 @Composable
 fun MainScreen(
     vmLogin: LoginViewModel,
     vmRegister: RegisterViewModel,
     vmHistoric: HistoricoViewModel,
-    user: UserPreferences,) {
+    vmConversion: ConversionViewModel,
+    user: UserPreferences,
+) {
     BasquiatNavHost(
         startDestination = "home",
         vmLogin = vmLogin,
         vmRegister = vmRegister,
         vmHistoric = vmHistoric,
+        vmConversion = vmConversion,
         user = user
     )
 }
@@ -71,6 +75,6 @@ fun MainScreen(
 //fun MainScreenPreview() {
 //    BasquiatTheme {
 //        MainScreen(vm)
-////        EchoScreen()
+////        com.changer.basquiat.presentation.ui.echo.EchoScreen()
 //    }
 //}
