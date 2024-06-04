@@ -6,10 +6,12 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.changer.basquiat.presentation.ui.conversion.ConversionScreen
 import com.changer.basquiat.presentation.ui.historic.HistoricScreen
 import com.changer.basquiat.presentation.ui.home.HomeScreen
 import com.changer.basquiat.presentation.ui.login.LoginScreen
 import com.changer.basquiat.presentation.ui.register.RegisterScreen
+import com.changer.basquiat.presentation.viewmodel.ConversionViewModel
 import com.changer.basquiat.presentation.viewmodel.HistoricoViewModel
 import com.changer.basquiat.presentation.viewmodel.LoginViewModel
 
@@ -20,6 +22,7 @@ fun BasquiatNavHost(
     startDestination: String,
     vmLogin: LoginViewModel,
     vmHistoric: HistoricoViewModel,
+    vmConversion: ConversionViewModel
 ) {
 
     NavHost(
@@ -56,6 +59,15 @@ fun BasquiatNavHost(
                 navigationToConversion = { navController.navigate("conversion") },
                 navigationToCircles = { navController.navigate("circles") },
                 vm = vmHistoric
+            )
+        }
+
+        composable("conversion") {
+            ConversionScreen(
+                navigationToHistoric = { navController.navigate("historico") },
+                navigationToConversion = { navController.navigate("conversion") },
+                navigationToCircles = { navController.navigate("circles") },
+                vm = vmConversion
             )
         }
     }

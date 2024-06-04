@@ -5,7 +5,7 @@
     <string name="termos_uso_tela_inicial_nao_logado">Criando uma conta, você concorda com nossos Termos de uso e Políticas de privacidade.</string>
     <string name="titulo_tela_login">Bem vindo(a) de volta!\nFaça login para continuar</string>
     <string name="titulo_tela_cadastro">Seja bem vindo(a)! \nCrie sua conta para ter acesso às conversões!</string>
-    <string name="titulo_tela_conversao">Transforme seus arquivos com a facilidade de um click</string>
+    <string name="titulo_tela_conversao">Transforme seus \narquivos com a \nfacilidade de um \nclick</string>
     <string name="como_usar_tela_conversao">Como usar o conversor?</string>
     <string name="como_usar_passo_um_tela_conversao">Selecione o arquivo que você deseja converter.</string>
     <string name="como_usar_passo_dois_tela_conversao">Selecione a extensão que quer converter seu arquivo.</string>

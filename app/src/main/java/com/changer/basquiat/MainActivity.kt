@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import com.changer.basquiat.common.appModule
 import com.changer.basquiat.presentation.ui.navigate.BasquiatNavHost
 import com.changer.basquiat.presentation.ui.theme.BasquiatTheme
+import com.changer.basquiat.presentation.viewmodel.ConversionViewModel
 import com.changer.basquiat.presentation.viewmodel.HistoricoViewModel
 import com.changer.basquiat.presentation.viewmodel.LoginViewModel
 import org.koin.android.ext.android.inject
@@ -32,7 +33,8 @@ class MainActivity : ComponentActivity() {
                 ) {
                     val vmLogin by inject<LoginViewModel>()
                     val vmHistoric by inject<HistoricoViewModel>()
-                    MainScreen(vmLogin, vmHistoric)
+                    val vmConversion by inject<ConversionViewModel>()
+                    MainScreen(vmLogin, vmHistoric, vmConversion)
                 }
             }
         }
@@ -40,11 +42,16 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun MainScreen(vmLogin: LoginViewModel, vmHistoric: HistoricoViewModel) {
+fun MainScreen(
+    vmLogin: LoginViewModel,
+    vmHistoric: HistoricoViewModel,
+    vmConversion: ConversionViewModel
+) {
     BasquiatNavHost(
         startDestination = "home",
         vmLogin = vmLogin,
-        vmHistoric = vmHistoric
+        vmHistoric = vmHistoric,
+        vmConversion = vmConversion
     )
 }
 
