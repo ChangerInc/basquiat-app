@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.changer.basquiat.presentation.ui.theme.Azul
 import com.changer.basquiat.presentation.ui.theme.BasquiatTheme
 import com.changer.basquiat.presentation.ui.theme.Branco
 import com.changer.basquiat.presentation.ui.theme.Preto
@@ -32,7 +33,7 @@ fun Loading(
             .background(Branco)
     ) {
         CircularProgressIndicator(
-            color = Color.Black,
+            color = Azul,
             modifier = Modifier
                 .size(80.dp)
         )
@@ -48,6 +49,6 @@ fun Loading(
 @Composable
 fun LoadingPreview() {
     BasquiatTheme {
-            Loading("Carregando suas músicas", Modifier)
+            Loading("Teste", Modifier)
     }
 }

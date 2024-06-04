@@ -14,9 +14,11 @@ import com.changer.basquiat.presentation.ui.theme.BasquiatTheme
 import com.changer.basquiat.presentation.viewmodel.HistoricoViewModel
 import com.changer.basquiat.presentation.viewmodel.LoginViewModel
 import com.changer.basquiat.presentation.ui.navigate.BasquiatNavHost
+import com.changer.basquiat.presentation.viewmodel.RegisterViewModel
 import org.koin.android.ext.android.inject
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,22 +34,34 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     val user by inject<UserPreferences>()
+                    val vmRegister by inject<RegisterViewModel>()
                     val vmLogin by inject<LoginViewModel>()
                     val vmHistoric by inject<HistoricoViewModel>()
-                    MainScreen(user, vmLogin, vmHistoric)
+                    MainScreen(
+                        vmLogin = vmLogin,
+                        vmRegister = vmRegister,
+                        vmHistoric = vmHistoric,
+                        user = user
+                    )
                 }
             }
         }
     }
 }
 
+
 @Composable
-fun MainScreen(user: UserPreferences, vmLogin: LoginViewModel, vmHistoric: HistoricoViewModel) {
+fun MainScreen(
+    vmLogin: LoginViewModel,
+    vmRegister: RegisterViewModel,
+    vmHistoric: HistoricoViewModel,
+    user: UserPreferences,) {
     BasquiatNavHost(
         startDestination = "home",
-        user = user,
         vmLogin = vmLogin,
-        vmHistoric = vmHistoric
+        vmRegister = vmRegister,
+        vmHistoric = vmHistoric,
+        user = user
     )
 }
 
@@ -57,6 +71,6 @@ fun MainScreen(user: UserPreferences, vmLogin: LoginViewModel, vmHistoric: Histo
 //fun MainScreenPreview() {
 //    BasquiatTheme {
 //        MainScreen(vm)
-////        com.changer.basquiat.presentation.ui.echo.EchoScreen()
+////        EchoScreen()
 //    }
 //}

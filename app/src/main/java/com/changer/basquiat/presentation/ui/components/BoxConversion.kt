@@ -32,6 +32,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.documentfile.provider.DocumentFile
 //import androidx.documentfile.provider.DocumentFile
 import com.changer.basquiat.presentation.ui.theme.Azul
 import com.changer.basquiat.presentation.ui.theme.BasquiatTheme
@@ -105,11 +106,11 @@ fun handleFileSelection(
     onFileSelected: (Uri, String) -> Unit,
     fileName: MutableState<String>
 ) {
-    if (uri != null) {/*
+    if (uri != null) {
         val documentFile = DocumentFile.fromSingleUri(context, uri)
         val name = documentFile?.name ?: "Unknown"
         onFileSelected(uri, name)
-        fileName.value = name*/
+        fileName.value = name
     } else {
         Toast.makeText(context, "Nenhum arquivo selecionado", Toast.LENGTH_SHORT).show()
     }
