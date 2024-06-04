@@ -9,6 +9,7 @@ import com.changer.basquiat.domain.model.UserForm
 import com.changer.basquiat.domain.repository.IUsuarioRepository
 import com.changer.basquiat.presentation.ui.login.LoginScreenState
 import com.changer.basquiat.presentation.ui.theme.Azul
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -53,34 +54,39 @@ class LoginViewModel (
         }
     }
 
-    var state = MutableLiveData<LoginScreenState>(LoginScreenState.Loading)
+    var state = MutableLiveData<LoginScreenState>(LoginScreenState.Normalize)
         private set
 
     fun getUser(form: UserForm) {
-        try {
-            viewModelScope.launch {
-                val response = repository.getUser(form)
+        viewModelScope.launch {
+            try {
                 state.value = LoginScreenState.Loading
-
+                delay(400)
+                val response = repository.getUser(form)
                 if (response.isSuccessful) {
                     response.body()?.let {
                         userPreferences.saveAuthToken(it)
                         state.value = LoginScreenState.Success(data = it)
-                    } ?: LoginScreenState.Error("Erro desconhecido")
+                    }
                 } else {
-                    state.value = LoginScreenState.Error("Erro desconhecido")
+                    val message = when (response.code()) {
+                        400 -> "Email ou senha incorretos"
+                        401 -> "E-mail ou senha incorretos"
+                        404 -> "Email ou senha incorretos"
+                        405 -> "Método http não permitido"
+                        500 -> "Erro interno do servidor"
+                        else -> "Erro desconhecido"
+                    }
+                    state.value = LoginScreenState.Error(message)
                 }
+            } catch (e: HttpException) {
+                state.value = LoginScreenState.Error(e.message.toString())
+            } catch (e: Exception) {
+                state.value = LoginScreenState.Error(e.message.toString())
             }
-        } catch (e: HttpException) {
-            val message = when (e.code()) {
-                400 -> "Campos em branco"
-                404 -> "Email ou senha incorretos"
-                else -> "Erro desconhecido"
-            }
-
-            state.value = LoginScreenState.Error(message)
-        } catch (e: Exception) {
-            state.value = LoginScreenState.Error("Erro desconhecido")
         }
+    }
+    fun TryAgain() {
+        state.value = LoginScreenState.Normalize
     }
 }

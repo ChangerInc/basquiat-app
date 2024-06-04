@@ -1,7 +1,8 @@
 package com.changer.basquiat.common.data.remote
 
 import com.changer.basquiat.domain.model.UserForm
-import com.changer.basquiat.domain.model.Usuario
+import com.changer.basquiat.domain.model.RegisterForm
+import com.changer.basquiat.domain.model.UserObj
 import com.changer.basquiat.domain.model.UsuarioToken
 import retrofit2.Response
 import retrofit2.http.Body
@@ -12,7 +13,7 @@ interface UsuarioService {
     suspend fun login(@Body login: UserForm): Response<UsuarioToken?>
 
     @POST("usuario/")
-    suspend fun register(@Body form: Usuario): Response<Usuario>
+    suspend fun register(@Body form: RegisterForm): Response<UserObj?>
 
     /*@PUT("/usuario/{uuid}")
     suspend fun mudarSenha(@Path("uuid") uuid: UUID): Response<Usuario>*/

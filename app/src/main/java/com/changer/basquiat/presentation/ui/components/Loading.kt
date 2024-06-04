@@ -43,6 +43,6 @@ fun Loading(
 @Composable
 fun LoadingPreview() {
     BasquiatTheme {
-            Loading("Enviando cadastro...", Modifier)
+            Loading("Teste", Modifier)
     }
 }

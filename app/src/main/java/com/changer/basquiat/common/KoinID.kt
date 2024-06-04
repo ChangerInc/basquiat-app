@@ -12,5 +12,5 @@ val appModule = module {
     single<IUsuarioRepository> { UsuarioRepositoryImp() }
     single { UserPreferences(get()) }
     viewModel { LoginViewModel(get(), get()) }
-    viewModel { RegisterViewModel() }
+    viewModel { RegisterViewModel(get(), get()) }
 }
