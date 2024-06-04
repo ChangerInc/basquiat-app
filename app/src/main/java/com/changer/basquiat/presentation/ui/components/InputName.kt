@@ -6,6 +6,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
@@ -13,6 +14,7 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -30,32 +32,41 @@ import com.changer.basquiat.presentation.ui.theme.Preto
 @Preview(showBackground = true)
 @Composable
 fun InputNamePreview() {
+    val name by remember {
+        mutableStateOf("")
+    }
+
     BasquiatTheme {
-        InputName()
+        InputName(
+            name = { name },
+            setName = {  },
+            inputColor = { Azul }
+        )
     }
 }
 
 @Composable
 fun InputName(
-    modifier: Modifier = Modifier
+    name: () -> String,
+    modifier: Modifier = Modifier,
+    setName: (String) -> Unit,
+    inputColor: () -> Color
 ) {
-    var name by rememberSaveable { mutableStateOf("") }
-
     OutlinedTextField(
         shape = OutlinedTextFieldDefaults.shape,
         colors = TextFieldDefaults.colors(
             cursorColor = Azul,
             focusedLeadingIconColor = Azul,
-            focusedIndicatorColor = Azul,
+            focusedIndicatorColor = inputColor(),
             focusedContainerColor = Branco,
             unfocusedLeadingIconColor = CinzaClaro,
-            unfocusedIndicatorColor = CinzaClaro,
+            unfocusedIndicatorColor = inputColor(),
             unfocusedContainerColor = Branco,
         ),
-        value = name,
+        value = name(),
         onValueChange = {
             if (it.length < 21) {
-                name = it
+                setName(it)
             }
         },
         label = {

@@ -17,12 +17,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -34,13 +34,13 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.changer.basquiat.R
 import com.changer.basquiat.domain.model.UserForm
 import com.changer.basquiat.presentation.ui.components.ErrorView
+import com.changer.basquiat.presentation.viewmodel.LoginViewModel
 import com.changer.basquiat.presentation.ui.components.InputEmail
 import com.changer.basquiat.presentation.ui.components.InputPassword
 import com.changer.basquiat.presentation.ui.components.Loading
 import com.changer.basquiat.presentation.ui.components.TopAppBarLoginCadastro
 import com.changer.basquiat.presentation.ui.theme.BasquiatTheme
 import com.changer.basquiat.presentation.ui.theme.Preto
-import com.changer.basquiat.presentation.viewmodel.LoginViewModel
 
 
 @Composable
@@ -52,13 +52,12 @@ fun LoginScreen(
 ) {
     val isEsqueciSenhaVisible = remember { mutableStateOf(false) }
 
-    var email by remember {
-        mutableStateOf("")
-    }
+    val email by vm.email.collectAsState()
+    val senha by vm.password.collectAsState()
 
-    var senha by remember {
-        mutableStateOf("")
-    }
+    val emailColor by vm.emailColor.collectAsState()
+    val senhaColor by vm.passwordColor.collectAsState()
+
 
     val state by vm.state.observeAsState()
 
@@ -93,15 +92,19 @@ fun LoginScreen(
 
                         Spacer(modifier = modifier.height(10.dp))
 
-                        InputEmail({ email }) { newEmail ->
-                            email = newEmail
-                        }
+                        InputEmail(
+                            email = { email },
+                            setEmail = { vm.validateEmail(it) },
+                            inputColor = { emailColor }
+                        )
 
                         Spacer(modifier = modifier.height(32.dp))
 
-                        InputPassword({ senha }) { newSenha ->
-                            senha = newSenha
-                        }
+                        InputPassword(
+                            senha = { senha },
+                            setSenha = { vm.validatePassword(it) },
+                            inputColor = { senhaColor }
+                        )
 
                         Column(
                             modifier = modifier
@@ -162,15 +165,15 @@ fun EsqueciSenhaDialog(onClose: () -> Unit) {
 
 }
 
-@Preview(showBackground = true)
-@Composable
-fun LoginScreenPreview() {
-    BasquiatTheme {
-        val vm = viewModel<LoginViewModel>()
-        LoginScreen(
-            navigateToHistorico = {},
-            navigateToHome = {},
-            vm = vm
-        )
+    @Preview(showBackground = true)
+    @Composable
+    fun LoginScreenPreview() {
+        BasquiatTheme {
+            val vm = viewModel<LoginViewModel>()
+            LoginScreen(
+                navigateToHistorico = {},
+                navigateToHome = {},
+                vm = vm
+            )
+        }
     }
-}

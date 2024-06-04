@@ -8,7 +8,7 @@ import com.changer.basquiat.common.data.repository.IUsuarioRepository
 import com.changer.basquiat.domain.AboutFile
 import com.changer.basquiat.presentation.viewmodel.HistoricoViewModel
 import com.changer.basquiat.presentation.viewmodel.LoginViewModel
-
+import com.changer.basquiat.presentation.viewmodel.RegisterViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.scope.get
 import org.koin.dsl.module
@@ -19,5 +19,6 @@ val appModule = module {
     single { AboutFile() }
     single { UserPreferences(get()) }
     viewModel { LoginViewModel(get(), get()) }
+    viewModel { RegisterViewModel(get(), get()) }
     viewModel { HistoricoViewModel(get(), get(), get()) }
 }

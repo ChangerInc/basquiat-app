@@ -12,6 +12,7 @@ import com.changer.basquiat.presentation.ui.login.LoginScreen
 import com.changer.basquiat.presentation.ui.register.RegisterScreen
 import com.changer.basquiat.presentation.viewmodel.HistoricoViewModel
 import com.changer.basquiat.presentation.viewmodel.LoginViewModel
+import com.changer.basquiat.presentation.viewmodel.RegisterViewModel
 
 @Composable
 fun BasquiatNavHost(
@@ -20,6 +21,7 @@ fun BasquiatNavHost(
     startDestination: String,
     vmLogin: LoginViewModel,
     vmHistoric: HistoricoViewModel,
+    vmRegister: RegisterViewModel,
 ) {
 
     NavHost(
@@ -46,7 +48,8 @@ fun BasquiatNavHost(
         composable("register") {
             RegisterScreen(
                 navigateToLogin = { navController.navigate("login") },
-                navigateToHome = { navController.navigate("home") }
+                navigateToHome = { navController.navigate("home") },
+                vm = vmRegister
             )
         }
 
