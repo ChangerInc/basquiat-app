@@ -6,6 +6,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.changer.basquiat.common.data.preferences.UserPreferences
 import com.changer.basquiat.presentation.ui.historic.HistoricScreen
 import com.changer.basquiat.presentation.ui.home.HomeScreen
 import com.changer.basquiat.presentation.ui.login.LoginScreen
@@ -19,6 +20,7 @@ fun BasquiatNavHost(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
     startDestination: String,
+    user: UserPreferences,
     vmLogin: LoginViewModel,
     vmHistoric: HistoricoViewModel,
     vmRegister: RegisterViewModel,
