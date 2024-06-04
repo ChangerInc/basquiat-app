@@ -6,10 +6,12 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.changer.basquiat.common.data.preferences.UserPreferences
 import com.changer.basquiat.presentation.ui.historic.HistoricScreen
 import com.changer.basquiat.presentation.ui.home.HomeScreen
 import com.changer.basquiat.presentation.ui.login.LoginScreen
 import com.changer.basquiat.presentation.ui.register.RegisterScreen
+import com.changer.basquiat.presentation.viewmodel.HistoricoViewModel
 import com.changer.basquiat.presentation.viewmodel.LoginViewModel
 import com.changer.basquiat.presentation.viewmodel.RegisterViewModel
 
@@ -18,8 +20,10 @@ fun BasquiatNavHost(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
     startDestination: String,
-    loginVm: LoginViewModel,
-    registerVm: RegisterViewModel
+    user: UserPreferences,
+    vmLogin: LoginViewModel,
+    vmHistoric: HistoricoViewModel,
+    vmRegister: RegisterViewModel,
 ) {
 
     NavHost(
@@ -39,7 +43,7 @@ fun BasquiatNavHost(
             LoginScreen(
                 navigateToHistorico = { navController.navigate("historico") },
                 navigateToHome = { navController.navigate("home") },
-                vm = loginVm
+                vm = vmLogin
             )
         }
 
@@ -47,12 +51,18 @@ fun BasquiatNavHost(
             RegisterScreen(
                 navigateToLogin = { navController.navigate("login") },
                 navigateToHome = { navController.navigate("home") },
-                vm = registerVm
+                vm = vmRegister
             )
         }
 
         composable("historico") {
-            HistoricScreen()
+            HistoricScreen(
+                navigationToHistoric = { navController.navigate("historico") },
+                navigationToConversion = { navController.navigate("conversion") },
+                navigationToCircles = { navController.navigate("circles") },
+                vm = vmHistoric,
+                user
+            )
         }
     }
 }

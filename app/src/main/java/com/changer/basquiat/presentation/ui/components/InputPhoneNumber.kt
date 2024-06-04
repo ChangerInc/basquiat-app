@@ -3,7 +3,6 @@ package com.changer.basquiat.presentation.ui.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material.icons.outlined.Phone
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton

@@ -1,3 +1,5 @@
+package com.changer.basquiat.presentation.ui.echo
+
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize

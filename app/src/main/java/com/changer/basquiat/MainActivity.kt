@@ -9,9 +9,11 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.changer.basquiat.common.appModule
-import com.changer.basquiat.presentation.ui.navigate.BasquiatNavHost
+import com.changer.basquiat.common.data.preferences.UserPreferences
 import com.changer.basquiat.presentation.ui.theme.BasquiatTheme
+import com.changer.basquiat.presentation.viewmodel.HistoricoViewModel
 import com.changer.basquiat.presentation.viewmodel.LoginViewModel
+import com.changer.basquiat.presentation.ui.navigate.BasquiatNavHost
 import com.changer.basquiat.presentation.viewmodel.RegisterViewModel
 import org.koin.android.ext.android.inject
 import org.koin.android.ext.koin.androidContext
@@ -30,9 +32,16 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    val loginVm by inject<LoginViewModel>()
-                    val registerVm by inject<RegisterViewModel>()
-                    MainScreen(loginVm, registerVm)
+                    val user by inject<UserPreferences>()
+                    val vmRegister by inject<RegisterViewModel>()
+                    val vmLogin by inject<LoginViewModel>()
+                    val vmHistoric by inject<HistoricoViewModel>()
+                    MainScreen(
+                        vmLogin = vmLogin,
+                        vmRegister = vmRegister,
+                        vmHistoric = vmHistoric,
+                        user = user
+                    )
                 }
             }
         }
@@ -40,11 +49,17 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun MainScreen(loginVm: LoginViewModel, registerVm: RegisterViewModel) {
+fun MainScreen(
+    vmLogin: LoginViewModel,
+    vmRegister: RegisterViewModel,
+    vmHistoric: HistoricoViewModel,
+    user: UserPreferences,) {
     BasquiatNavHost(
         startDestination = "home",
-        loginVm = loginVm,
-        registerVm = registerVm
+        vmLogin = vmLogin,
+        vmRegister = vmRegister,
+        vmHistoric = vmHistoric,
+        user = user
     )
 }
 

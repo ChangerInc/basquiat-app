@@ -19,7 +19,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -40,6 +39,7 @@ import com.changer.basquiat.presentation.ui.theme.BasquiatTheme
 import com.changer.basquiat.presentation.ui.theme.Preto
 
 
+
 @Composable
 fun LoginScreen(
     modifier: Modifier = Modifier,
@@ -48,10 +48,6 @@ fun LoginScreen(
     vm: LoginViewModel
 ) {
     val isEsqueciSenhaVisible = remember { mutableStateOf(false) }
-
-    var errorMessage by remember {
-        mutableStateOf("")
-    }
 
     val email by vm.email.collectAsState()
     val senha by vm.password.collectAsState()
@@ -147,14 +143,13 @@ fun LoginScreen(
         is LoginScreenState.Error, null -> {
             val errorMessage = (state as LoginScreenState.Error).message
             ErrorView(message = errorMessage) {
-                vm.TryAgain()
+                vm.tryAgain()
             }
         }
 
         is LoginScreenState.Success -> {
             navigateToHistorico()
         }
-
     }
 }
 
@@ -163,20 +158,15 @@ fun EsqueciSenhaDialog(onClose: () -> Unit) {
 
 }
 
-@Composable
-fun ScreenState(vm: LoginViewModel, form: UserForm) {
-
-}
-
-@Preview
-@Composable
-fun LoginScreenPreview() {
-    BasquiatTheme {
-        val vm = viewModel<LoginViewModel>()
-        LoginScreen(
-            navigateToHistorico = {},
-            navigateToHome = {},
-            vm = vm
-        )
+    @Preview(showBackground = true)
+    @Composable
+    fun LoginScreenPreview() {
+        BasquiatTheme {
+            val vm = viewModel<LoginViewModel>()
+            LoginScreen(
+                navigateToHistorico = {},
+                navigateToHome = {},
+                vm = vm
+            )
+        }
     }
-}

@@ -12,6 +12,7 @@ import com.changer.basquiat.presentation.ui.theme.Azul
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 
@@ -86,7 +87,10 @@ class LoginViewModel (
             }
         }
     }
-    fun TryAgain() {
+
+    fun tryAgain() {
         state.value = LoginScreenState.Normalize
     }
+
 }
+

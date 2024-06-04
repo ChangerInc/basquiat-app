@@ -1,5 +1,6 @@
 package com.changer.basquiat.presentation.ui.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -16,6 +17,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.changer.basquiat.presentation.ui.theme.Azul
 import com.changer.basquiat.presentation.ui.theme.BasquiatTheme
+import com.changer.basquiat.presentation.ui.theme.Branco
+import com.changer.basquiat.presentation.ui.theme.Preto
 
 @Composable
 fun Loading(
@@ -25,7 +28,9 @@ fun Loading(
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
-        modifier = modifier.fillMaxSize()
+        modifier = modifier
+            .fillMaxSize()
+            .background(Branco)
     ) {
         CircularProgressIndicator(
             color = Azul,
@@ -34,6 +39,7 @@ fun Loading(
         )
         Spacer(modifier = Modifier.height(20.dp))
         Text(
+            color = Preto,
             text = loadingMessage,
         )
     }
