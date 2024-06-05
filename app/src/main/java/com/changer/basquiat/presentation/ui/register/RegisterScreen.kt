@@ -87,7 +87,7 @@ fun RegisterScreen(
     }
 
     var errorForm by remember {
-        mutableStateOf(true)
+        mutableStateOf(false)
     }
 
     val state by vm.state.observeAsState()
