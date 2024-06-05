@@ -20,12 +20,10 @@ import java.util.UUID
 class HistoricoViewModel(
     private val repository: IArquivoRepository,
     userPreferences: UserPreferences,
-    aboutFile: AboutFile
+    private var aboutFile: AboutFile
 ) : ViewModel() {
 
     var state = MutableLiveData<HistoricScreenState>(HistoricScreenState.Loading(true))
-        private set
-    var about = aboutFile
         private set
     var arquivos = MutableLiveData<List<Arquivo>>()
         private set
@@ -82,9 +80,9 @@ class HistoricoViewModel(
                     val response = repository.downloadArquivo(idUser, idArquivo)
                     if (response.isSuccessful) {
                         response.body()?.byteStream()?.let { inputStream ->
-                            val uri = about.createFile(context, fileName)
+                            val uri = aboutFile.createFile(context, fileName, true)
                             if (uri != null) {
-                                about.writeToFile(context, inputStream, uri)
+                                aboutFile.writeToFile(context, inputStream, uri)
                                 state.value =
                                     HistoricScreenState.Success("Arquivo baixado com sucesso")
                                 delay(200)

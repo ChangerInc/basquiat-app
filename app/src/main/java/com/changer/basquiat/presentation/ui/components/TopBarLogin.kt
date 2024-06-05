@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import com.changer.basquiat.presentation.ui.theme.Azul
 import com.changer.basquiat.presentation.ui.theme.BasquiatTheme
 import com.changer.basquiat.presentation.ui.theme.Branco
 import com.changer.basquiat.presentation.ui.theme.Preto
@@ -35,14 +36,15 @@ fun TopBarLogin(
 ) {
     TopAppBar(
         colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = Branco,
-            titleContentColor = Preto,
+            containerColor = Azul,
+            titleContentColor = Preto
         ),
         title = {
             Text(
                 titulo,
                 textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.titleLarge,
+                color = Branco,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 modifier = modifier.fillMaxWidth()

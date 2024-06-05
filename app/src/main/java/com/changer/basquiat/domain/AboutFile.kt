@@ -5,35 +5,31 @@ import android.content.Context
 import android.net.Uri
 import android.os.Environment
 import android.provider.MediaStore
-import android.provider.OpenableColumns
 import android.util.Log
 import android.webkit.MimeTypeMap
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
-import okhttp3.MultipartBody
-import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.InputStream
 
 class AboutFile {
-
     fun createFile(
         context: Context,
-        fileName: String
+        fileName: String,
+        isHistoryFile: Boolean
     ): Uri? {
         val resolver = context.contentResolver
 
         val fileExtension = MimeTypeMap.getFileExtensionFromUrl(fileName)
         val mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(fileExtension)
 
+        val path = if (isHistoryFile) {
+            "${Environment.DIRECTORY_DOWNLOADS}/CHANGER/Histórico"
+        } else {
+            "${Environment.DIRECTORY_DOWNLOADS}/CHANGER/Conversões"
+        }
+
         val contentValues = ContentValues().apply {
             put(MediaStore.Files.FileColumns.DISPLAY_NAME, fileName)
             put(MediaStore.Files.FileColumns.MIME_TYPE, mimeType ?: "application/octet-stream")
-            put(
-                MediaStore.Files.FileColumns.RELATIVE_PATH,
-                "${Environment.DIRECTORY_DOWNLOADS}/changer"
-            )
+            put(MediaStore.Files.FileColumns.RELATIVE_PATH, path)
         }
 
         return resolver.insert(MediaStore.Files.getContentUri("external"), contentValues)

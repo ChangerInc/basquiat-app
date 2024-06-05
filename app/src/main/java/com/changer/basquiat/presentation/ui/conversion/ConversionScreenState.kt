@@ -1,10 +1,9 @@
 package com.changer.basquiat.presentation.ui.conversion
 
-import kotlinx.coroutines.flow.Flow
-
 interface ConversionScreenState {
     data class Loading(
-        val loading: Boolean
+        val loading: Boolean,
+        val message: String
     ) : ConversionScreenState
 
     data class Success(

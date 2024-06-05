@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FabPosition
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.PlainTooltip
 import androidx.compose.material3.Scaffold
@@ -28,7 +29,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -41,6 +41,7 @@ import com.changer.basquiat.presentation.ui.components.LinearProgress
 import com.changer.basquiat.presentation.ui.components.NavigateBar
 import com.changer.basquiat.presentation.ui.components.TopBarLogin
 import com.changer.basquiat.presentation.ui.components.UploadButton
+import com.changer.basquiat.presentation.ui.theme.Branco
 import com.changer.basquiat.presentation.viewmodel.HistoricoViewModel
 import kotlinx.coroutines.launch
 
@@ -138,7 +139,7 @@ fun HistoricScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color.White)
+                .background(Branco)
                 .padding(padding)
         ) {
             Text(
@@ -149,6 +150,8 @@ fun HistoricScreen(
                 style = MaterialTheme.typography.titleMedium,
                 textAlign = TextAlign.Center
             )
+
+            HorizontalDivider()
 
             AnimatedVisibility(visible = loading) {
                 LinearProgress()
