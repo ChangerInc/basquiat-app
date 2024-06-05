@@ -7,7 +7,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
 object ApiConfig {
-    private const val BASE_URL = "http://10.18.36.24:8080"
+    private const val BASE_URL = "http://192.168.15.10:8080"
 
     fun getIntance(): Retrofit {
         val logging = HttpLoggingInterceptor().apply {

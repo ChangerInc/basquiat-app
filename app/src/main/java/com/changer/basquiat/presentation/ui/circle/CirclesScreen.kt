@@ -36,7 +36,7 @@ fun CircleScreen(
     navigationToCircles: () -> Unit,
 ) {
     Scaffold(
-        topBar = { TopBarLogin(titulo = "Circulos") },
+        topBar = { TopBarLogin(titulo = "Circulos", url = "") },
         bottomBar = {
             NavigateBar(
                 navigateToHistorico = { navigationToHistoric() },

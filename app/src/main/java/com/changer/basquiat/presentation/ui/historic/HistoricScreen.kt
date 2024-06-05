@@ -65,9 +65,9 @@ fun HistoricScreen(
     vm: HistoricoViewModel
 ) {
     val arquivos by vm.arquivos.observeAsState(emptyList())
+    val state by vm.state.observeAsState()
     val user by vm.authToken.collectAsState(initial = null)
     val context = LocalContext.current
-    val state by vm.state.observeAsState()
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
     var loading by remember { mutableStateOf(false) }
@@ -105,7 +105,7 @@ fun HistoricScreen(
     }
 
     Scaffold(
-        topBar = { TopBarLogin(titulo = "Histórico") },
+        topBar = { TopBarLogin(titulo = "Histórico", url = "${user?.getFotoPerfil()}") },
         floatingActionButton = {
             TooltipBox(
                 positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),

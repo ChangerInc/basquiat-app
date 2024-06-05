@@ -93,7 +93,7 @@ fun ConversionScreen(
     }
 
     Scaffold(
-        topBar = { TopBarLogin(titulo = "Histórico") },
+        topBar = { TopBarLogin(titulo = "Histórico", url = "") },
         floatingActionButtonPosition = FabPosition.End,
         bottomBar = {
             NavigateBar(
