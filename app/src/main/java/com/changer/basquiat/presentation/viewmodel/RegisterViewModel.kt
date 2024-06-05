@@ -1,5 +1,6 @@
 package com.changer.basquiat.presentation.viewmodel
 
+import android.util.Log
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -105,7 +106,11 @@ class RegisterViewModel(
 
                 delay(400)
 
+
                 val response = repository.registerUser(form)
+
+                Log.d("Register", "Request: $form")
+                Log.d("Register", "Response: $response")
 
                 if (response.isSuccessful) {
                     response.body()?.let {
@@ -114,14 +119,17 @@ class RegisterViewModel(
                 } else {
                     val message = when (response.code()) {
                         409 -> "Email inválido"
-                        else -> response.toString()
+                        else -> "Erro: $response.message()"
                     }
                     state.value = RegisterScreenState.Error(message)
+                    Log.d("Register", "Error: $message")
                 }
             } catch (e: HttpException) {
                 state.value = RegisterScreenState.Error(e.message.toString())
+                Log.d("Register", "HttpException: ${e.message}")
             } catch (e: Exception) {
                 state.value = RegisterScreenState.Error(e.message.toString())
+                Log.d("Register", "Exception: ${e.message}")
             }
         }
     }
