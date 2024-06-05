@@ -2,6 +2,7 @@ package com.changer.basquiat.presentation.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -15,11 +16,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -42,7 +46,9 @@ fun InputConfirmPasswordPreview() {
         InputConfirmPassword(
             senha = { senha },
             setSenha = { },
-            inputColor = { Azul }
+            inputColor = { Azul },
+            focusRequester = { FocusRequester() },
+            onImeAction = {  },
         )
     }
 }
@@ -52,7 +58,9 @@ fun InputConfirmPassword(
     senha: () -> String,
     modifier: Modifier = Modifier,
     setSenha: (String) -> Unit,
-    inputColor: () -> Color
+    inputColor: () -> Color,
+    focusRequester: () -> FocusRequester,
+    onImeAction: () -> Unit
 ) {
     var senhaVisivel: Boolean by remember { mutableStateOf(false) }
 
@@ -117,7 +125,11 @@ fun InputConfirmPassword(
             )
         },
         visualTransformation = if (senhaVisivel) VisualTransformation.None else PasswordVisualTransformation(),
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password, imeAction = ImeAction.Next),
+        keyboardActions = KeyboardActions(onNext = {
+            focusRequester().requestFocus()
+            onImeAction()
+        }),
         textStyle = TextStyle(color = Preto, fontWeight = FontWeight.Bold),
         singleLine = true,
         modifier = modifier
@@ -125,5 +137,6 @@ fun InputConfirmPassword(
             .background(
                 color = Color.Transparent
             )
+            .focusRequester(focusRequester())
     )
 }
