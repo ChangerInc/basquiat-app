@@ -10,10 +10,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -22,6 +25,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -31,7 +35,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.changer.basquiat.R
 import com.changer.basquiat.presentation.ui.components.ErrorView
 import com.changer.basquiat.presentation.ui.components.InputConfirmPassword
-import com.changer.basquiat.presentation.ui.theme.BasquiatTheme
 import com.changer.basquiat.presentation.ui.components.InputEmail
 import com.changer.basquiat.presentation.ui.components.InputName
 import com.changer.basquiat.presentation.ui.components.InputPassword
@@ -39,6 +42,7 @@ import com.changer.basquiat.presentation.ui.components.Loading
 import com.changer.basquiat.presentation.ui.components.TopAppBarLoginCadastro
 import com.changer.basquiat.presentation.ui.home.RegisterButton
 import com.changer.basquiat.presentation.ui.theme.Azul
+import com.changer.basquiat.presentation.ui.theme.BasquiatTheme
 import com.changer.basquiat.presentation.viewmodel.RegisterViewModel
 
 @Preview
@@ -70,6 +74,21 @@ fun RegisterScreen(
     val passwordColor by vm.passwordColor.collectAsState()
     val passwordConfirmColor by vm.passwordConfirmColor.collectAsState()
 
+    val nameFocusRequester = remember {
+        FocusRequester()
+    }
+    val emailFocusRequester = remember {
+        FocusRequester()
+    }
+
+    val passwordFocusRequester = remember {
+        FocusRequester()
+    }
+
+    val confirmPasswordFocusRequester = remember {
+        FocusRequester()
+    }
+
     var errorName by remember {
         mutableStateOf("")
     }
@@ -92,6 +111,10 @@ fun RegisterScreen(
 
     val state by vm.state.observeAsState()
 
+    LaunchedEffect(Unit) {
+        nameFocusRequester.requestFocus()
+    }
+
     when (state) {
         is RegisterScreenState.Normalize -> {
             Scaffold(
@@ -108,6 +131,7 @@ fun RegisterScreen(
                         .fillMaxSize()
                         .background(Color.White)
                         .padding(padding)
+                        .verticalScroll(rememberScrollState())
                 ) {
                     Column(
                         modifier = modifier
@@ -138,7 +162,9 @@ fun RegisterScreen(
                         InputName(
                             name = { name },
                             setName = { vm.validateName(it) },
-                            inputColor = { nameColor }
+                            inputColor = { nameColor },
+                            focusRequester = { nameFocusRequester },
+                            onImeAction = { emailFocusRequester.requestFocus() }
                         )
 
                         Spacer(modifier = modifier.height(11.dp))
@@ -162,7 +188,9 @@ fun RegisterScreen(
                         InputEmail(
                             email = { email },
                             setEmail = { vm.validateEmail(it) },
-                            inputColor = { emailColor }
+                            inputColor = { emailColor },
+                            focusRequester = { emailFocusRequester },
+                            onImeAction = { passwordFocusRequester.requestFocus() }
                         )
 
                         Spacer(modifier = modifier.height(11.dp))
@@ -184,7 +212,9 @@ fun RegisterScreen(
                         InputPassword(
                             senha = { password },
                             setSenha = { vm.validatePassword(it) },
-                            inputColor = { passwordColor }
+                            inputColor = { passwordColor },
+                            focusRequester = { passwordFocusRequester },
+                            onImeAction = { confirmPasswordFocusRequester.requestFocus() }
                         )
 
                         Spacer(modifier = modifier.height(11.dp))
@@ -206,7 +236,9 @@ fun RegisterScreen(
                         InputConfirmPassword(
                             senha = { passwordConfirm },
                             setSenha = { vm.validatePasswordConfirm(it) },
-                            inputColor = { passwordConfirmColor }
+                            inputColor = { passwordConfirmColor },
+                            focusRequester = { confirmPasswordFocusRequester },
+                            onImeAction = { vm.registerSend() }
                         )
 
                         Column(
@@ -237,7 +269,7 @@ fun RegisterScreen(
         is RegisterScreenState.Loading -> {
             Loading(loadingMessage = "Enviando cadastro...")
         }
-        
+
         is RegisterScreenState.Error, null -> {
             ErrorView(message = (state as RegisterScreenState.Error).message) {
                 vm.TryAgain()

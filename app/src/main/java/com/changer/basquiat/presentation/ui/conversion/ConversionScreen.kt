@@ -112,7 +112,7 @@ fun ConversionScreen(
                 if (showDialog.value == true) {
                     DialogConversion(
                         options = options,
-                        onDismissRequest = { showDialog = mutableStateOf(false) },
+                        onDismissRequest = { showDialog.value },
                         onOptionSelected = { extensao ->
                             vm.converterArquivo(extensao)
                         }
