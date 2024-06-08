@@ -11,9 +11,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.changer.basquiat.domain.model.Circulo
 import com.changer.basquiat.presentation.ui.components.NavigateBar
 import com.changer.basquiat.presentation.ui.components.TopBarLogin
+import com.changer.basquiat.presentation.ui.navigate.Screen
 import com.changer.basquiat.presentation.ui.theme.BasquiatTheme
 import java.util.UUID
 
@@ -22,27 +26,28 @@ import java.util.UUID
 fun CircleScreenPreview() {
     BasquiatTheme {
         CircleScreen(
-            navigationToHistoric = {},
-            navigationToConversion = {},
-            navigationToCircles = {}
+            navController = rememberNavController()
         )
     }
 }
 
 @Composable
 fun CircleScreen(
-    navigationToHistoric: () -> Unit,
-    navigationToConversion: () -> Unit,
-    navigationToCircles: () -> Unit,
+    navController: NavHostController
 ) {
+    val screens = listOf(
+        Screen.Conversion,
+        Screen.Historic,
+        Screen.Circles
+    )
+
     Scaffold(
         topBar = { TopBarLogin(titulo = "Circulos", url = "") },
         bottomBar = {
             NavigateBar(
-                navigateToHistorico = { navigationToHistoric() },
-                navigateToConversao = { navigationToConversion() },
-                navigateToCirculos = { navigationToCircles() },
-                selectedScreen = 2
+                navController = navController,
+                screens = screens,
+                selectedScreen = Screen.Circles
             )
         },
     ) { padding ->

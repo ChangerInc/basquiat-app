@@ -1,6 +1,7 @@
 package com.changer.basquiat.presentation.ui.components
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -14,11 +15,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
+import com.changer.basquiat.R
 import com.changer.basquiat.presentation.ui.theme.Azul
 import com.changer.basquiat.presentation.ui.theme.BasquiatTheme
 import com.changer.basquiat.presentation.ui.theme.Branco
@@ -28,7 +31,11 @@ import com.changer.basquiat.presentation.ui.theme.Preto
 @Composable
 fun TopBarLoginPreview() {
     BasquiatTheme {
-        TopBarLogin(titulo = "Teste", url = "https://www.google.com/url?sa=i&url=https%3A%2F%2Fblogdataverna.com.br%2Fblog%2Fjujutsu-kaisen-gojo-vs-sukuna%2F&psig=AOvVaw2jaiE6PipylRsp6bFaY2v3&ust=1717703226415000&source=images&cd=vfe&opi=89978449&ved=0CBIQjRxqFwoTCNiz97idxYYDFQAAAAAdAAAAABAE")
+        TopBarLogin(
+            titulo = "Teste",
+            notification = 1,
+            url = "https://www.google.com/url?sa=i&url=https%3A%2F%2Fblogdataverna.com.br%2Fblog%2Fjujutsu-kaisen-gojo-vs-sukuna%2F&psig=AOvVaw2jaiE6PipylRsp6bFaY2v3&ust=1717703226415000&source=images&cd=vfe&opi=89978449&ved=0CBIQjRxqFwoTCNiz97idxYYDFQAAAAAdAAAAABAE"
+        )
     }
 }
 
@@ -37,6 +44,7 @@ fun TopBarLoginPreview() {
 fun TopBarLogin(
     modifier: Modifier = Modifier,
     titulo: String,
+    notification: Int = 0,
     url: String
 ) {
     TopAppBar(
@@ -44,6 +52,13 @@ fun TopBarLogin(
             containerColor = Azul,
             titleContentColor = Preto
         ),
+        navigationIcon = {
+            Image(
+                modifier = Modifier.size(50.dp),
+                painter = painterResource(id = R.drawable.c_white),
+                contentDescription = "Logo"
+            )
+        },
         title = {
             Text(
                 titulo,
@@ -56,6 +71,8 @@ fun TopBarLogin(
             )
         },
         actions = {
+            NotificationIcon(notification = notification)
+            Spacer(modifier = Modifier.size(20.dp))
             Image(
                 modifier = Modifier
                     .size(50.dp)
@@ -63,7 +80,7 @@ fun TopBarLogin(
                 painter = rememberAsyncImagePainter(model = url),
                 contentScale = ContentScale.Fit,
                 alignment = Alignment.Center,
-                contentDescription = "Profile Picture",
+                contentDescription = "Foto de perfil",
             )
         }
     )

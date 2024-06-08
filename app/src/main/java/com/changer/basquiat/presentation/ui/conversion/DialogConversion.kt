@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -45,11 +46,12 @@ fun DialogConversion(
         Column(
             modifier = Modifier
                 .width(200.dp)
+                .fillMaxHeight(0.4f)
                 .background(Branco, shape = RoundedCornerShape(8.dp))
                 .padding(16.dp)
                 .selectableGroup(),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+            verticalArrangement = Arrangement.Top
         ) {
             Text(
                 color = Preto,
@@ -67,7 +69,10 @@ fun DialogConversion(
             ) {
                 items(options) { option ->
                     SelectItem(
-                        onOptionSelected = onOptionSelected,
+                        onOptionSelected = { selected ->
+                            onOptionSelected(selected)
+                            selectedOption = selected
+                        },
                         selectedOption = selectedOption,
                         option = option
                     )

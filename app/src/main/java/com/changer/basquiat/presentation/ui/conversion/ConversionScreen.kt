@@ -16,6 +16,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -34,23 +35,32 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.changer.basquiat.R
 import com.changer.basquiat.presentation.ui.components.BoxConversion
 import com.changer.basquiat.presentation.ui.components.ErrorView
 import com.changer.basquiat.presentation.ui.components.Loading
 import com.changer.basquiat.presentation.ui.components.NavigateBar
 import com.changer.basquiat.presentation.ui.components.TopBarLogin
+import com.changer.basquiat.presentation.ui.navigate.Screen
 import com.changer.basquiat.presentation.ui.theme.Branco
 import com.changer.basquiat.presentation.viewmodel.ConversionViewModel
 import kotlinx.coroutines.launch
 
 @Composable
 fun ConversionScreen(
-    navigationToHistoric: () -> Unit,
-    navigationToConversion: () -> Unit,
-    navigationToCircles: () -> Unit,
+    navController: NavHostController,
     vm: ConversionViewModel
 ) {
+    val screens = listOf(
+        Screen.Conversion,
+        Screen.Historic,
+        Screen.Circles
+    )
+
+    val user by vm.authToken.collectAsState(initial = null)
     val context = LocalContext.current
     val showDialog = vm.showDialog.observeAsState()
     val state by vm.state.observeAsState()
@@ -93,14 +103,17 @@ fun ConversionScreen(
     }
 
     Scaffold(
-        topBar = { TopBarLogin(titulo = "Histórico", url = "") },
+        topBar = {
+            user?.let {
+                TopBarLogin(titulo = "Conversão", url = it.getFotoPerfil())
+            }
+        },
         floatingActionButtonPosition = FabPosition.End,
         bottomBar = {
             NavigateBar(
-                navigateToHistorico = { navigationToHistoric() },
-                navigateToConversao = { navigationToConversion() },
-                navigateToCirculos = { navigationToCircles() },
-                selectedScreen = 0
+                navController = navController,
+                screens = screens,
+                selectedScreen = Screen.Conversion
             )
         },
         snackbarHost = {
@@ -167,9 +180,7 @@ fun ConversionScreen(
 @Composable
 fun ConversionScreenPreview() {
     ConversionScreen(
-        navigationToHistoric = {},
-        navigationToConversion = {},
-        navigationToCircles = {},
+        navController = rememberNavController(),
         vm = viewModel()
     )
 }

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">basquiat</string>
+    <string name="app_name">Changer</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="titulo_tela_inicial_nao_logado">Transforme seus arquivos \ncom a facilidade de um </string>
     <string name="termos_uso_tela_inicial_nao_logado">Criando uma conta, você concorda com nossos Termos de uso e Políticas de privacidade.</string>

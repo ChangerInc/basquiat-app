@@ -62,6 +62,8 @@ class HistoricoViewModel(
                         arquivos.value = response.body()?.reversed()
                         state.value = HistoricScreenState.Loading(false)
                     } else {
+                        state.value = HistoricScreenState.Loading(false)
+                        delay(200)
                         state.value = HistoricScreenState.Error("Erro ao carregar arquivos")
                     }
                 }
@@ -90,6 +92,8 @@ class HistoricoViewModel(
                             }
                         }
                     } else {
+                        state.value = HistoricScreenState.Loading(false)
+                        delay(200)
                         state.value = HistoricScreenState.Error("Erro ao baixar arquivo")
                     }
                 }
@@ -111,6 +115,8 @@ class HistoricoViewModel(
                             HistoricScreenState.Success("Arquivo excluido com sucesso")
                         getArquivos()
                     } else {
+                        state.value = HistoricScreenState.Loading(false)
+                        delay(200)
                         state.value =
                             HistoricScreenState.Error("Não foi possível excluir o arquivo")
                     }

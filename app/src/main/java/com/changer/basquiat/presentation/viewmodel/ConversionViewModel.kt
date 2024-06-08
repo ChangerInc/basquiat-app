@@ -5,19 +5,27 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.changer.basquiat.common.data.preferences.UserPreferences
 import com.changer.basquiat.common.data.repository.IConversionRepository
 import com.changer.basquiat.domain.AboutFile
+import com.changer.basquiat.domain.model.UsuarioToken
 import com.changer.basquiat.presentation.ui.conversion.ConversionScreenState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.MultipartBody
 
 class ConversionViewModel(
     private val repository: IConversionRepository,
+    userPreferences: UserPreferences,
     private val aboutFile: AboutFile
 ) : ViewModel() {
+
+    private val _authToken: Flow<UsuarioToken?> = userPreferences.authToken
+    val authToken: Flow<UsuarioToken?>
+        get() = _authToken
     var showDialog: MutableLiveData<Boolean> = MutableLiveData(false)
         private set
     var state = MutableLiveData<ConversionScreenState>(ConversionScreenState.Loading(false, ""))
@@ -87,11 +95,13 @@ class ConversionViewModel(
                         val uri = aboutFile.createFile(context, fileName, false)
                         if (uri != null) {
                             aboutFile.writeToFile(context, it, uri)
-                            state.value = ConversionScreenState.Loading(false, "")
+                            tryAgain()
                             Log.d("Sucesso", "Arquivo baixado com sucesso")
                             delay(200)
                             state.value =
                                 ConversionScreenState.Success("Arquivo baixado com sucesso")
+                            delay(200)
+                            tryAgain()
                         }
                     }
                 } else {
