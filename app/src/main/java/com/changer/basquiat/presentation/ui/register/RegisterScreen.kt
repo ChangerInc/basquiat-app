@@ -6,15 +6,18 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -31,9 +34,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.changer.basquiat.R
 import com.changer.basquiat.presentation.ui.components.ErrorView
+import com.changer.basquiat.presentation.ui.components.GenericDialog
 import com.changer.basquiat.presentation.ui.components.InputConfirmPassword
 import com.changer.basquiat.presentation.ui.components.InputEmail
 import com.changer.basquiat.presentation.ui.components.InputName
@@ -43,6 +48,7 @@ import com.changer.basquiat.presentation.ui.components.TopAppBarLoginCadastro
 import com.changer.basquiat.presentation.ui.home.RegisterButton
 import com.changer.basquiat.presentation.ui.theme.Azul
 import com.changer.basquiat.presentation.ui.theme.BasquiatTheme
+import com.changer.basquiat.presentation.ui.theme.Preto
 import com.changer.basquiat.presentation.viewmodel.RegisterViewModel
 
 @Preview
@@ -73,6 +79,14 @@ fun RegisterScreen(
     val emailColor by vm.emailColor.collectAsState()
     val passwordColor by vm.passwordColor.collectAsState()
     val passwordConfirmColor by vm.passwordConfirmColor.collectAsState()
+
+    var isOpenTermsDialog by remember { mutableStateOf(false) }
+
+    val checkedState = remember { mutableStateOf(false) }
+
+    fun openTermsDialog(isOpen: Boolean) {
+        isOpenTermsDialog = isOpen
+    }
 
     val nameFocusRequester = remember {
         FocusRequester()
@@ -117,6 +131,19 @@ fun RegisterScreen(
 
     when (state) {
         is RegisterScreenState.Normalize -> {
+            if (isOpenTermsDialog) {
+                GenericDialog(
+                    title = "Termo de Adequação à LGPD",
+                    body = {
+                        TermsOfUse(
+                            modifier = Modifier
+                                .fillMaxHeight(0.6f)
+                        )
+                    },
+                    onDismiss = { isOpen ->
+                        openTermsDialog(isOpen)
+                    })
+            }
             Scaffold(
                 topBar = {
                     TopAppBarLoginCadastro(
@@ -246,6 +273,26 @@ fun RegisterScreen(
                                 .fillMaxWidth()
                                 .padding(top = 8.dp)
                         ) {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Checkbox(
+                                    checked = checkedState.value,
+                                    onCheckedChange = { checkedState.value = it }
+                                )
+                                Text(
+                                    text = "Li e concordo com os",
+                                    fontSize = 16.sp,
+                                    color = Preto
+                                )
+                                TextButton(onClick = { openTermsDialog(true) }) {
+                                    Text(
+                                        text = "termos de uso",
+                                        fontSize = 16.sp,
+                                        color = Azul
+                                    )
+                                }
+                            }
                             Text(
                                 color = Azul,
                                 text = "Já sou cadastrado!",
@@ -258,7 +305,11 @@ fun RegisterScreen(
                                     .align(Alignment.End)
                                     .padding(top = 8.dp)
                             ) {
-                                RegisterButton(onClick = { if (!errorForm) vm.registerSend() })
+                                RegisterButton(
+                                    onClick = { if (!errorForm && checkedState.value) vm.registerSend() },
+                                    enabled = !errorForm && checkedState.value && name != ""
+                                            && email != "" && password != "" && passwordConfirm != ""
+                                )
                             }
                         }
                     }
