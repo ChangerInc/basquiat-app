@@ -145,7 +145,8 @@ fun LoginScreen(
                                 EntryButton(
                                     onClick = {
                                         vm.getUser(form = UserForm(email, senha))
-                                    }
+                                    },
+                                    enabled = email != "" && senha != ""
                                 )
                             }
                         }
