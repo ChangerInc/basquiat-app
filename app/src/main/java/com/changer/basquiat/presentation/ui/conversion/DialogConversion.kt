@@ -41,7 +41,7 @@ fun DialogConversion(
     var selectedOption by remember { mutableStateOf(options.firstOrNull() ?: "") }
 
     Dialog(
-        onDismissRequest = { onDismissRequest(true) }
+        onDismissRequest = { onDismissRequest(false) }
     ) {
         Column(
             modifier = Modifier

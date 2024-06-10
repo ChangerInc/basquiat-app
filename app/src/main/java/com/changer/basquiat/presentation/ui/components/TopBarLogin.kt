@@ -34,7 +34,8 @@ fun TopBarLoginPreview() {
         TopBarLogin(
             titulo = "Teste",
             notification = 1,
-            url = "https://www.google.com/url?sa=i&url=https%3A%2F%2Fblogdataverna.com.br%2Fblog%2Fjujutsu-kaisen-gojo-vs-sukuna%2F&psig=AOvVaw2jaiE6PipylRsp6bFaY2v3&ust=1717703226415000&source=images&cd=vfe&opi=89978449&ved=0CBIQjRxqFwoTCNiz97idxYYDFQAAAAAdAAAAABAE"
+            url = "https://www.google.com/url?sa=i&url=https%3A%2F%2Fblogdataverna.com.br%2Fblog%2Fjujutsu-kaisen-gojo-vs-sukuna%2F&psig=AOvVaw2jaiE6PipylRsp6bFaY2v3&ust=1717703226415000&source=images&cd=vfe&opi=89978449&ved=0CBIQjRxqFwoTCNiz97idxYYDFQAAAAAdAAAAABAE",
+            openDialog = {}
         )
     }
 }
@@ -44,8 +45,9 @@ fun TopBarLoginPreview() {
 fun TopBarLogin(
     modifier: Modifier = Modifier,
     titulo: String,
-    notification: Int = 0,
-    url: String
+    notification: Int?,
+    url: String,
+    openDialog: (Boolean) -> Unit
 ) {
     TopAppBar(
         colors = TopAppBarDefaults.topAppBarColors(
@@ -71,7 +73,10 @@ fun TopBarLogin(
             )
         },
         actions = {
-            NotificationIcon(notification = notification)
+            NotificationIcon(
+                onClick = { openDialog(true) },
+                notification = notification ?: 0
+            )
             Spacer(modifier = Modifier.size(20.dp))
             Image(
                 modifier = Modifier

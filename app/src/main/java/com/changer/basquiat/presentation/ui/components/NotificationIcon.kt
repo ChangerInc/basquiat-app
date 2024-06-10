@@ -12,18 +12,24 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.changer.basquiat.presentation.ui.theme.BasquiatTheme
 import com.changer.basquiat.presentation.ui.theme.Branco
 
 @Composable
-fun NotificationIcon(notification: Int) {
+fun NotificationIcon(
+    onClick: () -> Unit,
+    notification: Int
+) {
     if (notification == 0) {
-        IconButton(onClick = { }) {
+        IconButton( onClick = { onClick() } ) {
             Icon(
                 modifier = Modifier.size(32.dp),
                 imageVector = Icons.Filled.Notifications,
@@ -37,10 +43,12 @@ fun NotificationIcon(notification: Int) {
                 Badge(
                     modifier = Modifier
                         .clip(CircleShape)
-                        .size(25.dp)
+                        .size(25.dp),
+                    containerColor = Color.Red
                 ) {
                     val badgeNumber = notification.toString()
                     Text(
+                        color = Branco,
                         text = badgeNumber,
                         maxLines = 1,
                         fontSize = 12.sp,
@@ -55,7 +63,7 @@ fun NotificationIcon(notification: Int) {
                     )
                 }
             }) {
-            IconButton(onClick = { }) {
+            IconButton(onClick = { onClick() }) {
                 Icon(
                     modifier = Modifier.size(32.dp),
                     imageVector = Icons.Filled.Notifications,
@@ -64,5 +72,16 @@ fun NotificationIcon(notification: Int) {
                 )
             }
         }
+    }
+}
+
+@Preview
+@Composable
+private fun NotificationIconPreview() {
+    BasquiatTheme {
+        NotificationIcon(
+            onClick = { },
+            notification = 1
+        )
     }
 }

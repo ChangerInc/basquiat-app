@@ -1,5 +1,6 @@
 package com.changer.basquiat.common.data.repository
 
+import com.changer.basquiat.domain.model.Convites
 import com.changer.basquiat.domain.model.UserForm
 import com.changer.basquiat.domain.model.RegisterForm
 import com.changer.basquiat.domain.model.UserObj
@@ -10,4 +11,6 @@ interface IUsuarioRepository {
     suspend fun getUser(login: UserForm): Response<UsuarioToken?>
 
     suspend fun registerUser(user: RegisterForm): Response<UserObj?>
+    suspend fun getQtdNotificacoes(email: String?): Response<Int>
+    suspend fun getConvites(email: String?): Response<List<Convites>>
 }

@@ -6,8 +6,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.changer.basquiat.common.data.preferences.UserPreferences
 import com.changer.basquiat.common.data.repository.IArquivoRepository
+import com.changer.basquiat.common.data.repository.IUsuarioRepository
 import com.changer.basquiat.domain.AboutFile
 import com.changer.basquiat.domain.model.Arquivo
+import com.changer.basquiat.domain.model.Convites
 import com.changer.basquiat.domain.model.UsuarioToken
 import com.changer.basquiat.presentation.ui.historic.HistoricScreenState
 import kotlinx.coroutines.delay
@@ -19,6 +21,7 @@ import java.util.UUID
 
 class HistoricoViewModel(
     private val repository: IArquivoRepository,
+    private val repositoryUser: IUsuarioRepository,
     userPreferences: UserPreferences,
     private var aboutFile: AboutFile
 ) : ViewModel() {
@@ -30,6 +33,9 @@ class HistoricoViewModel(
     private val _authToken: Flow<UsuarioToken?> = userPreferences.authToken
     val authToken: Flow<UsuarioToken?>
         get() = _authToken
+    var countNotifications = MutableLiveData<Int>()
+    var convites = MutableLiveData<List<Convites>>()
+        private set
 
     fun uploadArquivo(file: MultipartBody.Part) {
         viewModelScope.launch {
@@ -119,6 +125,41 @@ class HistoricoViewModel(
                         delay(200)
                         state.value =
                             HistoricScreenState.Error("Não foi possível excluir o arquivo")
+                    }
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+    fun getQtdNotificacoes() {
+        viewModelScope.launch {
+            try {
+                authToken.collect { token ->
+                    val emailUser = token?.getEmail()
+                    val response = repositoryUser.getQtdNotificacoes(emailUser)
+                    if (response.isSuccessful) {
+                        countNotifications.value = response.body()
+                    } else {
+                        state.value =
+                            HistoricScreenState.Error("Erro ao carregar quantidade de notificações")
+                    }
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+    fun getConvites() {
+        viewModelScope.launch {
+            try {
+                authToken.collect { token ->
+                    val email = token?.getEmail()
+                    val response = repositoryUser.getConvites(email)
+                    if (response.isSuccessful) {
+                        convites.value = response.body()
                     }
                 }
             } catch (e: Exception) {

@@ -23,6 +23,6 @@ val appModule = module {
     single { UserPreferences(get()) }
     viewModel { LoginViewModel(get(), get()) }
     viewModel { RegisterViewModel(get(), get()) }
-    viewModel { HistoricoViewModel(get(), get(), get()) }
+    viewModel { HistoricoViewModel(get(), get(), get(), get()) }
     viewModel { ConversionViewModel(get(), get(), get())}
 }

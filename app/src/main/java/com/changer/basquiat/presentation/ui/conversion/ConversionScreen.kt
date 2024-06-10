@@ -35,7 +35,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.changer.basquiat.R
@@ -105,7 +104,12 @@ fun ConversionScreen(
     Scaffold(
         topBar = {
             user?.let {
-                TopBarLogin(titulo = "Conversão", url = it.getFotoPerfil())
+                TopBarLogin(
+                    titulo = "Conversão",
+                    notification = 0,
+                    url = it.getFotoPerfil(),
+                    openDialog = {}
+                )
             }
         },
         floatingActionButtonPosition = FabPosition.End,

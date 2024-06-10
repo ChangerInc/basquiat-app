@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -41,8 +42,11 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.changer.basquiat.R
+import com.changer.basquiat.domain.model.Convites
 import com.changer.basquiat.presentation.ui.components.ErrorView
+import com.changer.basquiat.presentation.ui.components.GenericDialog
 import com.changer.basquiat.presentation.ui.components.InputSearch
+import com.changer.basquiat.presentation.ui.components.Invites
 import com.changer.basquiat.presentation.ui.components.LinearProgress
 import com.changer.basquiat.presentation.ui.components.NavigateBar
 import com.changer.basquiat.presentation.ui.components.TopBarLogin
@@ -50,7 +54,9 @@ import com.changer.basquiat.presentation.ui.components.UploadButton
 import com.changer.basquiat.presentation.ui.navigate.Screen
 import com.changer.basquiat.presentation.ui.theme.Branco
 import com.changer.basquiat.presentation.viewmodel.HistoricoViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.util.UUID
 
 @Preview(showBackground = true)
 @Composable
@@ -82,14 +88,23 @@ fun HistoricScreen(
 
     val user by vm.authToken.collectAsState(initial = null)
     val state by vm.state.observeAsState()
+    val countNotifications by vm.countNotifications.observeAsState()
+    val invites by vm.convites.observeAsState()
+    var openDialog by remember { mutableStateOf(false) }
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
     var loading by remember { mutableStateOf(false) }
     var snackbarMessage by remember { mutableStateOf("") }
 
+    fun handleDialog(isOpen: Boolean) {
+        openDialog = isOpen
+    }
+
     LaunchedEffect(null) {
         vm.getArquivos()
+        vm.getQtdNotificacoes()
+        vm.getConvites()
     }
 
     when (state) {
@@ -122,7 +137,14 @@ fun HistoricScreen(
     Scaffold(
         topBar = {
             user?.let {
-                TopBarLogin(titulo = "Histórico", url = it.getFotoPerfil())
+                TopBarLogin(
+                    titulo = "Histórico",
+                    url = it.getFotoPerfil(),
+                    notification = countNotifications,
+                    openDialog = { isOpen ->
+                        handleDialog(isOpen)
+                    }
+                )
             }
         },
         floatingActionButton = {
@@ -154,6 +176,20 @@ fun HistoricScreen(
             SnackbarHost(hostState = snackbarHostState)
         }
     ) { padding ->
+        if (openDialog) {
+            GenericDialog(
+                title = "Convites",
+                body = {
+                    Invites(
+                        items = invites ?: emptyList(),
+                        modifier = Modifier.fillMaxHeight(0.6f)
+                    )
+                },
+                onDismiss = { isOpen ->
+                    handleDialog(isOpen)
+                }
+            )
+        }
         Column(
             modifier = Modifier
                 .fillMaxSize()

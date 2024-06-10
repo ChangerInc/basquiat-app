@@ -11,7 +11,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.changer.basquiat.domain.model.Circulo
@@ -42,7 +41,12 @@ fun CircleScreen(
     )
 
     Scaffold(
-        topBar = { TopBarLogin(titulo = "Circulos", url = "") },
+        topBar = { TopBarLogin(
+            titulo = "Circulos",
+            notification = 0,
+            url = "",
+            openDialog = {}
+        ) },
         bottomBar = {
             NavigateBar(
                 navController = navController,
