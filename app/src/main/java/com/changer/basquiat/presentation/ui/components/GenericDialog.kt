@@ -36,13 +36,19 @@ fun GenericDialog(
     Dialog(onDismissRequest = { onDismiss(false) }) {
         Column(
             modifier = modifier
-                .background(Color.Black.copy(alpha = 0.5f), RoundedCornerShape(16.dp))
+                .background(
+                    Color.Transparent,
+                    RoundedCornerShape(16.dp)
+                )
         ) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(50.dp)
-                    .background(Color.White),
+                    .background(
+                        Color.White,
+                        RoundedCornerShape(16.dp, 16.dp, 0.dp, 0.dp)
+                    ),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {

@@ -34,8 +34,10 @@ import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
 import com.changer.basquiat.presentation.ui.theme.Branco
 import com.changer.basquiat.presentation.ui.theme.Preto
-import java.text.SimpleDateFormat
-import java.util.Locale
+import java.time.Duration
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatterBuilder
+import java.time.temporal.ChronoField
 
 @Composable
 fun InvitesItem(
@@ -47,11 +49,6 @@ fun InvitesItem(
     onClickRecusar: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSS", Locale.getDefault())
-    val outputFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-    val date = inputFormat.parse(horario)
-    val formattedDate = if (date != null) outputFormat.format(date) else "23/05/2000"
-
     Row(
         modifier = modifier
             .height(70.dp)
@@ -142,7 +139,7 @@ fun InvitesItem(
                     .fillMaxWidth(),
                 fontSize = 10.sp,
                 textAlign = TextAlign.Center,
-                text = formattedDate
+                text = tempoDecorrido(horario)
             )
         }
     }
@@ -155,8 +152,35 @@ private fun InvitesItemPreview() {
         fotoAnfitriao = "https://www.google.com",
         anfitriao = "Anfitrião",
         nomeCirculo = "Nome do círculo",
-        horario = "2022-10-10T10:10:10.000000",
+        horario = "2024-06-10T10:10:10.000000",
         onClickAceitar = { },
         onClickRecusar = { }
     )
+}
+
+fun tempoDecorrido(horario: String): String {
+    val formatter = DateTimeFormatterBuilder()
+        .appendPattern("yyyy-MM-dd'T'HH:mm:ss")
+        .appendFraction(ChronoField.MICRO_OF_SECOND, 0, 6, true)
+        .toFormatter()
+
+    val dataHorario = LocalDateTime.parse(horario, formatter)
+    val dataAtual = LocalDateTime.now()
+
+    val diferenca = Duration.between(dataHorario, dataAtual)
+    val diferencaEmMinutos = diferenca.toMinutes()
+
+    return when {
+        diferencaEmMinutos < 60 -> {
+            "há $diferencaEmMinutos minutos atrás"
+        }
+        diferencaEmMinutos in 60 until 1440 -> {
+            val diferencaEmHoras = diferenca.toHours()
+            "há $diferencaEmHoras horas atrás"
+        }
+        else -> {
+            val diferencaEmDias = diferenca.toDays()
+            "há $diferencaEmDias dias atrás"
+        }
+    }
 }

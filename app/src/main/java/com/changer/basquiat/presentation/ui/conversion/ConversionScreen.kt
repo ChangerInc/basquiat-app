@@ -6,8 +6,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
@@ -40,6 +42,8 @@ import androidx.navigation.compose.rememberNavController
 import com.changer.basquiat.R
 import com.changer.basquiat.presentation.ui.components.BoxConversion
 import com.changer.basquiat.presentation.ui.components.ErrorView
+import com.changer.basquiat.presentation.ui.components.GenericDialog
+import com.changer.basquiat.presentation.ui.components.Invites
 import com.changer.basquiat.presentation.ui.components.Loading
 import com.changer.basquiat.presentation.ui.components.NavigateBar
 import com.changer.basquiat.presentation.ui.components.TopBarLogin
@@ -62,6 +66,9 @@ fun ConversionScreen(
     val user by vm.authToken.collectAsState(initial = null)
     val context = LocalContext.current
     val showDialog = vm.showDialog.observeAsState()
+    var dialogNotifications by remember { mutableStateOf(false) }
+    val countNotifications by vm.countNotifications.observeAsState()
+    val invites by vm.convites.observeAsState()
     val state by vm.state.observeAsState()
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
@@ -72,6 +79,15 @@ fun ConversionScreen(
 
     fun updateListOptions(list: List<String>) {
         options = list
+    }
+
+    fun handleDialog(isOpen: Boolean) {
+        dialogNotifications = isOpen
+    }
+
+    LaunchedEffect(null) {
+        vm.getQtdNotificacoes()
+        vm.getConvites()
     }
 
     when (state) {
@@ -106,9 +122,11 @@ fun ConversionScreen(
             user?.let {
                 TopBarLogin(
                     titulo = "Conversão",
-                    notification = 0,
+                    notification = countNotifications,
                     url = it.getFotoPerfil(),
-                    openDialog = {}
+                    openDialog = { isOpen ->
+                        handleDialog(isOpen)
+                    }
                 )
             }
         },
@@ -124,6 +142,22 @@ fun ConversionScreen(
             SnackbarHost(hostState = snackbarHostState)
         }
     ) { padding ->
+        if (dialogNotifications) {
+            GenericDialog(
+                title = "Convites",
+                body = {
+                    Invites(
+                        items = invites ?: emptyList(),
+                        modifier = Modifier
+                            .fillMaxHeight(0.6f)
+                            .background(Color.White, RoundedCornerShape(16.dp))
+                    )
+                },
+                onDismiss = { isOpen ->
+                    handleDialog(isOpen)
+                }
+            )
+        }
         AnimatedVisibility(visible = loading) {
             Loading(loadingMessage)
         }

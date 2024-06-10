@@ -7,7 +7,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.changer.basquiat.common.data.preferences.UserPreferences
 import com.changer.basquiat.common.data.repository.IConversionRepository
+import com.changer.basquiat.common.data.repository.IUsuarioRepository
 import com.changer.basquiat.domain.AboutFile
+import com.changer.basquiat.domain.model.Convites
 import com.changer.basquiat.domain.model.UsuarioToken
 import com.changer.basquiat.presentation.ui.conversion.ConversionScreenState
 import kotlinx.coroutines.Dispatchers
@@ -19,6 +21,7 @@ import okhttp3.MultipartBody
 
 class ConversionViewModel(
     private val repository: IConversionRepository,
+    private val repositoryUser: IUsuarioRepository,
     userPreferences: UserPreferences,
     private val aboutFile: AboutFile
 ) : ViewModel() {
@@ -31,6 +34,9 @@ class ConversionViewModel(
     var state = MutableLiveData<ConversionScreenState>(ConversionScreenState.Loading(false, ""))
         private set
     private var fileName: String = ""
+    var countNotifications = MutableLiveData<Int>()
+    var convites = MutableLiveData<List<Convites>>()
+        private set
 
     fun enviarArquivo(file: MultipartBody.Part) {
         state.value = ConversionScreenState.Loading(true, "Enviando arquivo...")
@@ -107,6 +113,41 @@ class ConversionViewModel(
                 } else {
                     Log.e("Erro", response.body().toString())
                 }
+            }
+        }
+    }
+
+    fun getQtdNotificacoes() {
+        viewModelScope.launch {
+            try {
+                authToken.collect { token ->
+                    val emailUser = token?.getEmail()
+                    val response = repositoryUser.getQtdNotificacoes(emailUser)
+                    if (response.isSuccessful) {
+                        countNotifications.value = response.body()
+                    } else {
+                        state.value =
+                            ConversionScreenState.Error("Erro ao carregar quantidade de notificações")
+                    }
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+    fun getConvites() {
+        viewModelScope.launch {
+            try {
+                authToken.collect { token ->
+                    val email = token?.getEmail()
+                    val response = repositoryUser.getConvites(email)
+                    if (response.isSuccessful) {
+                        convites.value = response.body()
+                    }
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
         }
     }
