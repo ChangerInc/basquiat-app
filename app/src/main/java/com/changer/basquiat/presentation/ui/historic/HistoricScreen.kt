@@ -42,7 +42,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.changer.basquiat.R
-import com.changer.basquiat.domain.model.Convites
 import com.changer.basquiat.presentation.ui.components.ErrorView
 import com.changer.basquiat.presentation.ui.components.GenericDialog
 import com.changer.basquiat.presentation.ui.components.InputSearch
@@ -54,9 +53,7 @@ import com.changer.basquiat.presentation.ui.components.UploadButton
 import com.changer.basquiat.presentation.ui.navigate.Screen
 import com.changer.basquiat.presentation.ui.theme.Branco
 import com.changer.basquiat.presentation.viewmodel.HistoricoViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.util.UUID
 
 @Preview(showBackground = true)
 @Composable
@@ -82,7 +79,7 @@ fun HistoricScreen(
     val arquivos by vm.arquivos.observeAsState(emptyList())
     var searchExpanded by remember { mutableStateOf(false) }
     var searchQuery by remember { mutableStateOf("") }
-    val filteredFiles = arquivos.filter {
+    val filteredFiles = (arquivos ?: emptyList()).filter {
         it.nome.contains(searchQuery, ignoreCase = true)
     }
 

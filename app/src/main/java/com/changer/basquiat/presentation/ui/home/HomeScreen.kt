@@ -114,14 +114,6 @@ fun HomeScreen(
                     fontSize = 22.sp
                 )
             }
-            Spacer(modifier = Modifier.size(45.dp))
-            Text(
-                text = stringResource(id = R.string.termos_uso_tela_inicial_nao_logado),
-                fontSize = 11.sp,
-                textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .padding(horizontal = 48.dp)
-            )
         }
     }
 }
