@@ -21,7 +21,6 @@ import androidx.compose.ui.unit.sp
 import com.changer.basquiat.R
 import com.changer.basquiat.presentation.ui.theme.Azul
 import com.changer.basquiat.presentation.ui.theme.Branco
-import com.changer.basquiat.presentation.ui.theme.Preto
 
 @Composable
 fun HowToUse() {

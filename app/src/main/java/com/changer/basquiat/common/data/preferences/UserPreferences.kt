@@ -30,4 +30,21 @@ class UserPreferences(private val context: Context) {
             preferences[TOKEN_KEY] = gson.toJson(token)
         }
     }
+
+    suspend fun updateProfilePhoto(newPhotoUrl: String) {
+        context.dataStore.edit { preferences ->
+            val currentTokenJson = preferences[TOKEN_KEY]
+            if (currentTokenJson != null) {
+                val currentToken = gson.fromJson(currentTokenJson, UsuarioToken::class.java)
+                val updatedToken = currentToken.copy(fotoPerfil = newPhotoUrl)
+                preferences[TOKEN_KEY] = gson.toJson(updatedToken)
+            }
+        }
+    }
+
+    suspend fun clear() {
+    context.dataStore.edit { preferences ->
+        preferences.clear()
+    }
+}
 }

@@ -8,7 +8,10 @@ import com.changer.basquiat.domain.model.UserObj
 import com.changer.basquiat.domain.model.UsuarioToken
 import com.changer.basquiat.common.data.repository.IUsuarioRepository
 import com.changer.basquiat.domain.model.Convites
+import okhttp3.MultipartBody
+import okhttp3.ResponseBody
 import retrofit2.Response
+import java.util.UUID
 
 class UsuarioRepositoryImp : IUsuarioRepository {
     private val api by lazy {
@@ -31,5 +34,9 @@ class UsuarioRepositoryImp : IUsuarioRepository {
 
     override suspend fun getConvites(email: String?): Response<List<Convites>> {
         return api.getConvites(email)
+    }
+
+    override suspend fun patchFoto(idUsuario: UUID?, file: MultipartBody.Part): Response<ResponseBody> {
+        return api.patchFoto(idUsuario, file)
     }
 }

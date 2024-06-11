@@ -53,7 +53,7 @@ fun BoxConversionPreview() {
 @Composable
 fun BoxConversion(
     onFileSelected: (file: MultipartBody.Part) -> Unit,
-    options: (List<String>) -> Unit
+    options: (List<String>) -> Unit = {}
 ) {
     val fileName = remember { mutableStateOf("Selecionar arquivo") }
     val context = LocalContext.current

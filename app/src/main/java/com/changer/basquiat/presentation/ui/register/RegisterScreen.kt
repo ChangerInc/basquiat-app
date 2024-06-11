@@ -323,7 +323,7 @@ fun RegisterScreen(
 
         is RegisterScreenState.Error, null -> {
             ErrorView(message = (state as RegisterScreenState.Error).message) {
-                vm.TryAgain()
+                vm.tryAgain()
             }
         }
 

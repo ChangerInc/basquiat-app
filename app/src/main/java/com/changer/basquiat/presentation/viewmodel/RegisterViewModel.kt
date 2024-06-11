@@ -5,6 +5,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.changer.basquiat.authentication.FirebaseAuthRepository
 import com.changer.basquiat.common.data.repository.IUsuarioRepository
 import com.changer.basquiat.domain.model.RegisterForm
 import com.changer.basquiat.presentation.ui.register.RegisterScreenState
@@ -17,7 +18,7 @@ import retrofit2.HttpException
 
 class RegisterViewModel(
     private val repository: IUsuarioRepository,
-    private val loginVm: LoginViewModel
+    private val firebaseAuthRepository: FirebaseAuthRepository
 ) : ViewModel() {
     private val _name = MutableStateFlow("")
     val name: StateFlow<String> = _name
@@ -103,18 +104,15 @@ class RegisterViewModel(
         viewModelScope.launch {
             try {
                 state.value = RegisterScreenState.Loading
-
                 delay(400)
-
-
                 val response = repository.registerUser(form)
 
-                Log.d("Register", "Request: $form")
-                Log.d("Register", "Response: $response")
-
                 if (response.isSuccessful) {
+                    signUp(_email.value, _password.value)
                     response.body()?.let {
                         state.value = RegisterScreenState.Success(data = it)
+                        delay(200)
+                        state.value = RegisterScreenState.Normalize
                     }
                 } else {
                     val message = when (response.code()) {
@@ -134,7 +132,17 @@ class RegisterViewModel(
         }
     }
 
-    fun TryAgain() {
+    private fun signUp(email: String, password: String) {
+        viewModelScope.launch {
+            try {
+                firebaseAuthRepository.signUp(email, password)
+            } catch (e: Exception) {
+                state.value = RegisterScreenState.Error("Erro ao criar conta")
+            }
+        }
+    }
+
+    fun tryAgain() {
         state.value = RegisterScreenState.Normalize
     }
 }
