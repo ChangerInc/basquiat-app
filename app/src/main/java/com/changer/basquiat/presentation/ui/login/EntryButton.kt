@@ -14,13 +14,15 @@ import androidx.compose.ui.unit.dp
 import com.changer.basquiat.presentation.ui.theme.Azul
 import com.changer.basquiat.presentation.ui.theme.BasquiatTheme
 import com.changer.basquiat.presentation.ui.theme.Branco
+import com.changer.basquiat.presentation.ui.theme.CinzaClaro
 
 @Preview(showBackground = true)
 @Composable
 fun EntryButtonPreview(){
     BasquiatTheme {
         EntryButton(
-            onClick = {}
+            onClick = {},
+            enabled = true
         )
     }
 }
@@ -28,18 +30,22 @@ fun EntryButtonPreview(){
 @Composable
 fun EntryButton(
     modifier: Modifier = Modifier,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    enabled: Boolean
 ) {
     Button(
         colors = ButtonDefaults.outlinedButtonColors(
             containerColor = Azul,
-            contentColor = Branco
+            contentColor = Branco,
+            disabledContainerColor = CinzaClaro,
+            disabledContentColor = Branco
         ),
+        enabled = enabled,
         onClick = onClick,
         modifier = modifier
             .size(width = 146.dp, height = 53.dp)
             .background(
-                color = Azul,
+                color = if (enabled) Azul else CinzaClaro,
                 shape = RoundedCornerShape(6.dp)
             )
     ) {

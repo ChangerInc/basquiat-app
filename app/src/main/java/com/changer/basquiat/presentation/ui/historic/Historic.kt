@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.changer.basquiat.domain.model.Arquivo
 import com.changer.basquiat.presentation.ui.theme.CinzaClaro
+import com.changer.basquiat.presentation.ui.theme.Preto
 import java.math.BigDecimal
 import java.util.UUID
 
@@ -72,7 +73,8 @@ fun Historic(
                     text = "Nenhum arquivo no histórico",
                     modifier = Modifier.fillMaxSize(),
                     textAlign = androidx.compose.ui.text.style.TextAlign.Center,
-                    fontSize = 20.sp
+                    fontSize = 20.sp,
+                    color = Preto
                 )
             }
         }

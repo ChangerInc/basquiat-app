@@ -17,14 +17,15 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -34,13 +35,13 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.changer.basquiat.R
 import com.changer.basquiat.domain.model.UserForm
 import com.changer.basquiat.presentation.ui.components.ErrorView
-import com.changer.basquiat.presentation.viewmodel.LoginViewModel
 import com.changer.basquiat.presentation.ui.components.InputEmail
 import com.changer.basquiat.presentation.ui.components.InputPassword
 import com.changer.basquiat.presentation.ui.components.Loading
 import com.changer.basquiat.presentation.ui.components.TopAppBarLoginCadastro
 import com.changer.basquiat.presentation.ui.theme.BasquiatTheme
 import com.changer.basquiat.presentation.ui.theme.Preto
+import com.changer.basquiat.presentation.viewmodel.LoginViewModel
 
 
 @Composable
@@ -50,7 +51,16 @@ fun LoginScreen(
     navigateToHome: () -> Unit,
     vm: LoginViewModel
 ) {
-    val isEsqueciSenhaVisible = remember { mutableStateOf(false) }
+    val isEsqueciSenhaVisible = remember {
+        mutableStateOf(false)
+    }
+    val emailFocusRequester = remember {
+        FocusRequester()
+    }
+
+    val passwordFocusRequester = remember {
+        FocusRequester()
+    }
 
     val email by vm.email.collectAsState()
     val senha by vm.password.collectAsState()
@@ -60,6 +70,10 @@ fun LoginScreen(
 
 
     val state by vm.state.observeAsState()
+
+    LaunchedEffect(Unit) {
+        emailFocusRequester.requestFocus()
+    }
 
     when (state) {
         is LoginScreenState.Normalize -> {
@@ -95,7 +109,9 @@ fun LoginScreen(
                         InputEmail(
                             email = { email },
                             setEmail = { vm.validateEmail(it) },
-                            inputColor = { emailColor }
+                            inputColor = { emailColor },
+                            focusRequester = { emailFocusRequester },
+                            onImeAction = { passwordFocusRequester.requestFocus() }
                         )
 
                         Spacer(modifier = modifier.height(32.dp))
@@ -103,7 +119,11 @@ fun LoginScreen(
                         InputPassword(
                             senha = { senha },
                             setSenha = { vm.validatePassword(it) },
-                            inputColor = { senhaColor }
+                            inputColor = { senhaColor },
+                            focusRequester = { passwordFocusRequester },
+                            onImeAction = {
+                                vm.getUser(UserForm(email, senha))
+                            }
                         )
 
                         Column(
@@ -125,7 +145,8 @@ fun LoginScreen(
                                 EntryButton(
                                     onClick = {
                                         vm.getUser(form = UserForm(email, senha))
-                                    }
+                                    },
+                                    enabled = email != "" && senha != ""
                                 )
                             }
                         }
@@ -152,8 +173,7 @@ fun LoginScreen(
         }
 
         is LoginScreenState.Success -> {
-            val redirect = true
-            AnimatedVisibility(visible = redirect) {
+            AnimatedVisibility(visible = true) {
                 navigateToHistorico()
             }
         }
@@ -165,15 +185,15 @@ fun EsqueciSenhaDialog(onClose: () -> Unit) {
 
 }
 
-    @Preview(showBackground = true)
-    @Composable
-    fun LoginScreenPreview() {
-        BasquiatTheme {
-            val vm = viewModel<LoginViewModel>()
-            LoginScreen(
-                navigateToHistorico = {},
-                navigateToHome = {},
-                vm = vm
-            )
-        }
+@Preview(showBackground = true)
+@Composable
+fun LoginScreenPreview() {
+    BasquiatTheme {
+        val vm = viewModel<LoginViewModel>()
+        LoginScreen(
+            navigateToHistorico = {},
+            navigateToHome = {},
+            vm = vm
+        )
     }
+}

@@ -7,6 +7,7 @@ import com.changer.basquiat.domain.model.RegisterForm
 import com.changer.basquiat.domain.model.UserObj
 import com.changer.basquiat.domain.model.UsuarioToken
 import com.changer.basquiat.common.data.repository.IUsuarioRepository
+import com.changer.basquiat.domain.model.Convites
 import retrofit2.Response
 
 class UsuarioRepositoryImp : IUsuarioRepository {
@@ -22,5 +23,13 @@ class UsuarioRepositoryImp : IUsuarioRepository {
 
     override suspend fun registerUser(user: RegisterForm): Response<UserObj?> {
         return api.register(user)
+    }
+
+    override suspend fun getQtdNotificacoes(email: String?): Response<Int> {
+        return api.getQtdNotificacoes(email)
+    }
+
+    override suspend fun getConvites(email: String?): Response<List<Convites>> {
+        return api.getConvites(email)
     }
 }

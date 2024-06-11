@@ -5,12 +5,13 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import com.changer.basquiat.common.data.preferences.UserPreferences
+import com.changer.basquiat.presentation.ui.conversion.ConversionScreen
 import com.changer.basquiat.presentation.ui.historic.HistoricScreen
 import com.changer.basquiat.presentation.ui.home.HomeScreen
 import com.changer.basquiat.presentation.ui.login.LoginScreen
 import com.changer.basquiat.presentation.ui.register.RegisterScreen
+import com.changer.basquiat.presentation.viewmodel.ConversionViewModel
 import com.changer.basquiat.presentation.viewmodel.HistoricoViewModel
 import com.changer.basquiat.presentation.viewmodel.LoginViewModel
 import com.changer.basquiat.presentation.viewmodel.RegisterViewModel
@@ -18,12 +19,13 @@ import com.changer.basquiat.presentation.viewmodel.RegisterViewModel
 @Composable
 fun BasquiatNavHost(
     modifier: Modifier = Modifier,
-    navController: NavHostController = rememberNavController(),
+    navController: NavHostController,
     startDestination: String,
-    user: UserPreferences,
     vmLogin: LoginViewModel,
     vmHistoric: HistoricoViewModel,
     vmRegister: RegisterViewModel,
+    vmConversion: ConversionViewModel,
+    user: UserPreferences
 ) {
 
     NavHost(
@@ -31,36 +33,41 @@ fun BasquiatNavHost(
         navController = navController,
         startDestination = startDestination
     ) {
-        composable("home") {
+        composable(Screen.Home.route) {
             HomeScreen(
-                navigateToRegister = { navController.navigate("register") },
-                navigateToLogin = { navController.navigate("login") },
+                navigateToRegister = { navController.navigate(Screen.Register.route) },
+                navigateToLogin = { navController.navigate(Screen.Login.route) },
                 /*...*/
             )
         }
 
-        composable("login") {
+        composable(Screen.Login.route) {
             LoginScreen(
-                navigateToHistorico = { navController.navigate("historico") },
-                navigateToHome = { navController.navigate("home") },
+                navigateToHistorico = { navController.navigate(Screen.Historic.route) },
+                navigateToHome = { navController.navigate(Screen.Home.route) },
                 vm = vmLogin
             )
         }
 
-        composable("register") {
+        composable(Screen.Register.route) {
             RegisterScreen(
-                navigateToLogin = { navController.navigate("login") },
-                navigateToHome = { navController.navigate("home") },
+                navigateToLogin = { navController.navigate(Screen.Login.route) },
+                navigateToHome = { navController.navigate(Screen.Home.route) },
                 vm = vmRegister
             )
         }
 
-        composable("historico") {
+        composable(Screen.Historic.route) {
             HistoricScreen(
-                navigationToHistoric = { navController.navigate("historico") },
-                navigationToConversion = { navController.navigate("conversion") },
-                navigationToCircles = { navController.navigate("circles") },
+                navController = navController,
                 vm = vmHistoric
+            )
+        }
+
+        composable(Screen.Conversion.route) {
+            ConversionScreen(
+                navController = navController,
+                vm = vmConversion
             )
         }
     }
