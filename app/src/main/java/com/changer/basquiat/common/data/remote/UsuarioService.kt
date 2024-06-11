@@ -24,6 +24,8 @@ interface UsuarioService {
     @GET("usuario/convites/{email}")
     suspend fun getConvites(@Path("email") email: String?): Response<List<Convites>>
 
+
+
     /*@PUT("/usuario/{uuid}")
     suspend fun mudarSenha(@Path("uuid") uuid: UUID): Response<Usuario>*/
 
