@@ -18,6 +18,7 @@ import com.changer.basquiat.common.firebaseModule
 import com.changer.basquiat.presentation.ui.navigate.BasquiatNavHost
 import com.changer.basquiat.presentation.ui.navigate.Screen
 import com.changer.basquiat.presentation.ui.theme.BasquiatTheme
+import com.changer.basquiat.presentation.viewmodel.CircleViewModel
 import com.changer.basquiat.presentation.viewmodel.ConversionViewModel
 import com.changer.basquiat.presentation.viewmodel.HistoricoViewModel
 import com.changer.basquiat.presentation.viewmodel.LoginViewModel
@@ -48,11 +49,13 @@ class MainActivity : ComponentActivity() {
                     val vmLogin by inject<LoginViewModel>()
                     val vmHistoric by inject<HistoricoViewModel>()
                     val vmConversion by inject<ConversionViewModel>()
+                    val vmCircle by inject<CircleViewModel>()
                     MainScreen(
                         vmLogin = vmLogin,
                         vmRegister = vmRegister,
                         vmHistoric = vmHistoric,
                         vmConversion = vmConversion,
+                        vmCircle = vmCircle,
                         user = user
                     )
                 }
@@ -67,6 +70,7 @@ fun MainScreen(
     vmRegister: RegisterViewModel,
     vmHistoric: HistoricoViewModel,
     vmConversion: ConversionViewModel,
+    vmCircle: CircleViewModel,
     user: UserPreferences,
 ) {
     val navController = rememberNavController()
@@ -88,6 +92,7 @@ fun MainScreen(
         vmHistoric = vmHistoric,
         vmRegister = vmRegister,
         vmConversion = vmConversion,
+        vmCircle = vmCircle,
         user = user
     )
 }

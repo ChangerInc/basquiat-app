@@ -5,10 +5,13 @@ import com.changer.basquiat.common.data.preferences.UserPreferences
 import com.changer.basquiat.common.domain.UsuarioRepositoryImp
 import com.changer.basquiat.common.domain.ArquivoRepositoryImp
 import com.changer.basquiat.common.data.repository.IArquivoRepository
+import com.changer.basquiat.common.data.repository.ICirculoRepository
 import com.changer.basquiat.common.data.repository.IConversionRepository
 import com.changer.basquiat.common.data.repository.IUsuarioRepository
+import com.changer.basquiat.common.domain.CirculoRepositoryImp
 import com.changer.basquiat.common.domain.ConversionRepositoryImp
 import com.changer.basquiat.domain.AboutFile
+import com.changer.basquiat.presentation.viewmodel.CircleViewModel
 import com.changer.basquiat.presentation.viewmodel.ConversionViewModel
 import com.changer.basquiat.presentation.viewmodel.HistoricoViewModel
 import com.changer.basquiat.presentation.viewmodel.LoginViewModel
@@ -23,6 +26,7 @@ val appModule = module {
     single<IUsuarioRepository> { UsuarioRepositoryImp() }
     single<IArquivoRepository> { ArquivoRepositoryImp() }
     single<IConversionRepository> { ConversionRepositoryImp() }
+    single<ICirculoRepository> { CirculoRepositoryImp() }
     single { AboutFile() }
     single { UserPreferences(get()) }
     singleOf(::FirebaseAuthRepository)
@@ -30,6 +34,7 @@ val appModule = module {
     viewModel { RegisterViewModel(get(), get()) }
     viewModel { HistoricoViewModel(get(), get(), get(), get(), get()) }
     viewModel { ConversionViewModel(get(), get(), get(), get(), get())}
+    viewModel { CircleViewModel(get(), get(), get(), get(), get(), get()) }
 }
 
 val firebaseModule = module {

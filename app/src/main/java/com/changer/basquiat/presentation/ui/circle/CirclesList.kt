@@ -14,12 +14,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.changer.basquiat.domain.model.Arquivo
 import com.changer.basquiat.domain.model.Circulo
-import com.changer.basquiat.domain.model.UserMember
 import com.changer.basquiat.presentation.ui.theme.CinzaClaro
-import java.math.BigDecimal
-import java.util.UUID
+import com.changer.basquiat.presentation.ui.theme.Preto
 
 @Composable
 @Preview(showBackground = true)
@@ -55,7 +52,8 @@ fun CirclesList(
                     text = "Você não possui nenhum círculo",
                     modifier = Modifier.fillMaxSize(),
                     textAlign = TextAlign.Center,
-                    fontSize = 20.sp
+                    fontSize = 20.sp,
+                    color = Preto
                 )
             }
         }

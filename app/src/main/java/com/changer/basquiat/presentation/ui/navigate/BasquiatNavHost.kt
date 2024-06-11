@@ -10,11 +10,13 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.changer.basquiat.common.data.preferences.UserPreferences
+import com.changer.basquiat.presentation.ui.circle.CircleScreen
 import com.changer.basquiat.presentation.ui.conversion.ConversionScreen
 import com.changer.basquiat.presentation.ui.historic.HistoricScreen
 import com.changer.basquiat.presentation.ui.home.HomeScreen
 import com.changer.basquiat.presentation.ui.login.LoginScreen
 import com.changer.basquiat.presentation.ui.register.RegisterScreen
+import com.changer.basquiat.presentation.viewmodel.CircleViewModel
 import com.changer.basquiat.presentation.viewmodel.ConversionViewModel
 import com.changer.basquiat.presentation.viewmodel.HistoricoViewModel
 import com.changer.basquiat.presentation.viewmodel.LoginViewModel
@@ -30,6 +32,7 @@ fun BasquiatNavHost(
     vmHistoric: HistoricoViewModel,
     vmRegister: RegisterViewModel,
     vmConversion: ConversionViewModel,
+    vmCircle: CircleViewModel,
     user: UserPreferences
 ) {
     NavHost(
@@ -90,6 +93,21 @@ fun BasquiatNavHost(
                     scope.launch {
                         user.clear()
                         vmConversion.signOut()
+                        navController.navigate(Screen.Home.route)
+                    }
+                }
+            )
+        }
+
+        composable(Screen.Circles.route) {
+            val scope = rememberCoroutineScope()
+            CircleScreen(
+                navController = navController,
+                vm = vmCircle,
+                signOut = {
+                    scope.launch {
+                        user.clear()
+                        vmCircle.signOut()
                         navController.navigate(Screen.Home.route)
                     }
                 }

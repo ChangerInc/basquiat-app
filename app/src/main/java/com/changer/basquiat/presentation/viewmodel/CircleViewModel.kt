@@ -3,6 +3,7 @@ package com.changer.basquiat.presentation.viewmodel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.changer.basquiat.authentication.FirebaseAuthRepository
 import com.changer.basquiat.common.data.preferences.UserPreferences
 import com.changer.basquiat.common.data.repository.IArquivoRepository
 import com.changer.basquiat.common.data.repository.ICirculoRepository
@@ -16,13 +17,15 @@ import com.changer.basquiat.presentation.ui.circle.CircleScreenState
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
+import okhttp3.MultipartBody
 import java.util.UUID
 
 class CircleViewModel(
     private val repositoryArquivo: IArquivoRepository,
     private val repositoryUser: IUsuarioRepository,
     private val repositoryCirculo: ICirculoRepository,
-    userPreferences: UserPreferences,
+    private val firebaseAuthRepository: FirebaseAuthRepository,
+    private val userPreferences: UserPreferences,
     private var aboutFile: AboutFile
 ) : ViewModel() {
     var state = MutableLiveData<CircleScreenState>(CircleScreenState.Loading(true))
@@ -140,6 +143,41 @@ class CircleViewModel(
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
+            }
+        }
+    }
+
+    fun patchFoto(file: MultipartBody.Part) {
+        viewModelScope.launch {
+            try {
+                state.value = CircleScreenState.Loading(true)
+                authToken.collect { token ->
+                    val idUsuario = token?.getId()
+                    val response = repositoryUser.patchFoto(idUsuario, file)
+                    if (response.isSuccessful) {
+                        val newPhotoUrl = response.body()?.string()?.replace("'", "") ?: ""
+                        userPreferences.updateProfilePhoto(newPhotoUrl)
+                        state.value = CircleScreenState.Success("Foto alterada com sucesso")
+                        delay(200)
+                        tryAgain()
+                    } else {
+                        tryAgain()
+                        delay(200)
+                        state.value = CircleScreenState.Error("Erro ao alterar foto")
+                    }
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+    fun signOut() {
+        viewModelScope.launch {
+            try {
+                firebaseAuthRepository.signOut()
+            } catch (e: Exception) {
+                state.value = CircleScreenState.Error("Erro ao sair")
             }
         }
     }
