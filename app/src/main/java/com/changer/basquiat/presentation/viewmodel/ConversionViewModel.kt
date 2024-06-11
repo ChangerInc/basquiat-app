@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.changer.basquiat.authentication.FirebaseAuthRepository
 import com.changer.basquiat.common.data.preferences.UserPreferences
 import com.changer.basquiat.common.data.repository.IConversionRepository
 import com.changer.basquiat.common.data.repository.IUsuarioRepository
@@ -22,7 +23,8 @@ import okhttp3.MultipartBody
 class ConversionViewModel(
     private val repository: IConversionRepository,
     private val repositoryUser: IUsuarioRepository,
-    userPreferences: UserPreferences,
+    private val firebaseAuthRepository: FirebaseAuthRepository,
+    private val userPreferences: UserPreferences,
     private val aboutFile: AboutFile
 ) : ViewModel() {
 
@@ -148,6 +150,40 @@ class ConversionViewModel(
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
+            }
+        }
+    }
+
+    fun patchFoto(file: MultipartBody.Part) {
+        viewModelScope.launch {
+            try {
+                state.value = ConversionScreenState.Loading(true, "Alterando foto...")
+                authToken.collect { token ->
+                    val idUsuario = token?.getId()
+                    val response = repositoryUser.patchFoto(idUsuario, file)
+                    if (response.isSuccessful) {
+                        Log.d("Response XXXXXXXXX", response.body()!!.string())
+                        val newPhotoUrl = response.body()?.string()?.replace("'", "") ?: ""
+                        userPreferences.updateProfilePhoto(newPhotoUrl)
+                        state.value = ConversionScreenState.Success("Foto alterada com sucesso")
+                        delay(200)
+                        tryAgain()
+                    } else {
+                        state.value = ConversionScreenState.Error("Erro ao alterar foto")
+                    }
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+    fun signOut() {
+        viewModelScope.launch {
+            try {
+                firebaseAuthRepository.signOut()
+            } catch (e: Exception) {
+                state.value = ConversionScreenState.Error("Erro ao sair")
             }
         }
     }

@@ -71,8 +71,10 @@ fun LoginScreen(
 
     val state by vm.state.observeAsState()
 
-    LaunchedEffect(Unit) {
-        emailFocusRequester.requestFocus()
+    LaunchedEffect(state) {
+        if (state == LoginScreenState.Normalize) {
+            emailFocusRequester.requestFocus()
+        }
     }
 
     when (state) {

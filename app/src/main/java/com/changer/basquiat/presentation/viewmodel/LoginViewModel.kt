@@ -1,9 +1,11 @@
 package com.changer.basquiat.presentation.viewmodel
 
+import android.util.Log
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.changer.basquiat.authentication.FirebaseAuthRepository
 import com.changer.basquiat.common.data.preferences.UserPreferences
 import com.changer.basquiat.common.data.repository.IUsuarioRepository
 import com.changer.basquiat.domain.model.UserForm
@@ -12,14 +14,15 @@ import com.changer.basquiat.presentation.ui.theme.Azul
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 
-class LoginViewModel (
+class LoginViewModel(
     private val repository: IUsuarioRepository,
+    private val firebaseAuthRepository: FirebaseAuthRepository,
     private val userPreferences: UserPreferences
-): ViewModel() {
+) : ViewModel() {
     private val _email = MutableStateFlow("")
     val email: StateFlow<String> = _email
 
@@ -33,9 +36,16 @@ class LoginViewModel (
     private val _passwordColor = MutableStateFlow(Azul)
     val passwordColor: StateFlow<Color> = _passwordColor
 
+    val isAuthenticated = firebaseAuthRepository.currentUser
+        .map {
+            it != null
+        }
+
     fun validateEmail(email: String): Boolean {
         _email.value = email
-        return if (android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches() && _email.value != "") {
+        return if (android.util.Patterns.EMAIL_ADDRESS.matcher(email)
+                .matches() && _email.value != ""
+        ) {
             _emailColor.value = Azul
             true
         } else {
@@ -65,9 +75,12 @@ class LoginViewModel (
                 delay(400)
                 val response = repository.getUser(form)
                 if (response.isSuccessful) {
+                    signIn(email.value, password.value)
                     response.body()?.let {
                         userPreferences.saveAuthToken(it)
                         state.value = LoginScreenState.Success(data = it)
+                        delay(200)
+                        state.value = LoginScreenState.Normalize
                     }
                 } else {
                     val message = when (response.code()) {
@@ -85,6 +98,19 @@ class LoginViewModel (
             } catch (e: Exception) {
                 state.value = LoginScreenState.Error(e.message.toString())
             }
+        }
+    }
+
+    private suspend fun signIn(email: String, password: String) {
+        try {
+            firebaseAuthRepository
+                .signIn(
+                    email,
+                    password
+                )
+        } catch (e: Exception) {
+            Log.e("LoginViewModel", "Error: ${e.message}")
+            state.value = LoginScreenState.Error("Erro firebase ao logar")
         }
     }
 

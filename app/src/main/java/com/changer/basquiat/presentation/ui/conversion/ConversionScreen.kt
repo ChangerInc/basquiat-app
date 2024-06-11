@@ -41,6 +41,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.changer.basquiat.R
 import com.changer.basquiat.presentation.ui.components.BoxConversion
+import com.changer.basquiat.presentation.ui.components.ChangePhoto
 import com.changer.basquiat.presentation.ui.components.ErrorView
 import com.changer.basquiat.presentation.ui.components.GenericDialog
 import com.changer.basquiat.presentation.ui.components.Invites
@@ -55,7 +56,8 @@ import kotlinx.coroutines.launch
 @Composable
 fun ConversionScreen(
     navController: NavHostController,
-    vm: ConversionViewModel
+    vm: ConversionViewModel,
+    signOut: () -> Unit = {}
 ) {
     val screens = listOf(
         Screen.Conversion,
@@ -66,7 +68,8 @@ fun ConversionScreen(
     val user by vm.authToken.collectAsState(initial = null)
     val context = LocalContext.current
     val showDialog = vm.showDialog.observeAsState()
-    var dialogNotifications by remember { mutableStateOf(false) }
+    var openDialogInvites by remember { mutableStateOf(false) }
+    var openDialogChangePhoto by remember { mutableStateOf(false) }
     val countNotifications by vm.countNotifications.observeAsState()
     val invites by vm.convites.observeAsState()
     val state by vm.state.observeAsState()
@@ -81,11 +84,15 @@ fun ConversionScreen(
         options = list
     }
 
-    fun handleDialog(isOpen: Boolean) {
-        dialogNotifications = isOpen
+    fun handleDialogInvites(isOpen: Boolean) {
+        openDialogInvites = isOpen
     }
 
-    LaunchedEffect(null) {
+    fun handleDialogChangePhoto(isOpen: Boolean) {
+        openDialogChangePhoto = isOpen
+    }
+
+    LaunchedEffect(Unit) {
         vm.getQtdNotificacoes()
         vm.getConvites()
     }
@@ -124,8 +131,14 @@ fun ConversionScreen(
                     titulo = "Conversão",
                     notification = countNotifications,
                     url = it.getFotoPerfil(),
-                    openDialog = { isOpen ->
-                        handleDialog(isOpen)
+                    openDialogInvites = { isOpen ->
+                        handleDialogInvites(isOpen)
+                    },
+                    openDialogChangePhoto = { isOpen ->
+                        handleDialogChangePhoto(isOpen)
+                    },
+                    logout = {
+                        signOut()
                     }
                 )
             }
@@ -142,7 +155,7 @@ fun ConversionScreen(
             SnackbarHost(hostState = snackbarHostState)
         }
     ) { padding ->
-        if (dialogNotifications) {
+        if (openDialogInvites) {
             GenericDialog(
                 title = "Convites",
                 body = {
@@ -150,11 +163,29 @@ fun ConversionScreen(
                         items = invites ?: emptyList(),
                         modifier = Modifier
                             .fillMaxHeight(0.6f)
-                            .background(Color.White, RoundedCornerShape(16.dp))
+                            .background(Branco, RoundedCornerShape(16.dp))
                     )
                 },
                 onDismiss = { isOpen ->
-                    handleDialog(isOpen)
+                    handleDialogInvites(isOpen)
+                }
+            )
+        }
+        if (openDialogChangePhoto) {
+            GenericDialog(
+                title = "Mudar foto de perfil",
+                body = {
+                    ChangePhoto(
+                        onFileSelected = { file ->
+                            vm.patchFoto(file)
+                        },
+                        modifier = Modifier
+                            .fillMaxHeight(0.4f)
+                            .background(Branco, RoundedCornerShape(0.dp, 0.dp, 16.dp, 16.dp))
+                    )
+                },
+                onDismiss = { isOpen ->
+                    handleDialogChangePhoto(isOpen)
                 }
             )
         }

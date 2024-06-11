@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.MaterialTheme
@@ -42,6 +43,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.changer.basquiat.R
+import com.changer.basquiat.presentation.ui.components.ChangePhoto
 import com.changer.basquiat.presentation.ui.components.ErrorView
 import com.changer.basquiat.presentation.ui.components.GenericDialog
 import com.changer.basquiat.presentation.ui.components.InputSearch
@@ -68,7 +70,8 @@ fun HistoricScreenPreview() {
 @Composable
 fun HistoricScreen(
     navController: NavHostController,
-    vm: HistoricoViewModel
+    vm: HistoricoViewModel,
+    signOut: () -> Unit = {}
 ) {
     val screens = listOf(
         Screen.Conversion,
@@ -87,19 +90,26 @@ fun HistoricScreen(
     val state by vm.state.observeAsState()
     val countNotifications by vm.countNotifications.observeAsState()
     val invites by vm.convites.observeAsState()
-    var openDialog by remember { mutableStateOf(false) }
+    var openDialogInvites by remember { mutableStateOf(false) }
+    var openDialogChangePhoto by remember { mutableStateOf(false) }
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
     var loading by remember { mutableStateOf(false) }
     var snackbarMessage by remember { mutableStateOf("") }
 
-    fun handleDialog(isOpen: Boolean) {
-        openDialog = isOpen
+    fun handleDialogInvites(isOpen: Boolean) {
+        openDialogInvites = isOpen
     }
 
-    LaunchedEffect(null) {
-        vm.getArquivos()
+    fun handleDialogChangePhoto(isOpen: Boolean) {
+        openDialogChangePhoto = isOpen
+    }
+
+    LaunchedEffect(Unit) {
+        if (arquivos.isEmpty()) {
+            vm.getArquivos()
+        }
         vm.getQtdNotificacoes()
         vm.getConvites()
     }
@@ -111,6 +121,7 @@ fun HistoricScreen(
         }
 
         is HistoricScreenState.Success -> {
+            handleDialogChangePhoto(false)
             snackbarMessage = (state as HistoricScreenState.Success).message
             LaunchedEffect(HistoricScreenState.Success::class) {
                 scope.launch {
@@ -138,8 +149,14 @@ fun HistoricScreen(
                     titulo = "Histórico",
                     url = it.getFotoPerfil(),
                     notification = countNotifications,
-                    openDialog = { isOpen ->
-                        handleDialog(isOpen)
+                    openDialogInvites = { isOpen ->
+                        handleDialogInvites(isOpen)
+                    },
+                    openDialogChangePhoto = { isOpen ->
+                        handleDialogChangePhoto(isOpen)
+                    },
+                    logout = {
+                        signOut()
                     }
                 )
             }
@@ -173,7 +190,7 @@ fun HistoricScreen(
             SnackbarHost(hostState = snackbarHostState)
         }
     ) { padding ->
-        if (openDialog) {
+        if (openDialogInvites) {
             GenericDialog(
                 title = "Convites",
                 body = {
@@ -183,7 +200,25 @@ fun HistoricScreen(
                     )
                 },
                 onDismiss = { isOpen ->
-                    handleDialog(isOpen)
+                    handleDialogInvites(isOpen)
+                }
+            )
+        }
+        if (openDialogChangePhoto) {
+            GenericDialog(
+                title = "Mudar foto de perfil",
+                body = {
+                    ChangePhoto(
+                        onFileSelected = { file ->
+                            vm.patchFoto(file)
+                        },
+                        modifier = Modifier
+                            .fillMaxHeight(0.4f)
+                            .background(Branco, RoundedCornerShape(0.dp, 0.dp, 16.dp, 16.dp))
+                    )
+                },
+                onDismiss = { isOpen ->
+                    handleDialogChangePhoto(isOpen)
                 }
             )
         }

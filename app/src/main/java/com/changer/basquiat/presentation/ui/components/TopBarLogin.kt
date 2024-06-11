@@ -49,7 +49,9 @@ fun TopBarLoginPreview() {
             titulo = "Teste",
             notification = 1,
             url = "https://www.google.com/url?sa=i&url=https%3A%2F%2Fblogdataverna.com.br%2Fblog%2Fjujutsu-kaisen-gojo-vs-sukuna%2F&psig=AOvVaw2jaiE6PipylRsp6bFaY2v3&ust=1717703226415000&source=images&cd=vfe&opi=89978449&ved=0CBIQjRxqFwoTCNiz97idxYYDFQAAAAAdAAAAABAE",
-            openDialog = {}
+            openDialogInvites = {},
+            openDialogChangePhoto = {},
+            logout = {}
         )
     }
 }
@@ -61,7 +63,9 @@ fun TopBarLogin(
     titulo: String,
     notification: Int?,
     url: String,
-    openDialog: (Boolean) -> Unit
+    openDialogInvites: (Boolean) -> Unit,
+    openDialogChangePhoto: (Boolean) -> Unit,
+    logout: () -> Unit
 ) {
     var expanded by remember { mutableStateOf(false) }
 
@@ -90,7 +94,7 @@ fun TopBarLogin(
         },
         actions = {
             NotificationIcon(
-                onClick = { openDialog(true) },
+                onClick = { openDialogInvites(true) },
                 notification = notification ?: 0
             )
             Spacer(modifier = Modifier.size(20.dp))
@@ -118,7 +122,10 @@ fun TopBarLogin(
                             color = Preto
                         )
                     },
-                    onClick = { /* Handle settings! */ },
+                    onClick = {
+                        openDialogChangePhoto(true)
+                        expanded = false
+                    },
                     leadingIcon = {
                         Icon(
                             Icons.Outlined.InsertPhoto,
@@ -135,7 +142,7 @@ fun TopBarLogin(
                             color = Preto
                         )
                     },
-                    onClick = { /* Handle send feedback! */ },
+                    onClick = { logout() },
                     leadingIcon = {
                         Icon(
                             Icons.AutoMirrored.Outlined.Logout,

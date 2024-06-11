@@ -41,12 +41,16 @@ fun CircleScreen(
     )
 
     Scaffold(
-        topBar = { TopBarLogin(
-            titulo = "Circulos",
-            notification = 0,
-            url = "",
-            openDialog = {}
-        ) },
+        topBar = {
+            TopBarLogin(
+                titulo = "Circulos",
+                notification = 0,
+                url = "",
+                openDialogInvites = {},
+                openDialogChangePhoto = {  },
+                logout = { }
+            )
+        },
         bottomBar = {
             NavigateBar(
                 navController = navController,

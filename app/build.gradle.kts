@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -51,26 +52,29 @@ android {
 
 dependencies {
 
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
-    implementation("androidx.compose.runtime:runtime-livedata:1.6.5")
-    implementation("com.squareup.retrofit2:retrofit:2.11.0")
-    implementation("io.coil-kt:coil-compose:2.6.0")
-    implementation("com.squareup.retrofit2:converter-gson:2.11.0")
-    implementation ("com.google.code.gson:gson:2.8.8")
-    implementation("io.insert-koin:koin-android:3.5.0")
+    implementation(libs.firebase.auth)
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.analytics)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.runtime.livedata)
+    implementation(libs.retrofit)
+    implementation(libs.coil.compose)
+    implementation(libs.converter.gson)
+    implementation (libs.gson)
+    implementation(libs.koin.android)
 
-    implementation ("com.squareup.okhttp3:logging-interceptor:4.9.3")
+    implementation (libs.logging.interceptor)
 
-    implementation ("androidx.documentfile:documentfile:1.0.1")
-    implementation("io.insert-koin:koin-android:3.5.0")
-    implementation ("com.google.code.gson:gson:2.8.8")
+    implementation (libs.androidx.documentfile)
+    implementation(libs.koin.android)
+    implementation (libs.gson.v288)
 
-    implementation ("androidx.datastore:datastore-preferences:1.0.0")
+    implementation (libs.androidx.datastore.preferences)
 
-    implementation ("androidx.compose.material3:material3:1.2.1")
+    implementation (libs.material3)
     implementation ("androidx.compose.material3:material3-window-size-class:1.2.1")
-    implementation ("androidx.compose.material3:material3-adaptive-navigation-suite:1.3.0-beta01")
-    implementation ("androidx.compose.material:material-icons-extended")
+    implementation (libs.androidx.material3.adaptive.navigation.suite)
+    implementation (libs.androidx.material.icons.extended)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

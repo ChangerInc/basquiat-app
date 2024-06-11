@@ -33,7 +33,10 @@ import com.changer.basquiat.presentation.ui.theme.Preto
 @Preview
 @Composable
 fun HomeScreenPreview() {
-    HomeScreen(navigateToLogin = {}, navigateToRegister = {})
+    HomeScreen(
+        navigateToLogin = {},
+        navigateToRegister = {}
+    )
 }
 
 @Composable

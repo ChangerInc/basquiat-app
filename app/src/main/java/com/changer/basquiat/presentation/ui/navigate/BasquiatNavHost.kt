@@ -1,6 +1,10 @@
 package com.changer.basquiat.presentation.ui.navigate
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -15,6 +19,7 @@ import com.changer.basquiat.presentation.viewmodel.ConversionViewModel
 import com.changer.basquiat.presentation.viewmodel.HistoricoViewModel
 import com.changer.basquiat.presentation.viewmodel.LoginViewModel
 import com.changer.basquiat.presentation.viewmodel.RegisterViewModel
+import kotlinx.coroutines.launch
 
 @Composable
 fun BasquiatNavHost(
@@ -27,17 +32,21 @@ fun BasquiatNavHost(
     vmConversion: ConversionViewModel,
     user: UserPreferences
 ) {
-
     NavHost(
         modifier = modifier,
         navController = navController,
         startDestination = startDestination
     ) {
         composable(Screen.Home.route) {
+            val isAuthenticated by vmLogin.isAuthenticated.collectAsState(initial = false)
+            LaunchedEffect(isAuthenticated) {
+                if (isAuthenticated) {
+                    navController.navigate(Screen.Historic.route)
+                }
+            }
             HomeScreen(
                 navigateToRegister = { navController.navigate(Screen.Register.route) },
-                navigateToLogin = { navController.navigate(Screen.Login.route) },
-                /*...*/
+                navigateToLogin = { navController.navigate(Screen.Login.route) }
             )
         }
 
@@ -58,16 +67,32 @@ fun BasquiatNavHost(
         }
 
         composable(Screen.Historic.route) {
+            val scope = rememberCoroutineScope()
             HistoricScreen(
                 navController = navController,
-                vm = vmHistoric
+                vm = vmHistoric,
+                signOut = {
+                    scope.launch {
+                        user.clear()
+                        vmHistoric.signOut()
+                        navController.navigate(Screen.Home.route)
+                    }
+                }
             )
         }
 
         composable(Screen.Conversion.route) {
+            val scope = rememberCoroutineScope()
             ConversionScreen(
                 navController = navController,
-                vm = vmConversion
+                vm = vmConversion,
+                signOut = {
+                    scope.launch {
+                        user.clear()
+                        vmConversion.signOut()
+                        navController.navigate(Screen.Home.route)
+                    }
+                }
             )
         }
     }

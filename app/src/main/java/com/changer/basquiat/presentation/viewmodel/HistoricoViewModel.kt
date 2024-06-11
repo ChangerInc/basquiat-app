@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.changer.basquiat.authentication.FirebaseAuthRepository
 import com.changer.basquiat.common.data.preferences.UserPreferences
 import com.changer.basquiat.common.data.repository.IArquivoRepository
 import com.changer.basquiat.common.data.repository.IUsuarioRepository
@@ -22,11 +23,12 @@ import java.util.UUID
 class HistoricoViewModel(
     private val repository: IArquivoRepository,
     private val repositoryUser: IUsuarioRepository,
-    userPreferences: UserPreferences,
+    private val firebaseAuthRepository: FirebaseAuthRepository,
+    private val userPreferences: UserPreferences,
     private var aboutFile: AboutFile
 ) : ViewModel() {
 
-    var state = MutableLiveData<HistoricScreenState>(HistoricScreenState.Loading(true))
+    var state = MutableLiveData<HistoricScreenState>(HistoricScreenState.Loading(false))
         private set
     var arquivos = MutableLiveData<List<Arquivo>>()
         private set
@@ -61,6 +63,7 @@ class HistoricoViewModel(
     fun getArquivos() {
         viewModelScope.launch {
             try {
+                state.value = HistoricScreenState.Loading(true)
                 authToken.collect { token ->
                     val idUser = token?.getId()
                     val response = repository.getArquivos(idUser)
@@ -164,6 +167,41 @@ class HistoricoViewModel(
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
+            }
+        }
+    }
+
+    fun patchFoto(file: MultipartBody.Part) {
+        viewModelScope.launch {
+            try {
+                state.value = HistoricScreenState.Loading(true)
+                authToken.collect { token ->
+                    val idUsuario = token?.getId()
+                    val response = repositoryUser.patchFoto(idUsuario, file)
+                    if (response.isSuccessful) {
+                        val newPhotoUrl = response.body()?.string()?.replace("'", "") ?: ""
+                        userPreferences.updateProfilePhoto(newPhotoUrl)
+                        state.value = HistoricScreenState.Success("Foto alterada com sucesso")
+                        delay(200)
+                        tryAgain()
+                    } else {
+                        tryAgain()
+                        delay(200)
+                        state.value = HistoricScreenState.Error("Erro ao alterar foto")
+                    }
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+    fun signOut() {
+        viewModelScope.launch {
+            try {
+                firebaseAuthRepository.signOut()
+            } catch (e: Exception) {
+                state.value = HistoricScreenState.Error("Erro ao sair")
             }
         }
     }
