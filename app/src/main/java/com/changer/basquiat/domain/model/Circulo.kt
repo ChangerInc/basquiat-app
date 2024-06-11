@@ -6,6 +6,6 @@ data class Circulo (
     val id: UUID,
     val nomeCirculo: String,
     val dono: UUID,
-//    val membros: List<UsuarioFotoDto>,
+    val membros: List<UserMember>,
     val arquivos: List<Arquivo>
 )

@@ -14,65 +14,44 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.changer.basquiat.domain.model.Arquivo
-import com.changer.basquiat.domain.model.Circulo
 import com.changer.basquiat.domain.model.UserMember
 import com.changer.basquiat.presentation.ui.theme.CinzaClaro
-import java.math.BigDecimal
 import java.util.UUID
 
 @Composable
 @Preview(showBackground = true)
-fun CirclesListPreview() {
-    val staticHistoric = List(10) {
-        Arquivo(
-            idArquivo = UUID.randomUUID(),
-            nome = "Nome do arquivo",
-            criacao = "2021-10-10T00:00:00.000000",
-            tamanho = BigDecimal(100),
-            extensao = "pdf",
-            urlArquivo = "https://www.google.com"
-        )
-    }
-
+fun CircleMembersPreview() {
     val memberList = List(10) {
         UserMember(
-            id =  UUID.randomUUID(),
-            nome =  "Eu sou um membro",
+            id = UUID.randomUUID(),
+            nome = "Eu sou um membro",
             fotoPerfil = ""
         )
     }
 
-    val staticList = List(5) {
-        Circulo(
-            id = UUID.randomUUID(),
-            nomeCirculo = "Changer",
-            dono = UUID.randomUUID(),
-            arquivos = staticHistoric,
-            membros = memberList
-        )
-    }
-
-    CirclesList(groups = staticList)
+    CircleMembers(memberList)
 }
 
 @Composable
-fun CirclesList(
-    groups: List<Circulo>?
+fun CircleMembers(
+    members: List<UserMember>?
 ) {
     LazyColumn(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize(),
         contentPadding = PaddingValues(12.dp),
         verticalArrangement = Arrangement.spacedBy(5.dp)
     ) {
-        if (groups!!.isNotEmpty()) {
-            groups.forEach { circle ->
+        if (members!!.isNotEmpty()) {
+            members.forEach { member ->
                 item {
-                    CircleItem(
-                        nome = circle.nomeCirculo,
-                        arquivos = circle.arquivos
+                    MemberItem(
+                        id = member.id,
+                        nome = member.nome,
+                        fotoPerfil = member.fotoPerfil
                     )
-                    if (groups.indexOf(circle) != groups.size - 1) {
+
+                    if (members.indexOf(member) != members.size - 1) {
                         Spacer(modifier = Modifier.height(5.dp))
                         HorizontalDivider(color = CinzaClaro)
                     }
@@ -81,7 +60,7 @@ fun CirclesList(
         } else {
             item {
                 Text(
-                    text = "Você não possui nenhum círculo",
+                    text = "Nenhum membro adicionado",
                     modifier = Modifier.fillMaxSize(),
                     textAlign = TextAlign.Center,
                     fontSize = 20.sp

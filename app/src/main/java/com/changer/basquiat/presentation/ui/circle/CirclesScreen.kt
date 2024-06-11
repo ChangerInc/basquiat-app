@@ -1,5 +1,6 @@
 package com.changer.basquiat.presentation.ui.circle
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,10 +12,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import com.changer.basquiat.domain.model.Arquivo
 import com.changer.basquiat.domain.model.Circulo
+import com.changer.basquiat.domain.model.UserMember
+import com.changer.basquiat.presentation.ui.components.LinearProgress
 import com.changer.basquiat.presentation.ui.components.NavigateBar
 import com.changer.basquiat.presentation.ui.components.TopBarLogin
 import com.changer.basquiat.presentation.ui.theme.BasquiatTheme
+import java.math.BigDecimal
 import java.util.UUID
 
 @Composable
@@ -52,32 +57,10 @@ fun CircleScreen(
                 .background(Color.White)
                 .padding(padding)
         ) {
-            val staticList = listOf(
-                Circulo(
-                    id = UUID.randomUUID(),
-                    nomeCirculo = "Changer",
-                    dono = UUID.randomUUID(),
-                    arquivos = listOf()
-                ),
-                Circulo(
-                    id = UUID.randomUUID(),
-                    nomeCirculo = "Backstreet ",
-                    dono = UUID.randomUUID(),
-                    arquivos = listOf()
-                ),
-                Circulo(
-                    id = UUID.randomUUID(),
-                    nomeCirculo = "Bad Boys",
-                    dono = UUID.randomUUID(),
-                    arquivos = listOf()
-                ),
-                Circulo(
-                    id = UUID.randomUUID(),
-                    nomeCirculo = "The Boys",
-                    dono = UUID.randomUUID(),
-                    arquivos = listOf()
-                )
-            )
+            AnimatedVisibility(visible = false) {
+                LinearProgress()
+            }
+
             Column(
                 Modifier.align(Alignment.TopCenter)
             ) {
