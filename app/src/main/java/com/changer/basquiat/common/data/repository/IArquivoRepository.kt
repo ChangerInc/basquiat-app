@@ -11,4 +11,17 @@ interface IArquivoRepository {
     suspend fun uploadArquivo(idUsuario: UUID?, file: MultipartBody.Part): Response<ResponseBody>
     suspend fun downloadArquivo(idUsuario: UUID?, idArquivo: UUID?): Response<ResponseBody>
     suspend fun deleteArquivo(idUsuario: UUID?, idArquivo: UUID?): Response<ResponseBody>
+
+    suspend fun uploadArquivoCircle(
+        idCirculo: UUID,
+        file: MultipartBody.Part
+    ): Response<ResponseBody>
+    suspend fun downloadArquivoCircle(
+        idCirculo: UUID,
+        idArquivo: UUID
+    ): Response<ResponseBody>
+    suspend fun deleteArquivoCircle(
+        idCirculo: UUID,
+        idArquivo: UUID
+    ): Response<ResponseBody>
 }
