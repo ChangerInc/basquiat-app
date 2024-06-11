@@ -42,4 +42,34 @@ class ArquivoRepositoryImp : IArquivoRepository {
     ): Response<ResponseBody> {
         return api.deleteArquivo(idUsuario, idArquivo)
     }
+
+    override suspend fun uploadArquivoCircle(
+        idCirculo: UUID,
+        file: MultipartBody.Part
+    ): Response<ResponseBody> {
+        return api.uploadArquivoCircle(
+            idCirculo = idCirculo,
+            file = file
+        )
+    }
+
+    override suspend fun downloadArquivoCircle(
+        idCirculo: UUID,
+        idArquivo: UUID
+    ): Response<ResponseBody> {
+        return api.downloadArquivoCircle(
+            idCirculo = idCirculo,
+            idArquivo = idArquivo
+        )
+    }
+
+    override suspend fun deleteArquivoCircle(
+        idCirculo: UUID,
+        idArquivo: UUID
+    ): Response<ResponseBody> {
+        return api.deleteArquivoCircle(
+            idCirculo = idCirculo,
+            idArquivo = idArquivo
+        )
+    }
 }

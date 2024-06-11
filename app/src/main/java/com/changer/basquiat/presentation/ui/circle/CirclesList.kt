@@ -24,36 +24,7 @@ import java.util.UUID
 @Composable
 @Preview(showBackground = true)
 fun CirclesListPreview() {
-    val staticHistoric = List(10) {
-        Arquivo(
-            idArquivo = UUID.randomUUID(),
-            nome = "Nome do arquivo",
-            criacao = "2021-10-10T00:00:00.000000",
-            tamanho = BigDecimal(100),
-            extensao = "pdf",
-            urlArquivo = "https://www.google.com"
-        )
-    }
-
-    val memberList = List(10) {
-        UserMember(
-            id =  UUID.randomUUID(),
-            nome =  "Eu sou um membro",
-            fotoPerfil = ""
-        )
-    }
-
-    val staticList = List(5) {
-        Circulo(
-            id = UUID.randomUUID(),
-            nomeCirculo = "Changer",
-            dono = UUID.randomUUID(),
-            arquivos = staticHistoric,
-            membros = memberList
-        )
-    }
-
-    CirclesList(groups = staticList)
+    CirclesList(groups = listOf())
 }
 
 @Composable
